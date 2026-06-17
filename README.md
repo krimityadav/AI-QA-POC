@@ -1,12 +1,14 @@
 # 🤖 AI-QA-POC — AI-Powered Quality Assurance Platform
 
-> **Proof of Concept** — An orchestrated, multi-agent QA automation pipeline powered by Claude AI, Playwright, and DeepEval. From JIRA ticket to verified HTML report — fully automated.
+> **Proof of Concept** — An orchestrated, multi-agent QA automation pipeline powered by Claude AI, Playwright, and DeepEval. From any requirement source (JIRA, TFS, Asana, or `.md` files) to a verified HTML report — fully automated.
 
 ---
 
 ## 📌 What Is This?
 
-This repository is a **Proof of Concept** for a next-generation QA automation system that uses AI agents to perform the entire Software Testing Life Cycle (STLC) — from reading requirements to writing scripts, executing them, and reporting results back to JIRA — **with zero manual scripting per ticket**.
+This repository is a **Proof of Concept** for a next-generation QA automation system that uses AI agents to perform the entire Software Testing Life Cycle (STLC) — from reading requirements to writing scripts, executing them, and reporting results back to the source platform — **with zero manual scripting per ticket**.
+
+Requirements can come from **any platform** — JIRA, Azure DevOps (TFS), Asana, or a plain `.md` file dropped into the `requirement/` folder. The orchestrator normalises all sources into the same pipeline.
 
 Every ticket goes through a 5-phase pipeline, with a DeepEval quality gate after each phase to prevent low-quality output from advancing.
 
@@ -15,12 +17,18 @@ Every ticket goes through a 5-phase pipeline, with a DeepEval quality gate after
 ## 🏗️ System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                          JIRA BOARD                                 │
-│       Source of tickets · Acceptance criteria · Priority            │
-└──────────────────────────────┬──────────────────────────────────────┘
-                               │  fetch open / in-progress tickets
-                               ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        REQUIREMENT SOURCES                                   │
+│                                                                              │
+│   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌────────────────────┐      │
+│   │  JIRA    │   │  Azure   │   │  Asana   │   │  Manual .md File   │      │
+│   │  Board   │   │DevOps/TFS│   │  Board   │   │  (requirement/)    │      │
+│   └────┬─────┘   └────┬─────┘   └────┬─────┘   └────────┬───────────┘      │
+│        └──────────────┴──────────────┴──────────────────┘                   │
+│                  Source adapter normalises all inputs                        │
+└──────────────────────────────────┬───────────────────────────────────────────┘
+                                   │  structured requirement object
+                                   ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        QA ORCHESTRATOR                              │
 │                  (Claude Code Workflow Script)                      │
@@ -47,10 +55,15 @@ Every ticket goes through a 5-phase pipeline, with a DeepEval quality gate after
                                ┌────────────────────────┘
                                │  write results · attach report · update status
                                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                          JIRA BOARD                                 │
-│         Status updated · HTML report attached · Comments added      │
-└─────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     REPORT DESTINATION (same as source)                      │
+│                                                                              │
+│   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌────────────────────┐      │
+│   │  JIRA    │   │  Azure   │   │  Asana   │   │  HTML Report saved │      │
+│   │ Updated  │   │DevOps/TFS│   │  Task    │   │  to output/        │      │
+│   │          │   │ Updated  │   │  Updated │   │  run-history/      │      │
+│   └──────────┘   └──────────┘   └──────────┘   └────────────────────┘      │
+└──────────────────────────────────────────────────────────────────────────────┘
 
                  All agents read from / write to:
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -66,8 +79,12 @@ Every ticket goes through a 5-phase pipeline, with a DeepEval quality gate after
 
 ```mermaid
 flowchart TD
-    A([🎫 JIRA Ticket]) --> B[🔍 ANALYSE Agent\nExtract requirements & ACs]
-    B --> G1{DeepEval Gate ①\nCoverage ≥ 0.85?}
+    SRC1([🎫 JIRA]) --> SA
+    SRC2([📋 Azure DevOps / TFS]) --> SA
+    SRC3([📌 Asana]) --> SA
+    SRC4([📄 Manual .md File]) --> SA
+    SA[🔌 Source Adapter\nNormalise requirement input] --> B
+    B[🔍 ANALYSE Agent\nExtract requirements & ACs] --> G1{DeepEval Gate ①\nCoverage ≥ 0.85?}
     G1 -->|✅ Pass| C[📐 DESIGN Agent\nGenerate Test Cases]
     G1 -->|❌ Fail| B
     C --> G2{DeepEval Gate ②\nTC Quality ≥ 0.85?}
@@ -77,9 +94,12 @@ flowchart TD
     G3 -->|✅ Pass| E[▶️ EXECUTE Agent\nRun Tests in Browser]
     G3 -->|❌ Fail| D
     E --> G4{DeepEval Gate ④\nResult Validity ≥ 0.85?}
-    G4 -->|✅ Pass| F[📊 REPORT Agent\nHTML Report + JIRA Update]
+    G4 -->|✅ Pass| F[📊 REPORT Agent\nHTML Report + Platform Update]
     G4 -->|❌ Flag| H([👤 Human Escalation])
-    F --> I([✅ JIRA Updated\nReport Attached])
+    F --> OUT1([✅ JIRA Updated])
+    F --> OUT2([✅ TFS Updated])
+    F --> OUT3([✅ Asana Updated])
+    F --> OUT4([✅ HTML Report Saved])
 ```
 
 ---
@@ -92,7 +112,8 @@ flowchart TD
 | **Orchestration** | Claude Code Workflow | Pipeline, parallel & sequential execution |
 | **Test Automation** | Playwright + TypeScript | Browser automation & test execution |
 | **QA Evaluation** | DeepEval | Quality scoring at each phase gate |
-| **Project Management** | JIRA (via MCP) | Source of truth for requirements & status |
+| **Requirement Sources** | JIRA · Azure DevOps/TFS · Asana · `.md` files | Multi-platform input — all normalised to the same pipeline |
+| **Platform Integration** | MCP connectors (JIRA, TFS, Asana) | Read requirements in, write results back |
 | **Memory** | Markdown files (local) | Shared knowledge base — fast, version-controlled |
 | **Reporting** | Custom standalone HTML | Per-run dashboards with charts & acceptance criteria |
 | **Language** | TypeScript | Type-safe scripts, page objects, helpers |
@@ -162,7 +183,7 @@ AI-QA-POC/
 ## 🤖 Agent Responsibilities
 
 ### 1️⃣ ANALYSE Agent
-Reads the JIRA ticket and produces a structured requirement document — test scope, AC mapping, pre-conditions, and environment details.
+Reads from the configured requirement source (JIRA ticket, TFS work item, Asana task, or a `.md` file in `requirement/`) and produces a structured requirement document — test scope, AC mapping, pre-conditions, and environment details. A **Source Adapter** normalises all input formats before handing off to the pipeline.
 
 ### 2️⃣ DESIGN Agent
 Designs test suites (TS-001, TS-002…) and writes individual test cases with TC ID, priority (Critical / High / Medium), steps, and expected results. Every acceptance criterion must map to at least one Critical TC.
@@ -174,7 +195,7 @@ Creates the dedicated project folder, writes Playwright TypeScript spec files, P
 Runs the Playwright suite against the live application, captures screenshots for every TC, and writes newly discovered selectors/navigation paths to the shared memory layer.
 
 ### 5️⃣ REPORT Agent
-Generates a standalone custom HTML dashboard, saves it in `output/run-history/{YYYYMMDD-HHMM}/`, updates the JIRA ticket status, attaches the report, and adds an execution summary comment.
+Generates a standalone custom HTML dashboard, saves it in `output/run-history/{YYYYMMDD-HHMM}/`, then writes results back to the **originating platform** — updating ticket/task status, attaching the HTML report, and adding an execution summary comment. For `.md` file inputs, the report is saved locally only.
 
 ---
 
@@ -192,7 +213,7 @@ memory/
 │
 ├── TIER-2-OPERATIONAL/              ← Orchestrator & Report Agent read/write
 │   ├── deepeval-history.md          ← Gate scores per ticket per run
-│   ├── jira-field-map.md            ← JIRA project keys, field IDs
+│   ├── source-field-map.md          ← Platform field mappings (JIRA, TFS, Asana)
 │   └── tc-templates.md              ← Reusable TC patterns per feature type
 │
 └── TIER-3-INTELLIGENCE/             ← Builds up over time (Sprint 3+)
@@ -319,8 +340,18 @@ Reports are stored at:
 | Dimension | Today | Future |
 |---|---|---|
 | **Ticket volume** | 3–5 tickets/sprint | 50+ (same code, queued) |
+| **Requirement source** | JIRA / `.md` files | JIRA + TFS + Asana simultaneously |
 | **Environments** | 1 (dev.dmerocket.com) | Multiple (pass baseURL as arg) |
-| **Team size** | Solo QA | CI/CD via JIRA webhook trigger |
+| **Team size** | Solo QA | CI/CD via webhook trigger (any platform) |
+
+### Supported Requirement Sources
+
+| Platform | How it connects | Input | Output |
+|---|---|---|---|
+| **JIRA** | MCP connector | Ticket fields, ACs, attachments | Status update, comment, attachment |
+| **Azure DevOps / TFS** | MCP connector | Work item description, acceptance criteria | Work item state update, attachment |
+| **Asana** | MCP connector | Task description, subtasks | Task completion, comment |
+| **Manual `.md` file** | File read (no connector needed) | Requirement doc in `requirement/` folder | HTML report saved to `output/` |
 
 ---
 
