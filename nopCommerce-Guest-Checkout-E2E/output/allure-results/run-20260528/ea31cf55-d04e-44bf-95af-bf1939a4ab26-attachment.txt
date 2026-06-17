@@ -1,0 +1,2 @@
+[2026-05-28T06:48:59.123Z] [HomePage] navigate → /
+[2026-05-28T06:48:59.123Z] [HomePage] navigate -> https://demo.nopcommerce.com/

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI-Driven QA — Internal Team Presentation</title>
+<style>
+  body {
+    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    color: #1a1a1a;
+    margin: 2.5cm 2.5cm 2.5cm 2.5cm;
+    line-height: 1.6;
+    background: #fff;
+  }
+  h1 { font-size: 22pt; color: #1a3c5e; border-bottom: 3px solid #2b6cb0; padding-bottom: 8px; margin-top: 0; page-break-before: avoid; }
+  h2 { font-size: 15pt; color: #2b6cb0; border-left: 5px solid #2b6cb0; padding-left: 10px; margin-top: 28px; margin-bottom: 8px; page-break-after: avoid; }
+  h3 { font-size: 12pt; color: #276749; margin-top: 18px; margin-bottom: 6px; page-break-after: avoid; }
+  h4 { font-size: 11pt; color: #744210; margin-top: 14px; margin-bottom: 4px; }
+  p { margin: 6px 0 10px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 18px 0; font-size: 10pt; page-break-inside: avoid; }
+  th { background-color: #2b6cb0; color: #fff; padding: 7px 10px; text-align: left; font-weight: bold; }
+  td { border: 1px solid #bee3f8; padding: 6px 10px; vertical-align: top; }
+  tr:nth-child(even) td { background-color: #ebf8ff; }
+  tr:nth-child(odd) td { background-color: #fff; }
+  code, .code-block { font-family: 'Consolas', 'Courier New', monospace; background: #edf2f7; border-radius: 4px; font-size: 9.5pt; color: #2d3748; }
+  .code-block { display: block; padding: 10px 14px; margin: 8px 0 14px 0; border-left: 3px solid #2b6cb0; white-space: pre; }
+  .badge-pass { background:#38a169; color:#fff; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:bold; }
+  .badge-active { background:#3182ce; color:#fff; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:bold; }
+  .step-box { border: 1px solid #bee3f8; border-left: 5px solid #2b6cb0; background: #f7faff; padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; page-break-inside: avoid; }
+  .step-number { font-size: 14pt; font-weight: bold; color: #2b6cb0; margin-right: 6px; }
+  .step-title { font-size: 13pt; font-weight: bold; color: #1a3c5e; }
+  .highlight-box { background: #fffbeb; border: 1px solid #f6e05e; border-left: 5px solid #d69e2e; padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; }
+  ul { margin: 6px 0 10px 24px; padding: 0; }
+  ul li { margin-bottom: 4px; }
+  .cover-section { text-align: center; padding: 40px 0 30px 0; border-bottom: 2px solid #2b6cb0; margin-bottom: 30px; }
+  .cover-title { font-size: 26pt; color: #1a3c5e; font-weight: bold; margin-bottom: 10px; }
+  .cover-subtitle { font-size: 14pt; color: #2b6cb0; margin-bottom: 8px; }
+  .cover-meta { font-size: 10pt; color: #718096; margin-top: 10px; }
+  .toc-item { margin: 4px 0; }
+  .page-break { page-break-after: always; }
+  .ai-role { color: #276749; font-weight: bold; }
+  .human-role { color: #744210; font-weight: bold; }
+  .file-path { font-family: 'Consolas', 'Courier New', monospace; background: #edf2f7; padding: 1px 5px; border-radius: 3px; font-size: 9.5pt; color: #553c9a; }
+
+  /* ── Process Flow Diagram ── */
+  .flow-wrapper {
+    margin: 24px 0 28px 0;
+    overflow-x: auto;
+  }
+  .flow-diagram {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 860px;
+  }
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110px;
+    flex-shrink: 0;
+  }
+  .flow-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    flex-shrink: 0;
+  }
+  .flow-step-num {
+    font-size: 8pt;
+    color: #718096;
+    margin-top: 5px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  .flow-label {
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #1a3c5e;
+    text-align: center;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  .flow-desc {
+    font-size: 7.5pt;
+    color: #4a5568;
+    text-align: center;
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+  .flow-who {
+    font-size: 7pt;
+    margin-top: 5px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .who-ai   { background: #c6f6d5; color: #276749; }
+  .who-human { background: #fefcbf; color: #744210; }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding-top: 16px;
+    flex-shrink: 0;
+  }
+  .flow-arrow svg {
+    width: 28px;
+    height: 22px;
+  }
+  /* icon colours by step */
+  .c1 { background: linear-gradient(135deg, #d69e2e, #f6ad55); }
+  .c2 { background: linear-gradient(135deg, #3182ce, #63b3ed); }
+  .c3 { background: linear-gradient(135deg, #276749, #48bb78); }
+  .c4 { background: linear-gradient(135deg, #553c9a, #9f7aea); }
+  .c5 { background: linear-gradient(135deg, #2c7a7b, #4fd1c5); }
+  .c6 { background: linear-gradient(135deg, #c05621, #f6ad55); }
+  .c7 { background: linear-gradient(135deg, #e53e3e, #fc8181); }
+
+  /* Output box below flow */
+  .flow-outputs {
+    margin: 18px 0 10px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .flow-output-card {
+    border: 1px solid #bee3f8;
+    border-top: 3px solid #2b6cb0;
+    background: #f7faff;
+    border-radius: 6px;
+    padding: 8px 12px;
+    flex: 1;
+    min-width: 140px;
+    font-size: 8.5pt;
+  }
+  .flow-output-card strong { display: block; color: #2b6cb0; margin-bottom: 3px; }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-section">
+  <div class="cover-title">AI-Driven QA — POC</div>
+  <div class="cover-subtitle">Internal Team Presentation Guide</div>
+  <div class="cover-subtitle" style="font-size:12pt; color:#276749;">How Claude AI Automates the Full STLC</div>
+  <div class="cover-meta">
+    Project: <strong>AI-QA-POC</strong> &nbsp;|&nbsp; Model: <strong>Claude Sonnet 4.6</strong> &nbsp;|&nbsp; Framework: <strong>Playwright 1.60 + TypeScript 5.7</strong><br>
+    Prepared by: QA Team &nbsp;|&nbsp; For: Internal Team Demo / Showcase
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<h2>Table of Contents</h2>
+<div class="toc-item">1. &nbsp; What Is This POC?</div>
+<div class="toc-item">2. &nbsp; Technology Stack</div>
+<div class="toc-item">3. &nbsp; Project Folder Structure</div>
+<div class="toc-item">4. &nbsp; Step-by-Step AI Process Flow (7 Steps)</div>
+<div class="toc-item">5. &nbsp; Key Files — What Each One Does</div>
+<div class="toc-item">6. &nbsp; Bug Handling — Detection, Reporting &amp; Ticket Information</div>
+<div class="toc-item">7. &nbsp; What the AI Model Actually Does</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION 1 -->
+<h2>1. What Is This POC?</h2>
+<p>
+  <strong>AI-QA-POC</strong> is a working, file-based proof of concept that shows how Claude AI (an AI assistant by Anthropic)
+  can be used to perform every major phase of software QA — from reading a requirement document to producing a final
+  HTML test report — with minimal human effort.
+</p>
+<p>
+  The goal of this showcase is to demonstrate to the internal QA team that AI is not a future concept.
+  It is a tool you can use <em>today</em> in your daily QA activities to dramatically reduce manual work.
+</p>
+<div class="highlight-box">
+  <strong>Key Point for the Team:</strong> You do not need to know how to code to benefit from AI-assisted QA.
+  The AI reads your requirement document, writes the test cases, writes the automation code, and builds the report.
+  Your job is to provide the requirement and review the output.
+</div>
+
+<!-- SECTION 2 -->
+<h2>2. Technology Stack</h2>
+<table>
+  <tr><th>Component</th><th>Tool / Version</th><th>Purpose</th></tr>
+  <tr><td><strong>AI Model</strong></td><td>Claude Sonnet 4.6 (claude-sonnet-4-6)</td><td>Analyses requirements, writes test cases, writes automation code, generates reports</td></tr>
+  <tr><td><strong>AI Interface</strong></td><td>Claude Code CLI</td><td>Terminal-based interface used to interact with Claude in this project</td></tr>
+  <tr><td><strong>Test Framework</strong></td><td>Playwright 1.60.0</td><td>Runs browser automation tests across Chrome, Firefox, Safari</td></tr>
+  <tr><td><strong>Language</strong></td><td>TypeScript 5.7</td><td>Strongly-typed automation code — fewer bugs, better IDE support</td></tr>
+  <tr><td><strong>Reporting</strong></td><td>Custom HTML + Allure + Playwright HTML</td><td>Stakeholder dashboards, detailed test traces, iteration history</td></tr>
+  <tr><td><strong>Logging</strong></td><td>Winston 3.17</td><td>Structured logs for every test run</td></tr>
+  <tr><td><strong>Environment Config</strong></td><td>dotenv 16.5</td><td>Manages URLs, credentials, timeouts via .env file</td></tr>
+  <tr><td><strong>Platform</strong></td><td>Windows 10 Pro, PowerShell</td><td>Execution environment</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- SECTION 3 -->
+<h2>3. Project Folder Structure</h2>
+<p>Every project follows a strict, AI-enforced structure (defined in <span class="file-path">CLAUDE.md</span> at the project root):</p>
+
+<h3>Root Level — <span class="file-path">C:\Users\Krimit\Desktop\AI-QA-POC\</span></h3>
+<div class="code-block">AI-QA-POC/
+├── CLAUDE.md                          ← AI governance rules (7 rules, enforced automatically)
+├── playwright.config.ts               ← Root Playwright configuration
+├── package.json                       ← Dependencies and run scripts
+├── tsconfig.json                      ← TypeScript compiler settings
+├── .env                               ← Environment variables (URLs, credentials, timeouts)
+├── src/                               ← Shared framework (reused by all projects)
+├── nopCommerce-Guest-Checkout-E2E/    ← Project 1: E2E checkout suite
+└── BUG-Retest-Insurance-Name-Truncation/ ← Project 2: Bug retest suite</div>
+
+<h3>Inside Every Project Folder</h3>
+<div class="code-block">{ProjectName}/
+├── README.md                  ← Navigation guide + exact run command
+├── requirement/               ← Source requirement document (the AI's INPUT)
+├── test-cases/                ← Human-readable test case list (AI OUTPUT)
+├── scripts/                   ← Playwright spec files — the automation code (AI OUTPUT)
+├── page-objects/              ← Page Object Model classes (AI OUTPUT)
+├── fixtures/                  ← Playwright fixture files
+├── test-data/                 ← Test input values (JSON / TypeScript)
+├── config/                    ← Playwright config for this suite
+├── architecture/              ← SOPs and design decisions
+└── output/                    ← All results (never stored outside this folder)
+    ├── run-history/           ← One timestamped HTML report per execution
+    ├── playwright-report/     ← Full Playwright HTML report
+    └── artifacts/             ← Screenshots, videos, traces (auto-created)</div>
+
+<div class="highlight-box">
+  <strong>Run History Rule:</strong> Every test re-run creates a new timestamped folder
+  (<span class="file-path">YYYYMMDD-HHMM</span>). Old results are NEVER deleted.
+  This gives a full audit trail of every execution.
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION 4 -->
+<h2>4. Step-by-Step AI Process Flow</h2>
+<p>This is the complete STLC (Software Testing Life Cycle) as performed in this POC.
+  <span class="ai-role">Green = AI does the work.</span> &nbsp;
+  <span class="human-role">Amber = Human provides input or action.</span>
+</p>
+
+<!-- PROCESS FLOW DIAGRAM -->
+<div class="flow-wrapper">
+  <div class="flow-diagram">
+
+    <!-- Step 1 -->
+    <div class="flow-node">
+      <div class="flow-icon c1">📄</div>
+      <div class="flow-step-num">STEP 1</div>
+      <div class="flow-label">Requirement<br>Input</div>
+      <div class="flow-desc">Drop a plain-English requirement doc into the project folder</div>
+      <div class="flow-who who-human">Human</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="11" x2="22" y2="11" stroke="#2b6cb0" stroke-width="2.5"/>
+        <polyline points="16,5 23,11 16,17" fill="none" stroke="#2b6cb0" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="flow-node">
+      <div class="flow-icon c2">🔍</div>
+      <div class="flow-step-num">STEP 2</div>
+      <div class="flow-label">Requirement<br>Analysis</div>
+      <div class="flow-desc">Claude classifies, extracts testable conditions, maps dependencies</div>
+      <div class="flow-who who-ai">Claude AI</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="11" x2="22" y2="11" stroke="#2b6cb0" stroke-width="2.5"/>
+        <polyline points="16,5 23,11 16,17" fill="none" stroke="#2b6cb0" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="flow-node">
+      <div class="flow-icon c3">📋</div>
+      <div class="flow-step-num">STEP 3</div>
+      <div class="flow-label">Test Case<br>Design</div>
+      <div class="flow-desc">Claude writes all TCs — positive, negative, boundary, security</div>
+      <div class="flow-who who-ai">Claude AI</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="11" x2="22" y2="11" stroke="#2b6cb0" stroke-width="2.5"/>
+        <polyline points="16,5 23,11 16,17" fill="none" stroke="#2b6cb0" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="flow-node">
+      <div class="flow-icon c4">⌨️</div>
+      <div class="flow-step-num">STEP 4</div>
+      <div class="flow-label">Automation<br>Code</div>
+      <div class="flow-desc">Claude writes Page Objects and Playwright spec files</div>
+      <div class="flow-who who-ai">Claude AI</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="11" x2="22" y2="11" stroke="#2b6cb0" stroke-width="2.5"/>
+        <polyline points="16,5 23,11 16,17" fill="none" stroke="#2b6cb0" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="flow-node">
+      <div class="flow-icon c5">⚙️</div>
+      <div class="flow-step-num">STEP 5</div>
+      <div class="flow-label">Config &amp;<br>Test Data</div>
+      <div class="flow-desc">Claude sets up the Playwright config and test data files</div>
+      <div class="flow-who who-ai">Claude AI</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="11" x2="22" y2="11" stroke="#2b6cb0" stroke-width="2.5"/>
+        <polyline points="16,5 23,11 16,17" fill="none" stroke="#2b6cb0" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="flow-node">
+      <div class="flow-icon c6">▶️</div>
+      <div class="flow-step-num">STEP 6</div>
+      <div class="flow-label">Execute<br>Tests</div>
+      <div class="flow-desc">Human runs one terminal command; Playwright automates the browser</div>
+      <div class="flow-who who-human">Human + PW</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="11" x2="22" y2="11" stroke="#2b6cb0" stroke-width="2.5"/>
+        <polyline points="16,5 23,11 16,17" fill="none" stroke="#2b6cb0" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="flow-node">
+      <div class="flow-icon c7">📊</div>
+      <div class="flow-step-num">STEP 7</div>
+      <div class="flow-label">HTML<br>Report</div>
+      <div class="flow-desc">Claude generates a stakeholder-ready dashboard automatically</div>
+      <div class="flow-who who-ai">Claude AI</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Output cards -->
+<div class="flow-outputs">
+  <div class="flow-output-card"><strong>Step 2 Output</strong>requirement-analysis.md — classified requirements &amp; testable conditions</div>
+  <div class="flow-output-card"><strong>Step 3 Output</strong>test-cases.md + test-cases.json — all TCs with priority &amp; tags</div>
+  <div class="flow-output-card"><strong>Step 4 Output</strong>page-objects/ + scripts/ — full Playwright automation code</div>
+  <div class="flow-output-card"><strong>Step 6 Output</strong>screenshots, videos, traces, junit-results.xml, test-results.json</div>
+  <div class="flow-output-card"><strong>Step 7 Output</strong>Custom HTML dashboard + iteration-results.html (all runs compared)</div>
+</div>
+
+<hr style="border:none; border-top:1px solid #bee3f8; margin: 18px 0;">
+
+<!-- Step 1 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 1</span><span class="step-title">Input — Provide the Requirement Document</span></div>
+  <p><span class="human-role">Who does the work: Human (you)</span></p>
+  <p>Drop a plain English or structured requirement document into the <span class="file-path">requirement/</span> folder.
+     No special format required — it just needs to describe what the software should do.</p>
+  <table>
+    <tr><th>Project</th><th>Requirement File</th><th>Content</th></tr>
+    <tr>
+      <td>Bug Retest</td>
+      <td><span class="file-path">requirement/BUG_Retest_Insurance_Name_Truncation.md</span></td>
+      <td>Bug description, example of truncation (52-char name cut to 50), scope, test credentials, acceptance criteria</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Step 2 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 2</span><span class="step-title">Requirement Analysis — Claude Reads and Breaks Down the Requirement</span></div>
+  <p><span class="ai-role">Who does the work: Claude AI (100%)</span></p>
+  <p>Claude reads the requirement doc and performs a structured analysis using the SOP defined in
+    <span class="file-path">architecture/01-requirement-analysis-sop.md</span> (7-step process, 8 quality gates).</p>
+  <p><strong>What Claude does automatically:</strong></p>
+  <ul>
+    <li>Classifies each requirement by type: FUNC, UI, VAL, SEC, PERF, A11Y, DATA, INT</li>
+    <li>Extracts testable conditions: positive, negative, boundary, state-dependent, security</li>
+    <li>Identifies ambiguities and missing information</li>
+    <li>Maps dependencies between requirements</li>
+    <li>Estimates coverage complexity: Low / Medium / High / Critical</li>
+    <li>Prioritises requirements using MoSCoW method (Must / Should / Could / Won't)</li>
+  </ul>
+  <p><strong>Output:</strong> <span class="file-path">requirement/requirement-analysis.md</span></p>
+</div>
+
+<!-- Step 3 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 3</span><span class="step-title">Test Case Design — Claude Writes All Test Cases</span></div>
+  <p><span class="ai-role">Who does the work: Claude AI (100%)</span></p>
+  <p>Claude uses the analysed requirements to design a complete test suite using industry-standard techniques.</p>
+  <p><strong>Techniques applied by Claude:</strong></p>
+  <ul>
+    <li>Equivalence Partitioning</li>
+    <li>Boundary Value Analysis</li>
+    <li>Decision Table Testing</li>
+    <li>State Transition Testing</li>
+    <li>Error Guessing</li>
+  </ul>
+  <p><strong>Each test case includes:</strong> TC ID, Module code, Description, Priority (P0–P4), Tags (@smoke, @regression, @negative, @boundary, @security)</p>
+  <table>
+    <tr><th>Output File</th><th>Format</th><th>Used For</th></tr>
+    <tr>
+      <td><span class="file-path">test-cases/TC-001-to-TC-017.md</span></td>
+      <td>Markdown table</td>
+      <td>Human review — QA managers, stakeholders</td>
+    </tr>
+    <tr>
+      <td><span class="file-path">output/test-cases/test-cases.json</span></td>
+      <td>Machine-readable JSON</td>
+      <td>Automation scripts, coverage matrix</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Step 4 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 4</span><span class="step-title">Automation Code — Claude Writes All Playwright Scripts</span></div>
+  <p><span class="ai-role">Who does the work: Claude AI (100%)</span></p>
+  <p>Claude generates production-quality TypeScript automation code following the Page Object Model (POM) pattern.</p>
+
+  <h4>Page Object Files Generated — Bug Retest Project</h4>
+  <table>
+    <tr><th>File</th><th>Screen It Automates</th></tr>
+    <tr><td><span class="file-path">page-objects/InsuranceLoginPage.ts</span></td><td>DME Rocket login + navigation to Insurance module</td></tr>
+    <tr><td><span class="file-path">page-objects/InsuranceListingPage.ts</span></td><td>Insurance list — search, verify name display, delete rows</td></tr>
+    <tr><td><span class="file-path">page-objects/InsuranceFormPage.ts</span></td><td>Create/edit insurance form — enter names, save, verify no truncation</td></tr>
+  </table>
+
+  <h4>Spec / Test File Generated — Bug Retest Project</h4>
+  <table>
+    <tr><th>File</th><th>What It Tests</th></tr>
+    <tr><td><span class="file-path">scripts/insurance-name-truncation.spec.ts</span></td><td>All 17 test cases for the insurance name truncation bug — login, create, listing, edit, boundary, special chars</td></tr>
+  </table>
+</div>
+
+<!-- Step 5 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 5</span><span class="step-title">Configuration &amp; Test Data — Claude Sets Up the Runner</span></div>
+  <p><span class="ai-role">Who does the work: Claude AI</span></p>
+  <table>
+    <tr><th>File</th><th>Purpose</th></tr>
+    <tr><td><span class="file-path">config/playwright.insurance.config.ts</span></td><td>Browser settings, timeouts, retries=0 (clean pass/fail signal), reporter output paths</td></tr>
+    <tr><td><span class="file-path">test-data/insurance-data.ts</span></td><td>All test input values — name strings, boundary lengths (50/51/52/63 chars), credentials</td></tr>
+  </table>
+</div>
+
+<!-- Step 6 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 6</span><span class="step-title">Execution — Human Runs One Command</span></div>
+  <p><span class="human-role">Who does the work: Human (one command, ~5 seconds of effort)</span></p>
+  <p>The human runs a single terminal command. Playwright handles the rest — opening the browser, clicking through screens, making assertions, capturing evidence.</p>
+
+  <h4>Run Command</h4>
+  <div class="code-block">npx playwright test \
+  --config=BUG-Retest-Insurance-Name-Truncation/config/playwright.insurance.config.ts \
+  --retries=0</div>
+
+  <h4>What Happens Automatically</h4>
+  <table>
+    <tr><th>Event</th><th>What Is Captured</th><th>Saved To</th></tr>
+    <tr><td>Test failure</td><td>Screenshot of the browser at the moment of failure</td><td><span class="file-path">output/artifacts/</span></td></tr>
+    <tr><td>Test failure</td><td>Video recording of the entire test run</td><td><span class="file-path">output/artifacts/</span></td></tr>
+    <tr><td>First retry</td><td>Playwright trace (full network + DOM snapshot)</td><td><span class="file-path">output/artifacts/</span></td></tr>
+    <tr><td>After every run</td><td>JSON results (machine-readable)</td><td><span class="file-path">output/test-results.json</span></td></tr>
+    <tr><td>After every run</td><td>JUnit XML (Jenkins, Azure DevOps, GitHub Actions ready)</td><td><span class="file-path">output/junit-results.xml</span></td></tr>
+  </table>
+</div>
+
+<!-- Step 7 detail -->
+<div class="step-box">
+  <div><span class="step-number">Step 7</span><span class="step-title">Reporting — Claude Generates the Final Dashboard</span></div>
+  <p><span class="ai-role">Who does the work: Claude AI (100%)</span></p>
+  <p>Claude produces a custom, standalone HTML dashboard — not a raw framework dump. Every report is a polished, stakeholder-ready document.</p>
+
+  <h4>What Every HTML Report Contains</h4>
+  <table>
+    <tr><th>Section</th><th>What Is Shown</th></tr>
+    <tr><td>Header</td><td>Suite name, run date, RUN_ID, environment URL, filename</td></tr>
+    <tr><td>Result Banner</td><td>Green (all pass) or Amber (any fail) gradient with summary line</td></tr>
+    <tr><td>Stats Row</td><td>TCs Passed · TCs Failed · TCs Skipped · Hook status · Total duration</td></tr>
+    <tr><td>Visual Summary</td><td>SVG donut chart (pass/fail %) + per-suite progress bars + execution timeline</td></tr>
+    <tr><td>Test Results Table</td><td>TC ID · Description · Suite chip · Priority · Pass/Fail badge · Timestamp</td></tr>
+    <tr><td>Acceptance Criteria</td><td>Each criterion → test coverage → MET / NOT MET badge</td></tr>
+    <tr><td>Environment Card</td><td>URL, user, browser, Playwright version, config file, RUN_ID</td></tr>
+    <tr><td>Footer</td><td>Timestamp, RUN_ID, links to iteration history and previous run</td></tr>
+  </table>
+  <div class="highlight-box">
+    <strong>Run History:</strong> Every re-run gets its own timestamped folder —
+    <span class="file-path">output/run-history/insurance-retest-20260528-1151.html</span>,
+    <span class="file-path">insurance-retest-20260529-1450.html</span>, etc.
+    Old results are never deleted. An iteration comparison file
+    (<span class="file-path">iteration-results.html</span>) shows all runs side-by-side.
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION 5 -->
+<h2>5. Key Files — What Each One Does</h2>
+<h3>Bug Retest: Insurance Name Truncation — <span class="file-path">BUG-Retest-Insurance-Name-Truncation/</span></h3>
+<table>
+  <tr><th>File Path</th><th>What It Does</th></tr>
+  <tr><td><span class="file-path">requirement/BUG_Retest_Insurance_Name_Truncation.md</span></td><td>Source requirement — original bug description, example of truncation, scope, credentials, acceptance criteria</td></tr>
+  <tr><td><span class="file-path">test-cases/TC-001-to-TC-017.md</span></td><td>All 17 test cases in human-readable table — login, create, listing, edit, boundary, special characters</td></tr>
+  <tr><td><span class="file-path">scripts/insurance-name-truncation.spec.ts</span></td><td>Single Playwright spec automating all 17 test cases end-to-end</td></tr>
+  <tr><td><span class="file-path">page-objects/InsuranceLoginPage.ts</span></td><td>Login automation — enters credentials, navigates to the Insurance module</td></tr>
+  <tr><td><span class="file-path">page-objects/InsuranceListingPage.ts</span></td><td>List page automation — searches records, verifies full name is displayed, deletes test rows</td></tr>
+  <tr><td><span class="file-path">page-objects/InsuranceFormPage.ts</span></td><td>Form automation — enters long names into Create/Edit form, saves, checks for truncation</td></tr>
+  <tr><td><span class="file-path">test-data/insurance-data.ts</span></td><td>All test input strings — 50-char (exact boundary), 51-char, 52-char, 63-char names, special characters, credentials</td></tr>
+  <tr><td><span class="file-path">config/playwright.insurance.config.ts</span></td><td>Suite config — retries=0, single browser, reporter output paths set to this project's output folder</td></tr>
+  <tr><td><span class="file-path">output/run-history/insurance-retest-20260529-1450.html</span></td><td>Final verified run report — 17/17 PASSED, fix confirmed — <span class="badge-pass">Fix Verified</span></td></tr>
+  <tr><td><span class="file-path">output/run-history/iteration-results.html</span></td><td>Side-by-side comparison of all 7+ test iterations from start to verification</td></tr>
+  <tr><td><span class="file-path">output/test-results.json</span></td><td>Machine-readable results — used for CI/CD integration and trend analysis</td></tr>
+  <tr><td><span class="file-path">output/junit-results.xml</span></td><td>JUnit XML — plugs directly into Jenkins, Azure DevOps, GitHub Actions</td></tr>
+  <tr><td><span class="file-path">output/artifacts/</span></td><td>Auto-captured screenshots, videos, and Playwright traces (20+ files from all runs)</td></tr>
+</table>
+
+<h3>Test Suite Coverage — 17 Test Cases Across 6 Suites</h3>
+<table>
+  <tr><th>Suite</th><th>Test Cases</th><th>What It Validates</th></tr>
+  <tr><td>TS-001 Login &amp; Navigation</td><td>TC-001, TC-002</td><td>Admin login and reaching the Insurance module</td></tr>
+  <tr><td>TS-002 Create</td><td>TC-003, TC-004</td><td>53-char name accepted and saved without truncation</td></tr>
+  <tr><td>TS-003 Listing (after Create)</td><td>TC-005, TC-006, TC-007</td><td>Full name persists in listing; truncated value absent</td></tr>
+  <tr><td>TS-004 Edit</td><td>TC-008, TC-009, TC-010</td><td>Edit form shows full name; 63-char update accepted</td></tr>
+  <tr><td>TS-005 Listing (after Edit)</td><td>TC-011, TC-012, TC-013</td><td>Updated name persists in listing; no UI clipping</td></tr>
+  <tr><td>TS-006 Boundary &amp; Special Chars</td><td>TC-014, TC-015, TC-016, TC-017</td><td>Exact 50/51-char boundary; special characters accepted</td></tr>
+</table>
+
+<!-- SECTION 6 -->
+<h2>6. Bug Handling — Detection, Reporting &amp; Ticket Information</h2>
+
+<p>
+  When Playwright detects a test failure during execution, a structured process kicks in automatically.
+  Claude AI then produces a standalone bug report file per issue — ready to be copied into any ticket system
+  (Jira, Azure DevOps, Asana, Linear, etc.).
+</p>
+
+<!-- Bug detection flow -->
+<h3>6A — What Happens When a Bug Is Found During Execution</h3>
+
+<div class="step-box">
+  <p><strong>1. Playwright detects the failure</strong> — the assertion fails (e.g., element not visible, wrong text, timeout).</p>
+  <p><strong>2. Evidence is auto-captured immediately:</strong></p>
+  <ul>
+    <li>Screenshot of the browser at the exact moment of failure → saved to <span class="file-path">output/artifacts/</span></li>
+    <li>Video recording of the full test run → saved to <span class="file-path">output/artifacts/</span></li>
+    <li>Playwright trace file (full DOM + network snapshot) → saved to <span class="file-path">output/artifacts/</span> on first retry</li>
+  </ul>
+  <p><strong>3. Test is marked FAILED</strong> in the JSON results (<span class="file-path">output/test-results.json</span>) and JUnit XML (<span class="file-path">output/junit-results.xml</span>).</p>
+  <p><strong>4. Claude AI analyses the failures</strong> after execution and produces:</p>
+  <ul>
+    <li>One <span class="file-path">BUG-NNN-{title}.md</span> file per distinct bug — saved in <span class="file-path">output/bug-reports/</span></li>
+    <li>One <span class="file-path">BUG-SUMMARY.md</span> — executive summary of all bugs found in that run</li>
+  </ul>
+</div>
+
+<!-- Bug report structure -->
+<h3>6B — What Information Is Inside a Bug Report</h3>
+<p>Every bug report file follows this structure (from actual reports in <span class="file-path">output/bug-reports/</span>):</p>
+
+<table>
+  <tr><th>Field</th><th>What It Contains</th><th>Example (from BUG-001)</th></tr>
+  <tr><td><strong>Bug ID</strong></td><td>Sequential ID for tracking</td><td>BUG-001</td></tr>
+  <tr><td><strong>Title</strong></td><td>One-line description of the defect</td><td>Cloudflare Bot Protection blocks search results in headless Playwright</td></tr>
+  <tr><td><strong>Severity</strong></td><td>Impact on the product: Critical / High / Medium / Low</td><td>High (blocks 3 test cases)</td></tr>
+  <tr><td><strong>Affected Test Cases</strong></td><td>Which TC IDs are failing because of this bug</td><td>TC-SRCH-002, TC-RSLT-001, TC-RSLT-002</td></tr>
+  <tr><td><strong>Root Cause</strong></td><td>Why the bug happens — environment, code, or config issue</td><td>Cloudflare Browser Integrity Check detects headless Chromium and shows a security challenge instead of results</td></tr>
+  <tr><td><strong>Steps to Reproduce</strong></td><td>Exact steps a dev can follow to see the bug</td><td>1. Run in headless mode 2. Search for any product 3. Observe challenge page instead of results</td></tr>
+  <tr><td><strong>Workaround</strong></td><td>Temporary fix used to unblock the test run</td><td>Tests skipped; other tests use direct URL navigation</td></tr>
+  <tr><td><strong>Recommended Fix</strong></td><td>Long-term resolution options</td><td>Use headed browser / deploy nopCommerce locally without Cloudflare / use real Chrome channel</td></tr>
+  <tr><td><strong>Evidence</strong></td><td>Links to screenshot, video, trace file captured at failure time</td><td>output/artifacts/screenshot-TC-SRCH-002.png, trace file path</td></tr>
+  <tr><td><strong>Environment</strong></td><td>Browser, OS, app URL, Playwright version, run date</td><td>Chromium headless, Windows 10, demo.nopcommerce.com, PW 1.60, 2026-05-27</td></tr>
+</table>
+
+<!-- Actual bugs found in this POC -->
+<h3>6C — Actual Bugs Found in This POC (nopCommerce Project)</h3>
+<p>Location: <span class="file-path">nopCommerce-Guest-Checkout-E2E/output/bug-reports/</span></p>
+
+<table>
+  <tr><th>Bug ID</th><th>Title</th><th>Severity</th><th>Affected TCs</th><th>Status</th></tr>
+  <tr>
+    <td><strong>BUG-001</strong></td>
+    <td>Cloudflare Bot Protection blocks search results page in headless mode</td>
+    <td>High</td>
+    <td>TC-SRCH-002, TC-RSLT-001, TC-RSLT-002 (3 tests skipped)</td>
+    <td>Open — environment issue</td>
+  </tr>
+  <tr>
+    <td><strong>BUG-002</strong></td>
+    <td>Cloudflare blocks AJAX add-to-cart request via <code>__cfRLUnblockHandlers</code> guard</td>
+    <td>Critical</td>
+    <td>22 tests failed — cart, checkout, shipping, payment, confirmation, E2E</td>
+    <td>Open — requires local/staging environment without Cloudflare</td>
+  </tr>
+  <tr>
+    <td><strong>BUG-003</strong></td>
+    <td>Product title assertion uses 5s timeout instead of framework 30s timeout — flaky on slow networks</td>
+    <td>Low</td>
+    <td>TC-E2E-001 (1 test, masked by BUG-002)</td>
+    <td>Open — fix: add <code>{ timeout: 30_000 }</code> to <code>toBeVisible()</code> at line 876</td>
+  </tr>
+</table>
+
+<!-- Executive summary format -->
+<h3>6D — The BUG-SUMMARY.md — Executive Snapshot Per Run</h3>
+<p>After every execution, Claude also produces <span class="file-path">output/bug-reports/BUG-SUMMARY.md</span> — a one-page executive view of the run:</p>
+
+<table>
+  <tr><th>Section in Summary</th><th>What It Shows</th></tr>
+  <tr><td>Run Date &amp; ID</td><td>When the test was executed and the unique run identifier</td></tr>
+  <tr><td>Overall Result</td><td>Total: 30 tests · 5 Passed · 3 Skipped · 22 Failed</td></tr>
+  <tr><td>Passing Tests List</td><td>TC-SITE-001, TC-SITE-002, TC-SRCH-001, TC-PDP-001, TC-PDP-002</td></tr>
+  <tr><td>Skipped Tests List</td><td>TC-SRCH-002, TC-RSLT-001, TC-RSLT-002 (with reason: BUG-001)</td></tr>
+  <tr><td>Failed Tests List</td><td>All 22 test IDs blocked by BUG-002</td></tr>
+  <tr><td>Root Cause Summary</td><td>All failures trace to Cloudflare Bot Management on the target environment</td></tr>
+  <tr><td>Recommendations</td><td>Prioritised action list: switch to local env → fix BUG-003 → re-enable search tests</td></tr>
+</table>
+
+<!-- Go/No-Go criteria -->
+<h3>6E — Go / No-Go Decision Criteria (from SOP-QA-004)</h3>
+<table>
+  <tr><th>Criterion</th><th>Threshold</th><th>Action if Not Met</th></tr>
+  <tr><td>Smoke tests pass rate</td><td>100% — no exceptions</td><td>Block release, escalate immediately</td></tr>
+  <tr><td>Overall pass rate</td><td>≥ 95%</td><td>Hold release, review failures</td></tr>
+  <tr><td>P1 / Security failures</td><td>0 — zero tolerance</td><td>Block release unconditionally</td></tr>
+  <tr><td>New failures vs previous run</td><td>≤ 5% regression</td><td>Investigate before proceeding</td></tr>
+</table>
+
+<!-- How to put into a ticket -->
+<h3>6F — How to Move a Bug Into Your Ticket System</h3>
+<p>
+  The bug reports Claude generates are designed to be pasted directly into any ticket tool.
+  Each field maps to a standard Jira / Azure DevOps / Asana ticket field:
+</p>
+<table>
+  <tr><th>Bug Report Field</th><th>Maps to Jira Field</th><th>Maps to Azure DevOps Field</th></tr>
+  <tr><td>Bug ID + Title</td><td>Summary</td><td>Title</td></tr>
+  <tr><td>Severity</td><td>Priority</td><td>Severity</td></tr>
+  <tr><td>Root Cause + Steps to Reproduce</td><td>Description / Steps to Reproduce</td><td>Repro Steps</td></tr>
+  <tr><td>Affected Test Cases</td><td>Labels / Linked Issues</td><td>Related Work Items</td></tr>
+  <tr><td>Recommended Fix</td><td>Acceptance Criteria</td><td>Definition of Done</td></tr>
+  <tr><td>Evidence (screenshot, video, trace)</td><td>Attachments</td><td>Attachments</td></tr>
+  <tr><td>Environment details</td><td>Environment field</td><td>System Info</td></tr>
+</table>
+<div class="highlight-box">
+  <strong>Note:</strong> This POC does not yet have a direct integration to Jira or Azure DevOps.
+  The bug report Markdown files are the source — copy the content into your ticket tool of choice,
+  or attach the <span class="file-path">.md</span> file directly. A future enhancement would be an API call
+  from the report generator to auto-create tickets.
+</div>
+
+<!-- Report distribution -->
+<h3>6G — Who Receives Bug Reports (from SOP-QA-004)</h3>
+<table>
+  <tr><th>Audience</th><th>What They Receive</th><th>When</th></tr>
+  <tr><td>Development Team</td><td>Full bug reports with steps, root cause, evidence, recommended fix</td><td>Same day as the test run</td></tr>
+  <tr><td>QA Team</td><td>BUG-SUMMARY.md + HTML dashboard report</td><td>After every execution</td></tr>
+  <tr><td>QA Architect</td><td>Full run report + Go/No-Go recommendation</td><td>Before any release decision</td></tr>
+  <tr><td>Release Manager</td><td>Executive summary — pass/fail count, open blockers, Go/No-Go status</td><td>Pre-release checkpoint</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2>7. What the AI Model Actually Does</h2>
+<p>
+  Claude AI (model: <strong>claude-sonnet-4-6</strong>) acts as a senior QA engineer with full STLC knowledge.
+  It communicates through the <strong>Claude Code CLI</strong> — a terminal interface that lets Claude read files,
+  write code, run commands, and organise output on your local machine.
+</p>
+
+<h3>How Claude Thinks</h3>
+<p>Claude is a large language model trained on vast engineering and QA knowledge. When you give it a requirement document, it:</p>
+<ul>
+  <li>Understands the business domain and the software's intended behaviour</li>
+  <li>Applies ISTQB-aligned test design techniques automatically</li>
+  <li>Generates syntactically correct TypeScript code that follows Playwright best practices</li>
+  <li>Follows the project governance rules defined in <span class="file-path">CLAUDE.md</span> every session — automatically, without being reminded</li>
+</ul>
+
+<h3>The CLAUDE.md Governance File</h3>
+<p>
+  <span class="file-path">CLAUDE.md</span> at the project root contains 7 rules that Claude follows in every session:
+</p>
+<table>
+  <tr><th>Rule</th><th>What It Enforces</th></tr>
+  <tr><td>Rule 1</td><td>Every requirement / execution gets its own dedicated folder with a standard sub-structure</td></tr>
+  <tr><td>Rule 2</td><td>Every re-run creates a new timestamped folder — old results never overwritten</td></tr>
+  <tr><td>Rule 3</td><td>Every project folder must have a README.md with run command and folder map</td></tr>
+  <tr><td>Rule 4</td><td>No files at project root — only framework infrastructure and project folders</td></tr>
+  <tr><td>Rule 5</td><td>Shared code stays in src/; project-specific code stays in the project folder</td></tr>
+  <tr><td>Rule 6</td><td>Output file standards — where each file type goes and when to create it</td></tr>
+  <tr><td>Rule 7</td><td>HTML report format — mandatory sections, colour scheme, file size target (20–30 KB)</td></tr>
+</table>
+<div class="highlight-box">
+  <strong>Key Point:</strong> Claude follows these rules automatically in every session. You do not need to remind it.
+  This is how the project maintains consistency across many executions and team members.
+</div>
+
+<hr style="margin-top:40px; border:none; border-top:2px solid #bee3f8;">
+<div style="text-align:center; color:#718096; font-size:9pt; margin-top:12px;">
+  AI-QA-POC &nbsp;|&nbsp; Model: Claude Sonnet 4.6 (claude-sonnet-4-6) &nbsp;|&nbsp;
+  Framework: Playwright 1.60 + TypeScript 5.7 &nbsp;|&nbsp;
+  Prepared for Internal QA Team Showcase
+</div>
+
+</body>
+</html>

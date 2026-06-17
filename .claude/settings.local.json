@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm init playwright@latest 2>&1)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\nopCommerce-Guest-Checkout-E2E\" -Recurse -Force | Where-Object {$_.PSIsContainer -eq $false} | Select-Object FullName, @{Name='Size';Expression={$_.Length}} | Format-Table -AutoSize)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Insurance-Name-Truncation\" -Recurse -Force | Where-Object {$_.PSIsContainer -eq $false} | Select-Object FullName, @{Name='Size';Expression={$_.Length}} | Format-Table -AutoSize)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\src\" -Recurse -Force | Where-Object {$_.PSIsContainer -eq $false} | Select-Object FullName, @{Name='Size';Expression={$_.Length}} | Format-Table -AutoSize)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\nopCommerce-Guest-Checkout-E2E\\\\scripts\" -Recurse | Select-Object FullName, @{Name='Size';Expression={if\\(-not $_.PSIsContainer\\){$_.Length}else{'-'}}} | Format-Table -AutoSize)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\" -Force)",
+      "Bash(Select-Object Name, PSIsContainer)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-STAR-2173-RA\" -Recurse)",
+      "Bash(Select-Object FullName)",
+      "Bash(Format-Table -AutoSize)",
+      "PowerShell(New-Item *)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\requirement\")",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\test-cases\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\scripts\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\page-objects\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\test-data\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\config\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\output\\\\run-history\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\output\\\\playwright-report\\\\latest\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Krimit\\\\Desktop\\\\AI-QA-POC\\\\BUG-Retest-Manufacturer-Model-Audit-Fields\\\\output\\\\artifacts\")"
+    ]
+  }
+}

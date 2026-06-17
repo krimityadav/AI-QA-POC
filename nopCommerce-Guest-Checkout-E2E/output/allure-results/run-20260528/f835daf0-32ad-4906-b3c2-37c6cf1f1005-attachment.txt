@@ -1,0 +1,5 @@
+[2026-05-28T06:58:38.434Z] [ProductDetailPage] navigate -> https://demo.nopcommerce.com/apple-macbook-pro
+[2026-05-28T06:58:44.304Z] [ProductDetailPage] waitForPageLoad: networkidle timed-out, continuing
+[2026-05-28T06:58:44.314Z] [ProductDetailPage] addToCart
+[2026-05-28T06:58:44.326Z] [ProductDetailPage] clickElement: locator('#add-to-cart-button-product-page, button.add-to-cart-button').first()
+[2026-05-28T06:58:44.493Z] [ShoppingCartPage] navigate -> https://demo.nopcommerce.com/cart

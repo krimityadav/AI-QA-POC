@@ -1,0 +1,4 @@
+[2026-05-28T06:49:03.087Z] [HomePage] navigate → /
+[2026-05-28T06:49:03.087Z] [HomePage] navigate -> https://demo.nopcommerce.com/
+[2026-05-28T06:49:05.442Z] [HomePage] submitSearch
+[2026-05-28T06:49:05.443Z] [HomePage] clickElement: locator('.search-box-button')

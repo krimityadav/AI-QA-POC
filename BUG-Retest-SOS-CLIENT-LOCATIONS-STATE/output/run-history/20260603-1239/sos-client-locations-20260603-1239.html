@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOS-CLIENT-LOCATIONS-STATE Bug Retest — 2026-06-03 12:39</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; font-size: 14px; padding: 24px; }
+  .card { background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 20px; overflow: hidden; }
+  .card-body { padding: 20px 24px; }
+  .header { background: linear-gradient(135deg,#1a365d 0%,#2a4a7f 100%); color: #fff; padding: 24px 28px; border-radius: 12px; margin-bottom: 20px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .header .sub { font-size: 13px; opacity: .82; }
+  .header .meta-row { display: flex; gap: 32px; margin-top: 14px; flex-wrap: wrap; }
+  .header .meta-item { font-size: 12px; opacity: .78; }
+  .header .meta-item span { display: block; font-size: 13px; font-weight: 600; opacity: 1; }
+  .banner-blocked { background: linear-gradient(135deg,#d69e2e,#b7791f); color: #fff; padding: 18px 24px; border-radius: 12px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .banner-icon { font-size: 32px; }
+  .banner-text h2 { font-size: 18px; font-weight: 700; }
+  .banner-text p { font-size: 13px; opacity: .88; margin-top: 3px; }
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card { background: #fff; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+  .stat-value { font-size: 28px; font-weight: 800; line-height: 1; }
+  .stat-label { font-size: 11px; color: #718096; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .pass-val { color: #38a169; } .fail-val { color: #e53e3e; } .skip-val { color: #718096; } .warn-val { color: #d69e2e; } .blocked-val { color: #d69e2e; }
+  .visual { display: grid; grid-template-columns: 180px 1fr; gap: 24px; align-items: center; }
+  .donut-wrap { display: flex; flex-direction: column; align-items: center; }
+  .donut-label { font-size: 13px; color: #4a5568; margin-top: 8px; font-weight: 600; }
+  .suite-row { margin-bottom: 10px; }
+  .suite-name { font-size: 12px; font-weight: 600; color: #2d3748; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .bar-track { background: #edf2f7; border-radius: 5px; height: 10px; overflow: hidden; }
+  .bar-fill-pass { height: 100%; border-radius: 5px; background: #38a169; }
+  .bar-fill-block { height: 100%; border-radius: 5px; background: #d69e2e; }
+  .tc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tc-table th { background: #2d3748; color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .tc-table td { padding: 9px 12px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+  .tc-table tr:hover td { background: #f7fafc; }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 9999px; font-size: 11px; font-weight: 700; }
+  .badge-pass { background: #c6f6d5; color: #276749; }
+  .badge-blocked { background: #fef3c7; color: #92400e; }
+  .badge-nr { background: #e2e8f0; color: #4a5568; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+  .chip-ts1 { background: #bee3f8; color: #2b6cb0; }
+  .chip-ts2 { background: #c6f6d5; color: #276749; }
+  .chip-ts3 { background: #fefcbf; color: #744210; }
+  .priority-high { color: #e53e3e; font-weight: 700; }
+  .priority-critical { color: #9b2c2c; font-weight: 800; }
+  .priority-med { color: #d69e2e; font-weight: 600; }
+  .blocker-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+  .blocker-box h3 { color: #92400e; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .blocker-box ul { list-style: disc; padding-left: 20px; color: #78350f; font-size: 13px; line-height: 1.8; }
+  .blocker-box .resolution { margin-top: 12px; background: #fef3c7; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: #78350f; }
+  .ac-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ac-table th { background: #2d3748; color: #fff; padding: 9px 12px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .ac-table td { padding: 9px 12px; border-bottom: 1px solid #edf2f7; }
+  .badge-pending { background: #fef3c7; color: #92400e; }
+  .env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .env-item { background: #f7fafc; border-radius: 6px; padding: 10px 14px; }
+  .env-key { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: .5px; }
+  .env-val { font-size: 13px; font-weight: 600; color: #2d3748; margin-top: 2px; font-family: monospace; }
+  .section-title { font-size: 15px; font-weight: 700; color: #2d3748; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #edf2f7; }
+  footer { text-align: center; font-size: 12px; color: #718096; margin-top: 24px; }
+  a { color: #3182ce; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SOS-CLIENT-LOCATIONS-STATE — Client Locations State/Territory Column Verification</h1>
+  <div class="sub">BUG RETEST · Select Ortho – DME Rocket Scrum · app.dmerocket.com</div>
+  <div class="meta-row">
+    <div class="meta-item">Run Date<span>2026-06-03</span></div>
+    <div class="meta-item">Start Time<span>12:29 UTC</span></div>
+    <div class="meta-item">RUN_ID<span>SOSCLIENT-20260603-1229</span></div>
+    <div class="meta-item">Environment<span>https://app.dmerocket.com</span></div>
+    <div class="meta-item">Config<span>playwright.sos-client-locations.config.ts</span></div>
+  </div>
+</div>
+
+<!-- Result Banner -->
+<div class="banner-blocked">
+  <div class="banner-icon">⚠️</div>
+  <div class="banner-text">
+    <h2>BLOCKED — AUTHENTICATION ISSUE ON app.dmerocket.com</h2>
+    <p>TC-001 passed (login page loaded). TC-002 blocked: app.dmerocket.com uses Microsoft SSO which rejects admin@selectortho.net with "This username may be incorrect." TC-003–TC-010 did not run.</p>
+  </div>
+</div>
+
+<!-- Stats Row -->
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-value pass-val">1</div><div class="stat-label">TCs Passed</div></div>
+  <div class="stat-card"><div class="stat-value fail-val">0</div><div class="stat-label">TCs Failed</div></div>
+  <div class="stat-card"><div class="stat-value blocked-val">1</div><div class="stat-label">TCs Blocked</div></div>
+  <div class="stat-card"><div class="stat-value skip-val">8</div><div class="stat-label">Not Run</div></div>
+  <div class="stat-card"><div class="stat-value warn-val">⚠</div><div class="stat-label">Auth Status</div></div>
+</div>
+
+<!-- Blocker Details -->
+<div class="blocker-box">
+  <h3>🔒 Authentication Blocker — Root Cause</h3>
+  <ul>
+    <li><strong>Environment:</strong> https://app.dmerocket.com (production-like) uses Microsoft SSO (Azure AD)</li>
+    <li><strong>Credential used:</strong> admin@selectortho.net / Password123!</li>
+    <li><strong>Microsoft SSO error:</strong> "This username may be incorrect. Make sure you typed it correctly. Otherwise, contact your admin."</li>
+    <li><strong>Root cause:</strong> admin@selectortho.net is not registered in Microsoft Azure AD for the app.dmerocket.com tenant, or the domain selectortho.net is not federated with Microsoft</li>
+    <li><strong>Note:</strong> The same credentials work on dev.dmerocket.com which uses Auth0 (email + password directly)</li>
+    <li><strong>TC-001 (PASS):</strong> The login page at app.dmerocket.com loaded correctly; the two-step email → Continue → Microsoft SSO flow was identified</li>
+  </ul>
+  <div class="resolution">
+    <strong>Resolution required:</strong> Provide a Microsoft-linked test account for app.dmerocket.com, OR confirm if the bug can be verified on dev.dmerocket.com (which uses the same codebase). Re-run the suite once valid credentials are available.
+  </div>
+</div>
+
+<!-- Visual Summary -->
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Visual Summary</div>
+    <div class="visual">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 42 42" width="120" height="120">
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#edf2f7" stroke-width="4"/>
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#38a169" stroke-width="4"
+            stroke-dasharray="10 90" stroke-dashoffset="25" transform="rotate(-90 21 21)"/>
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#d69e2e" stroke-width="4"
+            stroke-dasharray="10 90" stroke-dashoffset="15" transform="rotate(-90 21 21)"/>
+          <text x="21" y="24" text-anchor="middle" font-size="6" font-weight="800" fill="#d69e2e">BLOCKED</text>
+        </svg>
+        <div class="donut-label">1 PASS · 1 BLOCKED · 8 NR</div>
+      </div>
+      <div class="suites-wrap">
+        <div class="suite-row">
+          <div class="suite-name"><span>TS-001 · Authentication</span><span>1/2 (1 blocked)</span></div>
+          <div class="bar-track"><div class="bar-fill-pass" style="width:50%"></div></div>
+        </div>
+        <div class="suite-row">
+          <div class="suite-name"><span>TS-002 · Navigate to Client Record</span><span>0/2 (not run)</span></div>
+          <div class="bar-track"><div class="bar-fill-block" style="width:0%"></div></div>
+        </div>
+        <div class="suite-row">
+          <div class="suite-name"><span>TS-003 · Verify State/Territory Column [BUG FIX]</span><span>0/6 (not run)</span></div>
+          <div class="bar-track"><div class="bar-fill-block" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Test Results Table -->
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Test Results</div>
+    <table class="tc-table">
+      <thead><tr><th>TC ID</th><th>Test Case</th><th>Priority</th><th>Result</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>TC-001</td><td><span class="chip chip-ts1">TS-001</span> Navigate to app.dmerocket.com and load login page</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>Login page loaded; two-step email → Microsoft SSO flow identified</td></tr>
+        <tr><td>TC-002</td><td><span class="chip chip-ts1">TS-001</span> Login with admin credentials</td><td class="priority-high">High</td><td><span class="badge badge-blocked">BLOCKED</span></td><td>Microsoft SSO rejects admin@selectortho.net — "username may be incorrect"</td></tr>
+        <tr><td>TC-003</td><td><span class="chip chip-ts2">TS-002</span> Navigate to Clients section from main menu</td><td class="priority-high">High</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002</td></tr>
+        <tr><td>TC-004</td><td><span class="chip chip-ts2">TS-002</span> Search and open Chatham Orthopaedic Associates</td><td class="priority-high">High</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002</td></tr>
+        <tr><td>TC-005</td><td><span class="chip chip-ts3">TS-003</span> Scroll to Client Locations section</td><td class="priority-high">High</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002</td></tr>
+        <tr><td>TC-006</td><td><span class="chip chip-ts3">TS-003</span> Client Locations table has at least one data row</td><td class="priority-high">High</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002</td></tr>
+        <tr><td>TC-007</td><td><span class="chip chip-ts3">TS-003</span> <strong>State/Territory column header is visible</strong> [BUG FIX]</td><td class="priority-critical">Critical</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002 — requires valid Microsoft SSO account</td></tr>
+        <tr><td>TC-008</td><td><span class="chip chip-ts3">TS-003</span> <strong>State/Territory values not blank</strong> [BUG FIX]</td><td class="priority-critical">Critical</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002 — requires valid Microsoft SSO account</td></tr>
+        <tr><td>TC-009</td><td><span class="chip chip-ts3">TS-003</span> <strong>All rows have non-empty State value</strong> [BUG FIX]</td><td class="priority-critical">Critical</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002 — requires valid Microsoft SSO account</td></tr>
+        <tr><td>TC-010</td><td><span class="chip chip-ts3">TS-003</span> All expected column headers present</td><td class="priority-med">Medium</td><td><span class="badge badge-nr">NOT RUN</span></td><td>Blocked by TC-002 — requires valid Microsoft SSO account</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Acceptance Criteria -->
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Acceptance Criteria</div>
+    <table class="ac-table">
+      <thead><tr><th>Criterion</th><th>Coverage</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>State/Territory column is visible in Client Locations table</td><td>TC-007</td><td><span class="badge badge-pending">⚠ PENDING</span></td></tr>
+        <tr><td>State/Territory value displayed (not blank) for each location</td><td>TC-008, TC-009</td><td><span class="badge badge-pending">⚠ PENDING</span></td></tr>
+        <tr><td>Data consistency between table and saved values</td><td>TC-008, TC-009</td><td><span class="badge badge-pending">⚠ PENDING</span></td></tr>
+        <tr><td>Other columns continue to display correctly</td><td>TC-010</td><td><span class="badge badge-pending">⚠ PENDING</span></td></tr>
+        <tr><td>Login page loads at app.dmerocket.com</td><td>TC-001</td><td><span class="badge badge-pass">✅ MET</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Environment -->
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Environment</div>
+    <div class="env-grid">
+      <div class="env-item"><div class="env-key">Application URL</div><div class="env-val">https://app.dmerocket.com</div></div>
+      <div class="env-item"><div class="env-key">Credential Attempted</div><div class="env-val">admin@selectortho.net</div></div>
+      <div class="env-item"><div class="env-key">Auth Method</div><div class="env-val">Microsoft SSO (Azure AD) — BLOCKED</div></div>
+      <div class="env-item"><div class="env-key">Browser</div><div class="env-val">Chromium (headed)</div></div>
+      <div class="env-item"><div class="env-key">Config File</div><div class="env-val">playwright.sos-client-locations.config.ts</div></div>
+      <div class="env-item"><div class="env-key">Run ID</div><div class="env-val">SOSCLIENT-20260603-1229</div></div>
+      <div class="env-item"><div class="env-key">Blocker</div><div class="env-val">Microsoft SSO — credential not recognized</div></div>
+      <div class="env-item"><div class="env-key">Action Required</div><div class="env-val">Provide Microsoft-linked test account</div></td></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Generated: 2026-06-03 12:39 UTC &nbsp;·&nbsp; RUN_ID: SOSCLIENT-20260603-1229 &nbsp;·&nbsp;
+  <a href="../iteration-results.html">Iteration Results</a>
+</footer>
+</body>
+</html>

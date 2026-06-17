@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOS-CLIENT-LOCATIONS-STATE Bug Retest — 2026-06-03 13:52</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; font-size: 14px; padding: 24px; }
+  .card { background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 20px; overflow: hidden; }
+  .card-body { padding: 20px 24px; }
+  .header { background: linear-gradient(135deg,#1a365d 0%,#2a4a7f 100%); color: #fff; padding: 24px 28px; border-radius: 12px; margin-bottom: 20px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .header .sub { font-size: 13px; opacity: .82; }
+  .header .meta-row { display: flex; gap: 32px; margin-top: 14px; flex-wrap: wrap; }
+  .header .meta-item { font-size: 12px; opacity: .78; }
+  .header .meta-item span { display: block; font-size: 13px; font-weight: 600; opacity: 1; }
+  .banner-pass { background: linear-gradient(135deg,#38a169,#276749); color: #fff; padding: 18px 24px; border-radius: 12px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .banner-icon { font-size: 32px; }
+  .banner-text h2 { font-size: 18px; font-weight: 700; }
+  .banner-text p { font-size: 13px; opacity: .88; margin-top: 3px; }
+  .note-box { background: #ebf8ff; border: 1px solid #90cdf4; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #2b6cb0; }
+  .note-box strong { display: block; margin-bottom: 4px; }
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card { background: #fff; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+  .stat-value { font-size: 28px; font-weight: 800; line-height: 1; }
+  .stat-label { font-size: 11px; color: #718096; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .pass-val { color: #38a169; } .fail-val { color: #e53e3e; } .skip-val { color: #718096; } .warn-val { color: #d69e2e; } .time-val { color: #3182ce; }
+  .visual { display: grid; grid-template-columns: 180px 1fr; gap: 24px; align-items: center; }
+  .donut-wrap { display: flex; flex-direction: column; align-items: center; }
+  .donut-label { font-size: 13px; color: #4a5568; margin-top: 8px; font-weight: 600; }
+  .suite-row { margin-bottom: 10px; }
+  .suite-name { font-size: 12px; font-weight: 600; color: #2d3748; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .bar-track { background: #edf2f7; border-radius: 5px; height: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 5px; background: #38a169; }
+  .tc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tc-table th { background: #2d3748; color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .tc-table td { padding: 9px 12px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+  .tc-table tr:hover td { background: #f7fafc; }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 9999px; font-size: 11px; font-weight: 700; }
+  .badge-pass { background: #c6f6d5; color: #276749; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+  .chip-ts1 { background: #bee3f8; color: #2b6cb0; }
+  .chip-ts2 { background: #c6f6d5; color: #276749; }
+  .chip-ts3 { background: #fefcbf; color: #744210; }
+  .priority-high { color: #e53e3e; font-weight: 700; }
+  .priority-critical { color: #9b2c2c; font-weight: 800; }
+  .priority-med { color: #d69e2e; font-weight: 600; }
+  .ac-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ac-table th { background: #2d3748; color: #fff; padding: 9px 12px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .ac-table td { padding: 9px 12px; border-bottom: 1px solid #edf2f7; }
+  .badge-met { background: #c6f6d5; color: #276749; }
+  .env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .env-item { background: #f7fafc; border-radius: 6px; padding: 10px 14px; }
+  .env-key { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: .5px; }
+  .env-val { font-size: 13px; font-weight: 600; color: #2d3748; margin-top: 2px; font-family: monospace; }
+  .section-title { font-size: 15px; font-weight: 700; color: #2d3748; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #edf2f7; }
+  footer { text-align: center; font-size: 12px; color: #718096; margin-top: 24px; }
+  a { color: #3182ce; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SOS-CLIENT-LOCATIONS-STATE — Client Locations State/Territory Column Verification</h1>
+  <div class="sub">BUG RETEST · Select Ortho – DME Rocket Scrum · dev.dmerocket.com (App Config → Client)</div>
+  <div class="meta-row">
+    <div class="meta-item">Run Date<span>2026-06-03</span></div>
+    <div class="meta-item">Start Time<span>13:21 UTC</span></div>
+    <div class="meta-item">RUN_ID<span>SOSCLIENT-20260603-1321</span></div>
+    <div class="meta-item">Environment<span>https://dev.dmerocket.com</span></div>
+    <div class="meta-item">Config<span>playwright.sos-client-locations.config.ts</span></div>
+  </div>
+</div>
+
+<div class="banner-pass">
+  <div class="banner-icon">✅</div>
+  <div class="banner-text">
+    <h2>ALL TESTS PASSED — BUG FIX VERIFIED</h2>
+    <p>All 10 test cases passed. The State/Territory column in Client Locations table displays values for all location rows (Georgia, Georgia, Georgia, Georgia, Alabama). Bug fix confirmed on dev.dmerocket.com.</p>
+  </div>
+</div>
+
+<div class="note-box">
+  <strong>📝 Environment Note</strong>
+  Original bug report URL was <code>https://app.dmerocket.com</code> (requires Microsoft SSO — not available for test credential admin@selectortho.net).
+  Re-run executed on <code>https://dev.dmerocket.com</code> (Auth0 login) per QA direction — same codebase, same Client module. Bug fix verified on dev environment.
+  Navigation path: App Config → Client → Chatham Orthopaedic Associates → Client Locations (accordion).
+</div>
+
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-value pass-val">10</div><div class="stat-label">TCs Passed</div></div>
+  <div class="stat-card"><div class="stat-value fail-val">0</div><div class="stat-label">TCs Failed</div></div>
+  <div class="stat-card"><div class="stat-value skip-val">0</div><div class="stat-label">TCs Skipped</div></div>
+  <div class="stat-card"><div class="stat-value warn-val">✓</div><div class="stat-label">Hook Status</div></div>
+  <div class="stat-card"><div class="stat-value time-val">~30s</div><div class="stat-label">Duration</div></div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Visual Summary</div>
+    <div class="visual">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 42 42" width="120" height="120">
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#edf2f7" stroke-width="4"/>
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#38a169" stroke-width="4"
+            stroke-dasharray="100 0" stroke-dashoffset="25" transform="rotate(-90 21 21)"/>
+          <text x="21" y="24" text-anchor="middle" font-size="7" font-weight="800" fill="#38a169">100%</text>
+        </svg>
+        <div class="donut-label">10 / 10 PASS</div>
+      </div>
+      <div class="suites-wrap">
+        <div class="suite-row">
+          <div class="suite-name"><span>TS-001 · Authentication</span><span>2/2</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="suite-row">
+          <div class="suite-name"><span>TS-002 · Navigate to Client Record</span><span>2/2</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="suite-row">
+          <div class="suite-name"><span>TS-003 · Verify State/Territory Column [BUG FIX]</span><span>6/6</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Test Results</div>
+    <table class="tc-table">
+      <thead><tr><th>TC ID</th><th>Test Case</th><th>Priority</th><th>Result</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>TC-001</td><td><span class="chip chip-ts1">TS-001</span> Navigate to dev.dmerocket.com and load login page</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>Login page loaded successfully</td></tr>
+        <tr><td>TC-002</td><td><span class="chip chip-ts1">TS-001</span> Login with admin credentials</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>Authenticated via Auth0 — app shell loaded</td></tr>
+        <tr><td>TC-003</td><td><span class="chip chip-ts2">TS-002</span> Navigate to Clients section via App Config menu</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>App Config → Client (/client) — client list loaded</td></tr>
+        <tr><td>TC-004</td><td><span class="chip chip-ts2">TS-002</span> Search and open Chatham Orthopaedic Associates</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>COA client found and View button clicked — detail page opened</td></tr>
+        <tr><td>TC-005</td><td><span class="chip chip-ts3">TS-003</span> Expand Client Locations accordion section</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>Accordion clicked and expanded — locations table appeared</td></tr>
+        <tr><td>TC-006</td><td><span class="chip chip-ts3">TS-003</span> Client Locations table is visible with data rows</td><td class="priority-high">High</td><td><span class="badge badge-pass">PASS</span></td><td>5 location rows visible (Savannah, Pooler, Richmond Hill, Rincon, COATest)</td></tr>
+        <tr><td>TC-007</td><td><span class="chip chip-ts3">TS-003</span> <strong>State/Territory column header is visible</strong> [BUG FIX]</td><td class="priority-critical">Critical</td><td><span class="badge badge-pass">PASS</span></td><td>✅ "State/Territory" column header present in the table</td></tr>
+        <tr><td>TC-008</td><td><span class="chip chip-ts3">TS-003</span> <strong>State/Territory values are not blank</strong> [BUG FIX]</td><td class="priority-critical">Critical</td><td><span class="badge badge-pass">PASS</span></td><td>✅ Values: Georgia, Georgia, Georgia, Georgia, Alabama — all non-empty</td></tr>
+        <tr><td>TC-009</td><td><span class="chip chip-ts3">TS-003</span> <strong>All rows display non-empty State/Territory</strong> [BUG FIX]</td><td class="priority-critical">Critical</td><td><span class="badge badge-pass">PASS</span></td><td>✅ 5/5 rows verified — no blank values in State/Territory column</td></tr>
+        <tr><td>TC-010</td><td><span class="chip chip-ts3">TS-003</span> All expected column headers present in table</td><td class="priority-med">Medium</td><td><span class="badge badge-pass">PASS</span></td><td>Headers found: Location Name, NPI, PTAN, Address, City, State/Territory, Postal Code, Phone, Status</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Acceptance Criteria</div>
+    <table class="ac-table">
+      <thead><tr><th>Criterion</th><th>Coverage</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>State/Territory column is visible in Client Locations table</td><td>TC-007</td><td><span class="badge badge-met">✅ MET</span></td></tr>
+        <tr><td>State/Territory value displayed (not blank) for each location row</td><td>TC-008, TC-009</td><td><span class="badge badge-met">✅ MET</span></td></tr>
+        <tr><td>Data renders consistently alongside other location fields</td><td>TC-010</td><td><span class="badge badge-met">✅ MET</span></td></tr>
+        <tr><td>No data loss — saved values displayed correctly</td><td>TC-008, TC-009</td><td><span class="badge badge-met">✅ MET</span></td></tr>
+        <tr><td>Other columns continue to display correctly (no regression)</td><td>TC-010</td><td><span class="badge badge-met">✅ MET</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="section-title">Environment</div>
+    <div class="env-grid">
+      <div class="env-item"><div class="env-key">Application URL</div><div class="env-val">https://dev.dmerocket.com</div></div>
+      <div class="env-item"><div class="env-key">User</div><div class="env-val">admin@selectortho.net</div></div>
+      <div class="env-item"><div class="env-key">Auth Method</div><div class="env-val">Auth0 (direct email + password)</div></div>
+      <div class="env-item"><div class="env-key">Navigation Path</div><div class="env-val">App Config → Client → COA → Locations</div></div>
+      <div class="env-item"><div class="env-key">Client Tested</div><div class="env-val">Chatham Orthopaedic Associates (COA)</div></div>
+      <div class="env-item"><div class="env-key">Browser</div><div class="env-val">Chromium (headed)</div></div>
+      <div class="env-item"><div class="env-key">Config File</div><div class="env-val">playwright.sos-client-locations.config.ts</div></div>
+      <div class="env-item"><div class="env-key">Run ID</div><div class="env-val">SOSCLIENT-20260603-1321</div></div>
+      <div class="env-item"><div class="env-key">Total Duration</div><div class="env-val">~30 seconds</div></div>
+      <div class="env-item"><div class="env-key">State Values Found</div><div class="env-val">Georgia × 4, Alabama × 1 (5 rows)</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Generated: 2026-06-03 13:52 UTC &nbsp;·&nbsp; RUN_ID: SOSCLIENT-20260603-1321 &nbsp;·&nbsp;
+  <a href="../iteration-results.html">Iteration Results</a>
+</footer>
+</body>
+</html>

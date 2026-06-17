@@ -1,0 +1,196 @@
+<testsuites id="" name="" tests="17" failures="1" skipped="9" errors="0" time="79.78580799999999">
+<testsuite name="insurance-name-truncation.spec.ts" timestamp="2026-06-10T11:49:56.878Z" hostname="chromium" tests="17" failures="1" skipped="9" time="50.776" errors="0">
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-001: Valid admin login — user is authenticated and lands on the application" classname="insurance-name-truncation.spec.ts" time="0.151">
+<system-out>
+<![CDATA[[2026-06-10T11:49:59.447Z] [InsuranceLoginPage] doLogin: admin@selectortho.net
+[2026-06-10T11:50:08.943Z] [InsuranceLoginPage] waitForPageLoad: networkidle timed-out, continuing
+[2026-06-10T11:50:08.943Z] [InsuranceLoginPage] doLogin: landed on https://dev-otl8xt3f1rt2o3gd.us.auth0.com/u/login?state=hKFo2SBmMnJOMFdqQWRMOU1HSmYxM2x3U0R0aG9IZjlGY3p4MKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDVwSFFQU1VxM09KZVhlRXFYWUNjWEhJNXRfbEZKMzJro2NpZNkgU2xxYzZTc1JBVVNZeUx3bk1USHNVdVJEVmllbzRPdFg
+[2026-06-10T11:50:09.049Z] [InsuranceLoginPage] doLogin: login form detected — filling credentials
+[2026-06-10T11:50:09.049Z] [InsuranceLoginPage] fillField: "admin@selectortho.net"
+[2026-06-10T11:50:09.170Z] [InsuranceLoginPage] fillField: "Password123!"
+[2026-06-10T11:50:09.240Z] [InsuranceLoginPage] clickElement: locator('button[type="submit"], button:has-text("Login"), button:has-text("Sign In"), button:has-text("Log In"), input[type="submit"]').first()
+[2026-06-10T11:50:15.929Z] [InsuranceLoginPage] waitForPageLoad: networkidle timed-out, continuing
+[2026-06-10T11:50:18.095Z] [InsuranceLoginPage] takeScreenshot: TC-001-login-success
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--535cb-nd-lands-on-the-application-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-002: Navigate to Insurance section via App Config menu" classname="insurance-name-truncation.spec.ts" time="5.139">
+<system-out>
+<![CDATA[[2026-06-10T11:50:18.262Z] [InsuranceLoginPage] navigateToInsurance
+[2026-06-10T11:50:23.219Z] [InsuranceListingPage] verifyPageLoaded
+[2026-06-10T11:50:23.242Z] [InsuranceLoginPage] takeScreenshot: TC-002-insurance-listing
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--08d7f-section-via-App-Config-menu-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-003: Open Add Insurance form — form displays with empty Name field" classname="insurance-name-truncation.spec.ts" time="3.821">
+<system-out>
+<![CDATA[[2026-06-10T11:50:25.306Z] [InsuranceListingPage] clickAddInsurance
+[2026-06-10T11:50:25.308Z] [InsuranceListingPage] clickElement: locator('button:has-text("New Insurance"), a:has-text("New Insurance"), button:has-text("Add Insurance"), button:has-text("+ Insurance"), [aria-label*="New Insurance" i]').first()
+[2026-06-10T11:50:27.070Z] [InsuranceFormPage] verifyFormIsOpen
+[2026-06-10T11:50:27.089Z] [InsuranceFormPage] verifyFormIsOpen: name input is visible ✓
+[2026-06-10T11:50:27.089Z] [InsuranceFormPage] getNameFieldValue
+[2026-06-10T11:50:27.107Z] [InsuranceFormPage] takeScreenshot: TC-003-add-insurance-form-open
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--af52b-plays-with-empty-Name-field-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-004: Enter full long name on Create — form submits without error" classname="insurance-name-truncation.spec.ts" time="4.08">
+<system-out>
+<![CDATA[[2026-06-10T11:50:27.264Z] [InsuranceFormPage] fillRequiredFields: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:27.264Z] [InsuranceFormPage] fillName: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:27.349Z] [InsuranceFormPage] selectInsuranceType
+[2026-06-10T11:50:27.360Z] [InsuranceFormPage] selectInsuranceType open: B: only combobox in form — text=""
+[2026-06-10T11:50:27.983Z] [InsuranceFormPage] selectInsuranceType type: typed in input[placeholder="Search..."]
+[2026-06-10T11:50:28.819Z] [InsuranceFormPage] selectInsuranceType confirm: Enter pressed on INPUT[role=null]
+[2026-06-10T11:50:29.362Z] [InsuranceFormPage] getNameFieldValue
+[2026-06-10T11:50:29.381Z] [InsuranceFormPage] takeScreenshot: TC-004-name-filled-before-save
+[2026-06-10T11:50:29.487Z] [InsuranceFormPage] saveForm: clicking "Save and Close"
+[2026-06-10T11:50:29.487Z] [InsuranceFormPage] clickElement: locator('button:has-text("Save and Close"), button:has-text("Save"), button[type="submit"]').first()
+[2026-06-10T11:50:31.121Z] [InsuranceFormPage] verifyFormSaveSuccess
+[2026-06-10T11:50:31.144Z] [InsuranceFormPage] verifyFormSaveSuccess: modal closed — save confirmed
+[2026-06-10T11:50:31.145Z] [InsuranceFormPage] takeScreenshot: TC-004-after-save
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--3a5a4--form-submits-without-error-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-005: Verify saved name on Create — full name persisted, truncated value absent" classname="insurance-name-truncation.spec.ts" time="5.287">
+<system-out>
+<![CDATA[[2026-06-10T11:50:33.213Z] [InsuranceListingPage] searchForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:34.854Z] [InsuranceListingPage] clickElement: locator('button:has-text("Search Insurances"), button:has-text("Search"), [aria-label*="search" i]').first()
+[2026-06-10T11:50:35.930Z] [InsuranceListingPage] verifyNameExistsInListing: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:35.945Z] [InsuranceListingPage] verifyNameAbsentFromListing: "QA INS LONG NAME TEST 197865----------------------"
+[2026-06-10T11:50:36.495Z] [InsuranceListingPage] takeScreenshot: TC-005-full-name-in-listing
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--f9569-sted-truncated-value-absent-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-006: Full name visible in listing — record shows exact name after create" classname="insurance-name-truncation.spec.ts" time="4.281">
+<system-out>
+<![CDATA[[2026-06-10T11:50:38.513Z] [InsuranceListingPage] searchForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:39.652Z] [InsuranceListingPage] clickElement: locator('button:has-text("Search Insurances"), button:has-text("Search"), [aria-label*="search" i]').first()
+[2026-06-10T11:50:40.724Z] [InsuranceListingPage] verifyNameExistsInListing: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:40.738Z] [InsuranceListingPage] takeScreenshot: TC-006-listing-full-name
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--7604f-ows-exact-name-after-create-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-007: No truncation in listing UI — name is not clipped in the Name column" classname="insurance-name-truncation.spec.ts" time="4.802">
+<system-out>
+<![CDATA[[2026-06-10T11:50:42.841Z] [InsuranceListingPage] searchForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:43.900Z] [InsuranceListingPage] clickElement: locator('button:has-text("Search Insurances"), button:has-text("Search"), [aria-label*="search" i]').first()
+[2026-06-10T11:50:44.980Z] [InsuranceListingPage] verifyNameNotClippedInUI: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:45.008Z] [InsuranceListingPage] verifyNameAbsentFromListing: "QA INS LONG NAME TEST 197865----------------------"
+[2026-06-10T11:50:45.540Z] [InsuranceListingPage] takeScreenshot: TC-007-no-ui-truncation
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--7f062--clipped-in-the-Name-column-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-008: Open Edit form for existing record — Edit form opens successfully" classname="insurance-name-truncation.spec.ts" time="23.215">
+<system-out>
+<![CDATA[[2026-06-10T11:50:47.625Z] [InsuranceListingPage] searchForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:49.236Z] [InsuranceListingPage] clickElement: locator('button:has-text("Search Insurances"), button:has-text("Search"), [aria-label*="search" i]').first()
+[2026-06-10T11:50:50.305Z] [InsuranceListingPage] clickEditForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:50:50.323Z] [InsuranceListingPage] clickElement: locator('tbody tr, [role="row"]:not(:has([role="columnheader"])), [class*="table-row"]:not([class*="header"])').filter({ hasText: 'QA INS LONG NAME TEST 197865-------------------------' }).first().locator('button:has-text("View"), a:has-text("View"), [aria-label*="view" i], [data-testid*="view"]').first()
+[2026-06-10T11:51:01.889Z] [InsuranceListingPage] clickEditForRecord: eval: no Edit button/link found
+[2026-06-10T11:51:03.906Z] [InsuranceListingPage] clickEditForRecord: form not yet visible after eval click — trying Playwright fallback click
+[2026-06-10T11:51:03.916Z] [InsuranceFormPage] verifyFormIsOpen
+[2026-06-10T11:51:03.924Z] [InsuranceFormPage] verifyFormIsOpen: name input not found — checking for Save button
+[2026-06-10T11:51:10.921Z] [InsuranceListingPage] searchForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:51:12.049Z] [InsuranceListingPage] clickElement: locator('button:has-text("Search Insurances"), button:has-text("Search"), [aria-label*="search" i]').first()
+[2026-06-10T11:51:13.130Z] [InsuranceListingPage] clickDeleteForRecord: "QA INS LONG NAME TEST 197865-------------------------"
+[2026-06-10T11:51:13.146Z] [InsuranceListingPage] clickElement: locator('tbody tr, [role="row"]:not(:has([role="columnheader"])), [class*="table-row"]:not([class*="header"])').filter({ hasText: 'QA INS LONG NAME TEST 197865-------------------------' }).first().locator('button:has-text("Delete"), a:has-text("Delete"), [aria-label*="delete" i]').first()
+[2026-06-10T11:51:14.212Z] [InsuranceListingPage] handleConfirmationDialog: eval: clicked "Delete" (button.text-red-600)
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--30731-dit-form-opens-successfully-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--30731-dit-form-opens-successfully-chromium\error-context.md]]
+
+[[ATTACHMENT|artifacts\insurance-name-truncation--30731-dit-form-opens-successfully-chromium\error-context.md]]
+]]>
+</system-out>
+<failure message="Insurance form modal should be open — &quot;Enter name&quot; field must be visible" type="expect.toBeVisible">
+<![CDATA[  [chromium] › insurance-name-truncation.spec.ts:218:7 › Insurance Name Truncation — Bug Retest @insurance › TC-008: Open Edit form for existing record — Edit form opens successfully 
+
+    Error: Insurance form modal should be open — "Enter name" field must be visible
+
+    expect(locator).toBeVisible() failed
+
+    Locator: locator('input[placeholder="Enter name"], input[placeholder="Name"], [role="dialog"] input[type="text"]:not([placeholder*="Search" i]), .modal-backdrop input[placeholder*="name" i]:not([placeholder*="Search" i])').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Insurance form modal should be open — "Enter name" field must be visible with timeout 5000ms
+      - waiting for locator('input[placeholder="Enter name"], input[placeholder="Name"], [role="dialog"] input[type="text"]:not([placeholder*="Search" i]), .modal-backdrop input[placeholder*="name" i]:not([placeholder*="Search" i])').first()
+
+
+       at ..\page-objects\InsuranceFormPage.ts:193
+
+      191 |       this.nameInput,
+      192 |       'Insurance form modal should be open — "Enter name" field must be visible',
+    > 193 |     ).toBeVisible({ timeout: 5_000 });
+          |       ^
+      194 |   }
+      195 |
+      196 |   /**
+        at InsuranceFormPage.verifyFormIsOpen (C:\Users\Krimit\Desktop\AI-QA-POC\BUG-Retest-Insurance-Name-Truncation\page-objects\InsuranceFormPage.ts:193:7)
+        at C:\Users\Krimit\Desktop\AI-QA-POC\BUG-Retest-Insurance-Name-Truncation\scripts\insurance-name-truncation.spec.ts:223:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\output\artifacts\insurance-name-truncation--30731-dit-form-opens-successfully-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\output\artifacts\insurance-name-truncation--30731-dit-form-opens-successfully-chromium\error-context.md
+
+    Error Context: ..\output\artifacts\insurance-name-truncation--30731-dit-form-opens-successfully-chromium\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-009: Verify pre-populated name is full — Edit form shows the untruncated value" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-010: Update name to long value and save — full updated name is persisted" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-011: Verify updated name after edit — listing shows the updated full name" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-012: Updated full name visible in listing after edit" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-013: No truncation after edit — updated full name is not clipped in UI" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-014: Name at previous truncation threshold (50 chars) saves in full" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-015: Name just above old threshold (51 chars) saves in full — fix confirmed" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-016: Short name saves correctly — no regression for short values" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Insurance Name Truncation — Bug Retest @insurance › TC-017: Name with special characters saves without truncation or alteration" classname="insurance-name-truncation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

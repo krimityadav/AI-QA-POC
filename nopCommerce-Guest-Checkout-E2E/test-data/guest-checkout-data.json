@@ -1,0 +1,42 @@
+{
+  "guestCheckout": {
+    "searchKeyword": "Apple MacBook Pro",
+    "billing": {
+      "firstName": "Demo",
+      "lastName": "Test",
+      "email": "demo@test.com",
+      "country": "United States",
+      "state": "California",
+      "city": "Los Angeles",
+      "address1": "2458 Sunset Blvd",
+      "zipCode": "90028",
+      "phone": "9876543210"
+    },
+    "payment": {
+      "cardholderName": "Demo",
+      "cardNumber": "4242424242424242",
+      "expirationMonth": "01",
+      "expirationYear": "2030",
+      "cvv": "123"
+    },
+    "quantity": 1
+  },
+  "negativeData": {
+    "emptySearch": "",
+    "xssSearch": "<script>alert('XSS')</script>",
+    "sqlInjection": "'; DROP TABLE products; --",
+    "invalidEmail": "not-an-email",
+    "invalidPhone": "abc-not-phone",
+    "invalidCardNumber": "1234",
+    "expiredCard": {
+      "expirationMonth": "01",
+      "expirationYear": "2020"
+    },
+    "invalidCvv": "12"
+  },
+  "quantityTests": {
+    "validQuantity": 2,
+    "zeroQuantity": 0,
+    "negativeQuantity": -1
+  }
+}

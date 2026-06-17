@@ -1,0 +1,220 @@
+<testsuites id="" name="" tests="15" failures="0" skipped="0" errors="0" time="109.572295">
+<testsuite name="manf-model-audit.spec.ts" timestamp="2026-06-04T12:15:07.388Z" hostname="chromium" tests="15" failures="0" skipped="0" time="104.812" errors="0">
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-001: Navigate to nexstar-uat.trsrentelco.com and submit login credentials" classname="manf-model-audit.spec.ts" time="25.188">
+<system-out>
+<![CDATA[[2026-06-04T12:15:10.554Z] [ManfModelLoginPage] Navigating to https://nexstar-uat.trsrentelco.com
+[2026-06-04T12:15:16.136Z] [ManfModelLoginPage] Clicking "Login to UAT" button
+[2026-06-04T12:15:16.136Z] [ManfModelLoginPage] clickElement: locator('button:has-text("Login to UAT"), a:has-text("Login to UAT"), [data-testid*="login-uat"], span:has-text("Login to UAT")').first()
+[2026-06-04T12:15:23.375Z] [ManfModelLoginPage] waitForPageLoad: networkidle timed-out, continuing
+[2026-06-04T12:15:24.394Z] [ManfModelLoginPage] takeScreenshot: TC-001-after-login-to-uat
+[2026-06-04T12:15:24.679Z] [ManfModelLoginPage] Entering email
+[2026-06-04T12:15:24.760Z] [ManfModelLoginPage] takeScreenshot: TC-001-email-filled
+[2026-06-04T12:15:24.849Z] [ManfModelLoginPage] clickElement: locator('input[type="submit"][value="Next"], button:has-text("Next"), input[value="Next"]').first()
+[2026-06-04T12:15:28.971Z] [ManfModelLoginPage] Entering password
+[2026-06-04T12:15:28.989Z] [ManfModelLoginPage] takeScreenshot: TC-001-password-filled
+[2026-06-04T12:15:31.119Z] [ManfModelLoginPage] "Stay signed in?" detected — clicking Yes
+[2026-06-04T12:15:34.955Z] [ManfModelLoginPage] takeScreenshot: TC-001-after-credential-submit
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-dbf3a-nd-submit-login-credentials-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-002: Complete Microsoft Authentication — approve MFA push notification" classname="manf-model-audit.spec.ts" time="4.286">
+<system-out>
+<![CDATA[[2026-06-04T12:15:36.029Z] [ManfModelLoginPage] Checking for MFA requirement…
+[2026-06-04T12:15:36.033Z] [ManfModelLoginPage] Waiting for MFA approval (up to 120 s)…
+[2026-06-04T12:15:40.065Z] [ManfModelLoginPage] Authenticated — landed on https://nexstar-uat.trsrentelco.com/
+[2026-06-04T12:15:40.065Z] [ManfModelLoginPage] Verifying authentication
+[2026-06-04T12:15:40.132Z] [ManfModelLoginPage] takeScreenshot: TC-002-mfa-approved
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-b5e87-prove-MFA-push-notification-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-003: Navigate to Equipment → Manf Model from the application menu" classname="manf-model-audit.spec.ts" time="10.886">
+<system-out>
+<![CDATA[[2026-06-04T12:15:40.337Z] [ManfModelPage] Navigating to Equipment → Manf Model
+[2026-06-04T12:15:40.337Z] [ManfModelPage] Waiting 3 s for home page to stabilise…
+[2026-06-04T12:15:43.366Z] [ManfModelPage] clickElement: locator('a:has-text("Equipment"), button:has-text("Equipment"), span:has-text("Equipment"), li:has-text("Equipment") > a').first()
+[2026-06-04T12:15:49.452Z] [ManfModelPage] Force click failed — using JS evaluation to click Manf Model
+[2026-06-04T12:15:49.520Z] [ManfModelPage] Clicked Manf Model via JS (generic)
+[2026-06-04T12:15:51.039Z] [ManfModelPage] takeScreenshot: TC-003-manf-model-loaded
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-210ab-l-from-the-application-menu-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-004: Search for model KT/52126A and confirm the record is found" classname="manf-model-audit.spec.ts" time="5.453">
+<system-out>
+<![CDATA[[2026-06-04T12:15:51.245Z] [ManfModelPage] Loading model: KT/52126A into Mdl# field
+[2026-06-04T12:15:51.252Z] [ManfModelPage] Second text input not found — trying first text input as fallback
+[2026-06-04T12:15:51.252Z] [ManfModelPage] fillField: "KT/52126A"
+[2026-06-04T12:15:56.484Z] [ManfModelPage] Verifying model KT/52126A is loaded
+[2026-06-04T12:15:56.491Z] [ManfModelPage] Model KT/52126A confirmed in form inputs
+[2026-06-04T12:15:56.493Z] [ManfModelPage] takeScreenshot: TC-004-model-loaded
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-f41bb-confirm-the-record-is-found-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-005: Confirm record tabs are visible and capture baseline audit values for both tabs" classname="manf-model-audit.spec.ts" time="4.587">
+<system-out>
+<![CDATA[[2026-06-04T12:15:56.731Z] [ManfModelPage] Clicking General tab
+[2026-06-04T12:15:56.731Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("General"), .k-item:has-text("General"), li.k-item:has-text("General"), a:has-text("General"):visible').first()
+[2026-06-04T12:15:57.609Z] [ManfModelPage] Reading audit values (Changed By + Date) from active tab
+[2026-06-04T12:15:57.678Z] [ManfModelPage] Audit values → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+[2026-06-04T12:15:57.678Z] [ManfModelPage] takeScreenshot: TC-005-general-tab-baseline
+[2026-06-04T12:15:57.784Z] [ManfModelPage] Clicking Cal Int tab
+[2026-06-04T12:15:57.785Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("Cal Int"), .k-item:has-text("Cal Int"), li.k-item:has-text("Cal Int"), a:has-text("Cal Int"):visible').first()
+[2026-06-04T12:16:00.088Z] [ManfModelPage] Reading audit values (Changed By + Date) from active tab
+[2026-06-04T12:16:00.150Z] [ManfModelPage] Audit values → changedBy="EMP1753710", date="2026-06-04"
+[2026-06-04T12:16:00.150Z] [ManfModelPage] takeScreenshot: TC-005-calint-tab-baseline
+[2026-06-04T12:16:00.258Z] [ManfModelPage] Clicking General tab
+[2026-06-04T12:16:00.258Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("General"), .k-item:has-text("General"), li.k-item:has-text("General"), a:has-text("General"):visible').first()
+Baseline General → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+Baseline Cal Int → changedBy="EMP1753710", date="2026-06-04"
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-a36f3--audit-values-for-both-tabs-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-006: Append &quot;Test&quot; to Short Desc field in the General tab" classname="manf-model-audit.spec.ts" time="0.938">
+<system-out>
+<![CDATA[[2026-06-04T12:16:01.319Z] [ManfModelPage] Appending "Test" to Short Desc field
+[2026-06-04T12:16:01.320Z] [ManfModelPage] waitForElement: locator('input[id*="ShortDesc" i], input[name*="ShortDesc" i], input[id*="ShortDescription" i], label:has-text("Short Desc") + input, label:has-text("Short Desc") ~ input').first()
+[2026-06-04T12:16:01.336Z] [ManfModelPage] fillField: "MULTI-BUS Test Test Test Test"
+[2026-06-04T12:16:01.905Z] [ManfModelPage] Short Desc set to: "MULTI-BUS Test Test Test Test"
+[2026-06-04T12:16:01.972Z] [ManfModelPage] takeScreenshot: TC-006-short-desc-appended
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-22d1e-sc-field-in-the-General-tab-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-007: Save the record after General tab edit" classname="manf-model-audit.spec.ts" time="4.395">
+<system-out>
+<![CDATA[[2026-06-04T12:16:02.275Z] [ManfModelPage] Saving the record
+[2026-06-04T12:16:02.276Z] [ManfModelPage] clickElement: locator('button:has-text("Save"), input[value="Save"], button[title="Save"], a:has-text("Save"), button:has-text("Update"), [data-action="save" i], .k-button:has-text("Save")').first()
+[2026-06-04T12:16:04.091Z] [ManfModelPage] Save confirmation dialog detected — clicking Yes
+[2026-06-04T12:16:06.392Z] [ManfModelPage] takeScreenshot: TC-007-record-saved
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-9b523-cord-after-General-tab-edit-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-008: Close Manf Model window; reopen and search for KT/52126A" classname="manf-model-audit.spec.ts" time="18.209">
+<system-out>
+<![CDATA[[2026-06-04T12:16:06.693Z] [ManfModelPage] Closing the record
+[2026-06-04T12:16:09.321Z] [ManfModelPage] takeScreenshot: TC-008-after-close
+[2026-06-04T12:16:09.428Z] [ManfModelPage] Navigating to Equipment → Manf Model
+[2026-06-04T12:16:09.428Z] [ManfModelPage] Waiting 3 s for home page to stabilise…
+[2026-06-04T12:16:12.432Z] [ManfModelPage] clickElement: locator('a:has-text("Equipment"), button:has-text("Equipment"), span:has-text("Equipment"), li:has-text("Equipment") > a').first()
+[2026-06-04T12:16:18.591Z] [ManfModelPage] Force click failed — using JS evaluation to click Manf Model
+[2026-06-04T12:16:18.665Z] [ManfModelPage] Clicked Manf Model via JS (generic)
+[2026-06-04T12:16:20.179Z] [ManfModelPage] Loading model: KT/52126A into Mdl# field
+[2026-06-04T12:16:20.185Z] [ManfModelPage] Second text input not found — trying first text input as fallback
+[2026-06-04T12:16:20.185Z] [ManfModelPage] fillField: "KT/52126A"
+[2026-06-04T12:16:24.633Z] [ManfModelPage] takeScreenshot: TC-008-record-reopened
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-a1b31-en-and-search-for-KT-52126A-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-009: Verify General tab Changed By / Date updated after General tab edit" classname="manf-model-audit.spec.ts" time="1.212">
+<system-out>
+<![CDATA[[2026-06-04T12:16:24.957Z] [ManfModelPage] Clicking General tab
+[2026-06-04T12:16:24.958Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("General"), .k-item:has-text("General"), li.k-item:has-text("General"), a:has-text("General"):visible').first()
+[2026-06-04T12:16:25.838Z] [ManfModelPage] Reading audit values (Changed By + Date) from active tab
+[2026-06-04T12:16:25.903Z] [ManfModelPage] Audit values → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+After Part 1 General → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+[2026-06-04T12:16:25.906Z] [ManfModelPage] takeScreenshot: TC-009-general-tab-audit-after-part1
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-e58db-ated-after-General-tab-edit-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-010: Verify Cal Int tab Changed By / Date is UNCHANGED — Bug Fix Verified (Part 1)" classname="manf-model-audit.spec.ts" time="2.364">
+<system-out>
+<![CDATA[[2026-06-04T12:16:26.183Z] [ManfModelPage] Clicking Cal Int tab
+[2026-06-04T12:16:26.184Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("Cal Int"), .k-item:has-text("Cal Int"), li.k-item:has-text("Cal Int"), a:has-text("Cal Int"):visible').first()
+[2026-06-04T12:16:28.273Z] [ManfModelPage] Reading audit values (Changed By + Date) from active tab
+[2026-06-04T12:16:28.351Z] [ManfModelPage] Audit values → changedBy="EMP1753710", date="2026-06-04"
+After Part 1 Cal Int → changedBy="EMP1753710", date="2026-06-04"
+Baseline Cal Int     → changedBy="EMP1753710", date="2026-06-04"
+[2026-06-04T12:16:28.353Z] [ManfModelPage] takeScreenshot: TC-010-calint-unchanged-part1-verified
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-f16fd--—-Bug-Fix-Verified-Part-1--chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-011: Navigate to Cal Int tab and modify the Interval field value" classname="manf-model-audit.spec.ts" time="1.709">
+<system-out>
+<![CDATA[[2026-06-04T12:16:28.563Z] [ManfModelPage] Clicking Cal Int tab
+[2026-06-04T12:16:28.564Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("Cal Int"), .k-item:has-text("Cal Int"), li.k-item:has-text("Cal Int"), a:has-text("Cal Int"):visible').first()
+[2026-06-04T12:16:29.953Z] [ManfModelPage] Modifying Interval field in Cal Int tab
+[2026-06-04T12:16:29.981Z] [ManfModelPage] Found visible Interval input at index 1
+[2026-06-04T12:16:29.988Z] [ManfModelPage] fillField: "13"
+[2026-06-04T12:16:30.067Z] [ManfModelPage] Interval changed from "12" to "13"
+[2026-06-04T12:16:30.069Z] [ManfModelPage] takeScreenshot: TC-011-interval-modified
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-d1de9-fy-the-Interval-field-value-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-012: Save the record after Cal Int tab edit" classname="manf-model-audit.spec.ts" time="4.241">
+<system-out>
+<![CDATA[[2026-06-04T12:16:30.292Z] [ManfModelPage] Saving the record
+[2026-06-04T12:16:30.292Z] [ManfModelPage] clickElement: locator('button:has-text("Save"), input[value="Save"], button[title="Save"], a:has-text("Save"), button:has-text("Update"), [data-action="save" i], .k-button:has-text("Save")').first()
+[2026-06-04T12:16:32.071Z] [ManfModelPage] Save confirmation dialog detected — clicking Yes
+[2026-06-04T12:16:34.258Z] [ManfModelPage] takeScreenshot: TC-012-record-saved-calint
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-17db3-cord-after-Cal-Int-tab-edit-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-013: Close Manf Model window; reopen and search for KT/52126A" classname="manf-model-audit.spec.ts" time="17.561">
+<system-out>
+<![CDATA[[2026-06-04T12:16:34.550Z] [ManfModelPage] Closing the record
+[2026-06-04T12:16:37.131Z] [ManfModelPage] takeScreenshot: TC-013-after-close
+[2026-06-04T12:16:37.251Z] [ManfModelPage] Navigating to Equipment → Manf Model
+[2026-06-04T12:16:37.251Z] [ManfModelPage] Waiting 3 s for home page to stabilise…
+[2026-06-04T12:16:40.262Z] [ManfModelPage] clickElement: locator('a:has-text("Equipment"), button:has-text("Equipment"), span:has-text("Equipment"), li:has-text("Equipment") > a').first()
+[2026-06-04T12:16:46.344Z] [ManfModelPage] Force click failed — using JS evaluation to click Manf Model
+[2026-06-04T12:16:46.441Z] [ManfModelPage] Clicked Manf Model via JS (generic)
+[2026-06-04T12:16:47.959Z] [ManfModelPage] Loading model: KT/52126A into Mdl# field
+[2026-06-04T12:16:47.999Z] [ManfModelPage] Second text input not found — trying first text input as fallback
+[2026-06-04T12:16:47.999Z] [ManfModelPage] fillField: "KT/52126A"
+[2026-06-04T12:16:51.914Z] [ManfModelPage] takeScreenshot: TC-013-record-reopened
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-85581-en-and-search-for-KT-52126A-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-014: Verify Cal Int tab Changed By / Date updated after Cal Int tab edit" classname="manf-model-audit.spec.ts" time="2.362">
+<system-out>
+<![CDATA[[2026-06-04T12:16:52.128Z] [ManfModelPage] Clicking Cal Int tab
+[2026-06-04T12:16:52.129Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("Cal Int"), .k-item:has-text("Cal Int"), li.k-item:has-text("Cal Int"), a:has-text("Cal Int"):visible').first()
+[2026-06-04T12:16:54.146Z] [ManfModelPage] Reading audit values (Changed By + Date) from active tab
+[2026-06-04T12:16:54.209Z] [ManfModelPage] Audit values → changedBy="EMP1753710", date="2026-06-04"
+After Part 2 Cal Int → changedBy="EMP1753710", date="2026-06-04"
+[2026-06-04T12:16:54.211Z] [ManfModelPage] takeScreenshot: TC-014-calint-tab-audit-after-part2
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-234db-ated-after-Cal-Int-tab-edit-chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Manufacturer Model — Independent Tab Audit Fields @manfModelAudit › TC-015: Verify General tab Changed By / Date is UNCHANGED — Bug Fix Verified (Part 2)" classname="manf-model-audit.spec.ts" time="1.421">
+<system-out>
+<![CDATA[[2026-06-04T12:16:54.510Z] [ManfModelPage] Clicking General tab
+[2026-06-04T12:16:54.510Z] [ManfModelPage] clickElement: locator('[role="tab"]:has-text("General"), .k-item:has-text("General"), li.k-item:has-text("General"), a:has-text("General"):visible').first()
+[2026-06-04T12:16:55.456Z] [ManfModelPage] Reading audit values (Changed By + Date) from active tab
+[2026-06-04T12:16:55.712Z] [ManfModelPage] Audit values → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+After Part 2 General  → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+After Part 1 General  → changedBy="EMP1753710", date="1990-04-30 | 12:00:00 AM"
+[2026-06-04T12:16:55.714Z] [ManfModelPage] takeScreenshot: TC-015-general-unchanged-part2-verified
+
+[[ATTACHMENT|artifacts\manf-model-audit-Manufactu-e899d--—-Bug-Fix-Verified-Part-2--chromium\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

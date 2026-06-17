@@ -1,0 +1,3 @@
+[2026-05-28T06:50:46.269Z] [ProductDetailPage] navigate -> https://demo.nopcommerce.com/apple-macbook-pro
+[2026-05-28T06:50:52.129Z] [ProductDetailPage] getQuantityValue
+[2026-05-28T06:50:52.129Z] [ProductDetailPage] getQuantity

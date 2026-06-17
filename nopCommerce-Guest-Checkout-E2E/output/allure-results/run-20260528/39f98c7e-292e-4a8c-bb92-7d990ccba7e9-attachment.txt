@@ -1,0 +1,4 @@
+[2026-05-28T06:51:46.316Z] [ProductDetailPage] navigate -> https://demo.nopcommerce.com/apple-macbook-pro
+[2026-05-28T06:51:52.140Z] [ProductDetailPage] addToCart
+[2026-05-28T06:51:52.159Z] [ProductDetailPage] clickElement: locator('#add-to-cart-button-product-page, button.add-to-cart-button').first()
+[2026-05-28T06:51:52.419Z] [ShoppingCartPage] navigate -> https://demo.nopcommerce.com/cart

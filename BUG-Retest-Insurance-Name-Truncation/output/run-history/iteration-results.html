@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DME Rocket — Insurance Name Truncation Bug Retest — Iteration Results</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f4f8;
+      color: #2d3748;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #1a202c;
+    }
+    .subtitle {
+      color: #718096;
+      margin-bottom: 28px;
+      font-size: 0.9rem;
+    }
+    .summary-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      background: white;
+      border-radius: 10px;
+      padding: 16px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      min-width: 140px;
+      text-align: center;
+    }
+    .stat-box .val { font-size: 2rem; font-weight: 800; }
+    .stat-box .lbl { font-size: 0.8rem; color: #718096; margin-top: 2px; text-transform: uppercase; letter-spacing: .05em; }
+    .stat-box.pass .val { color: #38a169; }
+    .stat-box.fail .val { color: #e53e3e; }
+    .stat-box.skip .val { color: #d69e2e; }
+    .stat-box.iter .val { color: #3182ce; }
+
+    .iteration-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-header:hover { background: #f7fafc; }
+    .iter-badge {
+      background: #3182ce;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .iter-badge.success { background: #38a169; }
+    .iter-badge.failure { background: #e53e3e; }
+    .card-title { font-weight: 600; font-size: 1rem; flex: 1; }
+    .card-meta { font-size: 0.8rem; color: #718096; white-space: nowrap; }
+    .progress-bar {
+      height: 8px;
+      background: #edf2f7;
+      margin: 0 20px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      display: flex;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .p-pass { background: #38a169; }
+    .p-fail { background: #e53e3e; }
+    .p-skip { background: #e2e8f0; }
+
+    .card-body { padding: 16px 20px; }
+    .change-summary {
+      background: #fffbeb;
+      border-left: 3px solid #d69e2e;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 14px;
+      font-size: 0.88rem;
+      color: #744210;
+    }
+    .change-summary.success {
+      background: #f0fff4;
+      border-color: #38a169;
+      color: #276749;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      background: #f7fafc;
+      color: #4a5568;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    td {
+      padding: 7px 12px;
+      border-bottom: 1px solid #edf2f7;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .badge.pass  { background: #c6f6d5; color: #276749; }
+    .badge.fail  { background: #fed7d7; color: #9b2c2c; }
+    .badge.skip  { background: #fefcbf; color: #744210; }
+    .badge.retry { background: #bee3f8; color: #2b6cb0; }
+
+    .error-note {
+      font-size: 0.8rem;
+      color: #e53e3e;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .fix-note {
+      font-size: 0.8rem;
+      color: #38a169;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .final-banner {
+      background: linear-gradient(135deg, #276749 0%, #38a169 100%);
+      color: white;
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .final-banner .icon { font-size: 2.5rem; }
+    .final-banner h2 { font-size: 1.3rem; margin-bottom: 4px; }
+    .final-banner p { opacity: .85; font-size: 0.9rem; }
+
+    .tc-id { font-weight: 600; color: #2b6cb0; white-space: nowrap; }
+    details summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    .expand-icon { font-size: 0.8rem; color: #718096; margin-left: auto; }
+
+    footer { margin-top: 40px; text-align: center; color: #a0aec0; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+
+<h1>DME Rocket — Insurance Name Truncation Bug Retest</h1>
+<p class="subtitle">
+  Module: App Config / Insurance &nbsp;·&nbsp;
+  Bug: Insurance name &gt; 50 chars silently truncated on save &nbsp;·&nbsp;
+  Date: 2026-05-28 &nbsp;·&nbsp;
+  Tester: QA Automation (Playwright 1.60 + TypeScript)
+</p>
+
+<!-- Final result banner -->
+<div class="final-banner">
+  <div class="icon">✅</div>
+  <div>
+    <h2>Bug Fix VERIFIED — All 17 Test Cases Pass (Clean, Single Execution)</h2>
+    <p>Latest run (Run 8 · RUN_ID=466289 · 2026-05-29): 17/17 passed · 0 failed · 0 skipped · 5/5 records cleaned up · Total run time ≈ 2m 48s · No auto-reruns</p>
+  </div>
+</div>
+
+<!-- Top-level stats -->
+<div class="summary-bar">
+  <div class="stat-box iter"><div class="val">8</div><div class="lbl">Total Iterations</div></div>
+  <div class="stat-box pass"><div class="val">17</div><div class="lbl">TC Passed (final)</div></div>
+  <div class="stat-box fail"><div class="val">0</div><div class="lbl">TC Failed (final)</div></div>
+  <div class="stat-box skip"><div class="val">0</div><div class="lbl">TC Skipped (final)</div></div>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 1
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card">
+  <details open>
+    <summary>
+      <div class="card-header">
+        <span class="iter-badge failure">RUN 1 of 5</span>
+        <span class="card-title">First Full Execution — Dropdown Strategy Failure</span>
+        <span class="card-meta">3 passed · 1 failed · 13 skipped</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:17.6%"></div>
+      <div class="p-fail" style="width:5.9%"></div>
+      <div class="p-skip" style="width:76.5%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary">
+        <strong>Root Cause:</strong> <code>selectInsuranceType()</code> Strategy D found the "Primary Insurance Type"
+        label and clicked a sibling <code>&lt;INPUT&gt;</code>, but this input did not open the
+        dropdown. The option-scan then found the <em>nav sidebar</em> "Dashboard" <code>&lt;li&gt;</code>
+        as the first visible option (no nav exclusion). Submitting with no insurance type caused the
+        validation error <em>"Primary Insurance Type Id field is required"</em>.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001</td><td>Valid admin login</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-002</td><td>Navigate to Insurance section</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-003</td><td>Open Add Insurance form</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-004</td><td>Enter full long name (53 chars) on Create</td><td><span class="badge fail">✗ FAIL</span>
+            <div class="error-note">Insurance Type not selected → "Primary Insurance Type Id field is required"</div></td><td></td></tr>
+          <tr><td class="tc-id">TC-005</td><td>Verify saved name on Create</td><td><span class="badge skip">⏭ SKIP</span></td><td>Blocked by TC-004 failure (serial mode)</td></tr>
+          <tr><td class="tc-id">TC-006</td><td>Full name visible in listing</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-007</td><td>No truncation in listing UI</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-008</td><td>Open Edit form for existing record</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-009</td><td>Verify pre-populated name is full</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-010</td><td>Update name to long value and save</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-011</td><td>Verify updated name after edit</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-012</td><td>Updated full name visible in listing</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-013</td><td>No truncation after edit</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-014</td><td>Name at 50-char threshold saves in full</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-015</td><td>Name above old threshold (51 chars)</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-016</td><td>Short name regression check</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-017</td><td>Special characters preserved</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 2
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card">
+  <details open>
+    <summary>
+      <div class="card-header">
+        <span class="iter-badge failure">RUN 2 of 5</span>
+        <span class="card-title">Dropdown Fixed · Strict-Mode Violation on TC-005</span>
+        <span class="card-meta">4 passed · 1 failed · 12 skipped</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:23.5%"></div>
+      <div class="p-fail" style="width:5.9%"></div>
+      <div class="p-skip" style="width:70.6%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary">
+        <strong>Fixes applied:</strong> Rewrote <code>selectInsuranceType()</code> to open the
+        <code>[role="combobox"]</code>, type "Commercial" in the <code>input[placeholder="Search..."]</code>,
+        and press Enter. TC-004 now passes.<br>
+        <strong>New failure:</strong> TC-005 <code>verifyNameAbsentFromListing</code> used
+        <code>.filter({ hasText: truncated })</code> — substring matching. The full-name row
+        <em>contains</em> the 50-char truncated value as a prefix → false positive (count = 1, expected 0).
+        Also: duplicate records from previous runs caused a strict-mode violation (2 matching rows).
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001</td><td>Valid admin login</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-002</td><td>Navigate to Insurance section</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-003</td><td>Open Add Insurance form</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-004</td><td>Enter full long name (53 chars) on Create</td><td><span class="badge pass">✓ PASS</span>
+            <div class="fix-note">Fixed: combobox + Search... + Enter</div></td><td></td></tr>
+          <tr><td class="tc-id">TC-005</td><td>Verify saved name on Create</td><td><span class="badge fail">✗ FAIL</span>
+            <div class="error-note">Substring match on truncatedBuggyValue — matched full-name row as false positive. Also: static names caused duplicate records.</div></td><td></td></tr>
+          <tr><td class="tc-id">TC-006 – TC-017</td><td colspan="3"><span class="badge skip">⏭ SKIP</span> — Blocked by TC-005 failure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 3
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card">
+  <details open>
+    <summary>
+      <div class="card-header">
+        <span class="iter-badge failure">RUN 3 of 5</span>
+        <span class="card-title">TC-005 Fixed · TC-008 View→Detail Page (No Modal)</span>
+        <span class="card-meta">7 passed · 1 failed · 9 skipped</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:41.2%"></div>
+      <div class="p-fail" style="width:5.9%"></div>
+      <div class="p-skip" style="width:52.9%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary">
+        <strong>Fixes applied:</strong>
+        (1) Dynamic unique names via <code>RUN_ID = Date.now().slice(-6)</code> — eliminates duplicate-validation errors.
+        (2) <code>verifyNameAbsentFromListing</code> switched to <code>evaluateAll</code> with exact
+        <code>td:first-child</code> text matching — eliminates false-positive substring hits.
+        (3) <code>getRowByName</code> scoped to <code>tbody tr</code> — excludes header row with embedded search input.
+        (4) Added <code>.first()</code> to all row operations.<br>
+        <strong>New failure:</strong> TC-008 — clicking "View" navigated to an <strong>Insurance Detail page</strong>
+        (not a modal). The page showed heading "Insurance: …" and an "Edit" button. The code expected a modal
+        with <code>input[placeholder="Enter name"]</code> to appear after clicking "View", but none did. 30-second timeout exhausted.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001</td><td>Valid admin login</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-002</td><td>Navigate to Insurance section</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-003</td><td>Open Add Insurance form</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-004</td><td>Enter full long name (53 chars) on Create</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-005</td><td>Verify saved name on Create</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-006</td><td>Full name visible in listing</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-007</td><td>No truncation in listing UI</td><td><span class="badge pass">✓ PASS</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-008</td><td>Open Edit form for existing record</td><td><span class="badge fail">✗ FAIL</span>
+            <div class="error-note">"View" navigates to Detail page, not a modal. <code>input[placeholder="Enter name"]</code> never found.</div></td><td></td></tr>
+          <tr><td class="tc-id">TC-009 – TC-017</td><td colspan="3"><span class="badge skip">⏭ SKIP</span> — Blocked by TC-008 failure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 4
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card">
+  <details open>
+    <summary>
+      <div class="card-header">
+        <span class="iter-badge failure">RUN 4 of 5</span>
+        <span class="card-title">Isolated TC-008 Debug Run — No Record (TC-004 Not Run)</span>
+        <span class="card-meta">0 passed · 1 failed · 3 skipped (subset: 4 tests)</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-fail" style="width:25%"></div>
+      <div class="p-skip" style="width:75%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary">
+        <strong>Purpose:</strong> Debug run of TC-008 through TC-011 only (<code>--grep</code>),
+        to isolate the edit-form issue.<br>
+        <strong>Finding:</strong> Since TC-004 was not executed in this subset, no insurance record
+        existed for the current <code>RUN_ID</code>. The search returned 0 rows. Row-not-found
+        error rather than the modal issue.  Confirmed the full suite must run sequentially for TC-008 to work.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-008</td><td>Open Edit form for existing record</td><td><span class="badge fail">✗ FAIL</span>
+            <div class="error-note">Row not found — record not created (TC-004 was not in this subset run)</div></td><td></td></tr>
+          <tr><td class="tc-id">TC-009</td><td>Verify pre-populated name is full</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-010</td><td>Update name to long value and save</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+          <tr><td class="tc-id">TC-011</td><td>Verify updated name after edit</td><td><span class="badge skip">⏭ SKIP</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 5
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card">
+  <details open>
+    <summary>
+      <div class="card-header">
+        <span class="iter-badge failure">RUN 5 of 6</span>
+        <span class="card-title">All 17 TCs Pass · afterAll Hook Timeout Causes Retry</span>
+        <span class="card-meta">17 passed · 1 failed (hook) · 0 skipped · ~3m 12s</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:94.1%"></div>
+      <div class="p-fail" style="width:5.9%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary">
+        <strong>All 17 test cases passed</strong> but the suite was marked failed due to a hook timeout:<br>
+        The <code>afterAll</code> hook ran cleanup for 5+ records (navigate + search + delete + confirm per
+        record), consuming ~35–40s. Playwright's default <code>afterAll</code> timeout is 30s — exceeded.
+        Playwright treated this as a test failure and reported <em>"afterAll hook timeout of 30000ms exceeded"</em>,
+        triggering a serial-block retry from TC-001.<br><br>
+        Root cause of the slowness: <code>gotoInsuranceListing()</code> called <code>waitForPageLoad()</code>
+        (which internally waits for <code>networkidle</code>, timing out at 10s each call).
+        5 deletes × (navigate + search + delete) → ~35s total for cleanup.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001–017</td><td>All test cases</td><td><span class="badge pass">✓ PASS</span></td><td>All 17 assertions correct</td></tr>
+          <tr><td class="tc-id">afterAll</td><td>Cleanup hook</td><td><span class="badge fail">✗ FAIL</span>
+            <div class="error-note">"afterAll" hook timeout of 30000ms exceeded — 3/5 records deleted before timeout. Serial block retried from TC-001.</div></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 6 — FINAL
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card" style="border: 2px solid #38a169;">
+  <details open>
+    <summary>
+      <div class="card-header" style="background:#f0fff4;">
+        <span class="iter-badge success">RUN 6 of 8</span>
+        <span class="card-title" style="color:#276749;">ALL 17 TEST CASES PASSED · CLEAN afterAll ✅</span>
+        <span class="card-meta">17 passed · 0 failed · 0 skipped · 5/5 records cleaned · ~2m 36s</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:100%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary success">
+        <strong>Fresh iteration — RUN_ID 759527 — Fixes applied (cumulative):</strong><br>
+        (1) <code>clickEditForRecord</code> updated to follow the two-step navigation:
+            <em>click "View" → wait for Detail page URL (<code>/insurance/\d+</code>) → fire programmatic DOM click
+            on Edit button via <code>page.evaluate()</code></em>. The Edit button then opens the Insurance form
+            modal with <code>input[placeholder="Enter name"]</code>. Log confirms: <em>"eval: clicked exact 'Edit' button"</em>
+            and <em>"form is open after eval click ✓"</em>.<br>
+        (2) <code>gotoInsuranceListing()</code> replaced <code>waitForPageLoad()</code> with
+            <code>page.waitForTimeout(1_500)</code> — eliminates 10s networkidle timeout per cleanup navigation.<br>
+        (3) <code>test.afterAll</code> hook given explicit <code>{ timeout: 180_000 }</code> option (second argument) —
+            the Playwright-documented approach. All 5 records deleted within ~27s, well under the 180s budget.<br>
+        (4) All earlier fixes remain: unique names, exact cell matching, tbody scoping, eval-based delete confirm.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Priority</th><th>Status</th><th>Timestamp (UTC)</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001</td><td>Valid admin login — user authenticated (RUN_ID=759527)</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:17</td></tr>
+          <tr><td class="tc-id">TC-002</td><td>Navigate to Insurance section via App Config</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:22</td></tr>
+          <tr><td class="tc-id">TC-003</td><td>Open Add Insurance form — empty Name field</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:25</td></tr>
+          <tr><td class="tc-id">TC-004</td><td>Enter full 53-char name on Create — saves without error<br><code style="font-size:.78rem;">QA INS LONG NAME TEST 759527-------------------------</code></td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:30</td></tr>
+          <tr><td class="tc-id">TC-005</td><td>Full name persisted — truncated value absent in listing</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:36</td></tr>
+          <tr><td class="tc-id">TC-006</td><td>Full name visible in listing after Create</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:41</td></tr>
+          <tr><td class="tc-id">TC-007</td><td>No UI truncation (CSS overflow) in listing Name column</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:47</td></tr>
+          <tr><td class="tc-id">TC-008</td><td>Open Edit form for existing record<br><span class="fix-note">Log: "eval: clicked exact 'Edit' button" · "form is open after eval click ✓"</span></td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:55</td></tr>
+          <tr><td class="tc-id">TC-009</td><td>Edit form pre-populated with full (untruncated) name</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:56</td></tr>
+          <tr><td class="tc-id">TC-010</td><td>Update name to 63-char value — full name persisted<br><code style="font-size:.78rem;">QA INS LONG NAME UPDATED 759527--------------------------------</code></td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:46:57</td></tr>
+          <tr><td class="tc-id">TC-011</td><td>Updated name visible in listing after Edit</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:47:02</td></tr>
+          <tr><td class="tc-id">TC-012</td><td>Updated full name visible in listing (second check)</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:47:07</td></tr>
+          <tr><td class="tc-id">TC-013</td><td>No UI truncation after Edit</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:47:11</td></tr>
+          <tr><td class="tc-id">TC-014</td><td>50-char name (old boundary) saves in full<br><code style="font-size:.78rem;">QA BOUNDARY 50 CHARS 759527-----------------------</code></td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>11:47:24</td></tr>
+          <tr><td class="tc-id">TC-015</td><td>51-char name (above old limit) saves in full — fix confirmed<br><code style="font-size:.78rem;">QA BOUNDARY 51 CHARS 759527------------------------</code></td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>11:47:38</td></tr>
+          <tr><td class="tc-id">TC-016</td><td>Short name regression — no side-effects from fix<br><code style="font-size:.78rem;">QA SHORT 759527</code></td><td>Medium</td><td><span class="badge pass">✓ PASS</span></td><td>11:47:52</td></tr>
+          <tr><td class="tc-id">TC-017</td><td>Special characters (& and em-dash) preserved<br><code style="font-size:.78rem;">QA &amp; INS TEST — 759527</code></td><td>Medium</td><td><span class="badge pass">✓ PASS</span></td><td>11:48:05</td></tr>
+          <tr><td class="tc-id" colspan="2" style="background:#f0fff4;"><strong>afterAll hook</strong> — Cleanup: 5 records deleted via eval DOM click, browser closed</td><td></td><td><span class="badge pass">✓ COMPLETED</span><div class="fix-note">~27s total · well within 180s budget</div></td><td>11:48:07–11:48:34</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px; padding:12px 16px; background:#ebf8ff; border-radius:8px; font-size:.88rem; color:#2b6cb0;">
+        <strong>Acceptance Criteria — All Met:</strong><br>
+        ✅ TC-004 + TC-005: 53-char name saves and persists correctly on Create<br>
+        ✅ TC-010 + TC-011: 63-char name saves and persists correctly on Edit<br>
+        ✅ TC-006 + TC-012: Full names display in listing after both Create and Edit<br>
+        ✅ TC-015: Names beyond 50-char old limit now save in full (fix confirmed)<br>
+        ✅ TC-016: Short names are not regressed<br>
+        ✅ TC-017: Special characters preserved without alteration<br>
+        ✅ Truncated (buggy) values never appear in listing<br>
+        ✅ <strong>afterAll cleanup: all test data deleted within 180s hook budget — no retries</strong>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 7
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card">
+  <details>
+    <summary>
+      <div class="card-header" style="background:#fffbeb;">
+        <span class="iter-badge" style="background:#d69e2e;">RUN 7 of 8</span>
+        <span class="card-title">17/17 PASSED — afterAll timeout + auto-reruns (root config used)</span>
+        <span class="card-meta">17 passed · 0 failed · 0 skipped · ⚠ 3× reruns triggered</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:100%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary">
+        <strong>Root Cause:</strong> Run was triggered using the <em>root</em> <code>playwright.config.ts</code>
+        instead of the dedicated <code>playwright.insurance.config.ts</code>. The root config reads
+        <code>RETRY_COUNT=2</code> from <code>.env</code> → <code>retries: 2</code>. When <code>afterAll</code>
+        exceeded the 30s global timeout, Playwright treated the hook failure as a test failure and
+        auto-reran the entire <code>test.describe.serial</code> block 2 more times.
+        All 17 TCs passed on each run; only the afterAll cleanup hit the limit.
+        RUN_ID=109220 · 2026-05-28.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Result</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001 → TC-017</td><td><span class="badge pass">✓ PASS</span></td><td>All 17 passed on original run</td></tr>
+          <tr><td class="tc-id">afterAll</td><td><span class="badge retry">⚠ TIMEOUT</span></td><td>30s global timeout from root config; <code>retries:2</code> caused 2 extra full-suite reruns</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────────────────────
+     RUN 8 — FINAL (2026-05-29)
+     ────────────────────────────────────────────────────────────────────────── -->
+<div class="iteration-card" style="border: 2px solid #38a169;">
+  <details open>
+    <summary>
+      <div class="card-header" style="background:#f0fff4;">
+        <span class="iter-badge success">RUN 8 of 8 — LATEST</span>
+        <span class="card-title" style="color:#276749;">ALL 17 TEST CASES PASSED · CLEAN · SINGLE EXECUTION ✅</span>
+        <span class="card-meta">17 passed · 0 failed · 0 skipped · 5/5 records cleaned · ~2m 48s · retries=0</span>
+        <span class="expand-icon">▾</span>
+      </div>
+    </summary>
+    <div class="progress-bar"><div class="progress-fill">
+      <div class="p-pass" style="width:100%"></div>
+    </div></div>
+    <div class="card-body">
+      <div class="change-summary success">
+        <strong>RUN_ID 466289 · 2026-05-29 · All fixes applied (cumulative):</strong><br>
+        (1) Used dedicated config <code>playwright.insurance.config.ts</code> with <code>retries: 0</code> and
+            <code>timeout: 60_000</code> — no auto-reruns possible.<br>
+        (2) <code>test.setTimeout(0)</code> as FIRST line inside <code>test.afterAll</code> body — removes the
+            per-hook timeout entirely for Playwright 1.60 (overrides global config timeout at runtime).<br>
+        (3) Fixed path alias: <code>InsuranceLoginPage.ts</code> changed from
+            <code>@test-data/insurance-data</code> (broken — pointed to nopCommerce folder) to
+            <code>../test-data/insurance-data</code> (relative — always correct).<br>
+        (4) All earlier fixes remain: unique dynamic names, exact cell matching, tbody scoping,
+            eval-based dropdown and delete confirm, two-step View→Edit navigation.
+      </div>
+      <table>
+        <thead><tr><th>TC ID</th><th>Test Case</th><th>Priority</th><th>Status</th><th>Timestamp (UTC)</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">TC-001</td><td>Valid admin login — user authenticated (RUN_ID=466289)</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:26</td></tr>
+          <tr><td class="tc-id">TC-002</td><td>Navigate to Insurance section via App Config</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:32</td></tr>
+          <tr><td class="tc-id">TC-003</td><td>Open Add Insurance form — empty Name field</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:36</td></tr>
+          <tr><td class="tc-id">TC-004</td><td>Enter full 53-char name on Create — saves without error<br><code style="font-size:.78rem;">QA INS LONG NAME TEST 466289-------------------------</code></td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:41</td></tr>
+          <tr><td class="tc-id">TC-005</td><td>Full name persisted — truncated value absent in listing</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:47</td></tr>
+          <tr><td class="tc-id">TC-006</td><td>Full name visible in listing after Create</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:52</td></tr>
+          <tr><td class="tc-id">TC-007</td><td>No UI truncation (CSS overflow) in listing Name column</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:21:57</td></tr>
+          <tr><td class="tc-id">TC-008</td><td>Open Edit form for existing record</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:06</td></tr>
+          <tr><td class="tc-id">TC-009</td><td>Edit form pre-populated with full (untruncated) name</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:06</td></tr>
+          <tr><td class="tc-id">TC-010</td><td>Update name to 63-char value — full name persisted<br><code style="font-size:.78rem;">QA INS LONG NAME UPDATED 466289--------------------------------</code></td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:08</td></tr>
+          <tr><td class="tc-id">TC-011</td><td>Updated name visible in listing after Edit</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:13</td></tr>
+          <tr><td class="tc-id">TC-012</td><td>Updated full name visible in listing (second check)</td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:18</td></tr>
+          <tr><td class="tc-id">TC-013</td><td>No UI truncation after Edit</td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:23</td></tr>
+          <tr><td class="tc-id">TC-014</td><td>50-char name (old boundary) saves in full<br><code style="font-size:.78rem;">QA BOUNDARY 50 CHARS 466289-----------------------</code></td><td>High</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:42</td></tr>
+          <tr><td class="tc-id">TC-015</td><td>51-char name (above old limit) saves in full — fix confirmed<br><code style="font-size:.78rem;">QA BOUNDARY 51 CHARS 466289------------------------</code></td><td>Critical</td><td><span class="badge pass">✓ PASS</span></td><td>09:22:56</td></tr>
+          <tr><td class="tc-id">TC-016</td><td>Short name regression — no side-effects from fix<br><code style="font-size:.78rem;">QA SHORT 466289</code></td><td>Medium</td><td><span class="badge pass">✓ PASS</span></td><td>09:23:09</td></tr>
+          <tr><td class="tc-id">TC-017</td><td>Special characters (& and em-dash) preserved<br><code style="font-size:.78rem;">QA &amp; INS TEST — 466289</code></td><td>Medium</td><td><span class="badge pass">✓ PASS</span></td><td>09:23:22</td></tr>
+          <tr><td class="tc-id" colspan="2" style="background:#f0fff4;"><strong>afterAll hook</strong> — Cleanup: 5 records deleted, browser closed</td><td></td><td><span class="badge pass">✓ COMPLETED</span><div class="fix-note">~29s · no timeout · test.setTimeout(0) working correctly</div></td><td>09:23:24–09:23:53</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px; padding:12px 16px; background:#ebf8ff; border-radius:8px; font-size:.88rem; color:#2b6cb0;">
+        <strong>Acceptance Criteria — All Met:</strong><br>
+        ✅ TC-004 + TC-005: 53-char name saves and persists correctly on Create<br>
+        ✅ TC-010 + TC-011: 63-char name saves and persists correctly on Edit<br>
+        ✅ TC-006 + TC-012: Full names display in listing after both Create and Edit<br>
+        ✅ TC-015: Names beyond 50-char old limit now save in full (fix confirmed)<br>
+        ✅ TC-016: Short names are not regressed<br>
+        ✅ TC-017: Special characters preserved without alteration<br>
+        ✅ Truncated (buggy) values never appear in listing<br>
+        ✅ <strong>Single clean execution — no auto-reruns, afterAll completed without timeout</strong>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- Root causes / Fix timeline -->
+<div class="iteration-card" style="margin-top:32px;">
+  <div class="card-header" style="cursor:default;">
+    <span class="iter-badge" style="background:#6b46c1;">DEFECT LOG</span>
+    <span class="card-title">Automation Defects Found &amp; Fixed During Retest</span>
+  </div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>#</th><th>Defect</th><th>Root Cause</th><th>Fix Applied</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>D-1</td>
+          <td>Insurance Type dropdown not selectable</td>
+          <td>Playwright's <code>click()</code> intercepted by <code>.modal-backdrop</code> overlay. Strategies A–C didn't match the custom <code>[role="combobox"]</code>. Strategy D found the wrong sibling INPUT.</td>
+          <td>Rewrote to use <code>page.evaluate()</code>: click the combobox, type "Commercial" in the revealed <code>input[placeholder="Search..."]</code>, press Enter.</td>
+        </tr>
+        <tr>
+          <td>D-2</td>
+          <td>TC-005 <code>verifyNameAbsentFromListing</code> false positive</td>
+          <td>The truncated value (50 chars) is a prefix of the full name (53 chars). Playwright's <code>.filter({ hasText })</code> uses substring matching, so the full-name row matched the truncated-value check.</td>
+          <td>Changed to <code>evaluateAll</code> on <code>tbody tr td:first-child</code> with exact <code>innerText.trim() === target</code> comparison.</td>
+        </tr>
+        <tr>
+          <td>D-3</td>
+          <td>Duplicate records — app duplicate-name validation</td>
+          <td>Static test names (same across all runs) triggered the app's duplicate-name validation on subsequent runs.</td>
+          <td>Changed to dynamic names with <code>RUN_ID = Date.now().slice(-6)</code> per run. Names padded to exact target lengths for boundary tests.</td>
+        </tr>
+        <tr>
+          <td>D-4</td>
+          <td>Header row matched by <code>getRowByName</code></td>
+          <td>The Insurance listing table embeds a search <code>&lt;input&gt;</code> inside the <code>&lt;thead&gt;</code> row. After searching, the header row's text contained the full search term, causing strict-mode violations.</td>
+          <td>Scoped <code>getRowByName</code> to <code>tbody tr</code>. Added <code>.first()</code> to all row operations.</td>
+        </tr>
+        <tr>
+          <td>D-5</td>
+          <td>TC-008 "View" navigates to Detail page, not modal</td>
+          <td>Clicking "View" in the listing navigates to a full Insurance Detail page (not a modal overlay). The edit form only opens after clicking the "Edit" button on that Detail page.</td>
+          <td>Updated <code>clickEditForRecord</code> to: (1) click "View" → (2) wait for Detail page to load → (3) click the "Edit" button. Added <code>{ force: true }</code> to bypass modal-backdrop in residual states.</td>
+        </tr>
+        <tr>
+          <td>D-6</td>
+          <td>Delete confirmation button blocked by modal-backdrop</td>
+          <td>The delete confirmation dialog also renders inside a <code>.modal-backdrop</code>, blocking Playwright's pointer events on the confirm button.</td>
+          <td>Rewrote <code>handleConfirmationDialog</code> to use <code>page.evaluate()</code> to fire programmatic <code>el.click()</code> on the red "Delete" button, bypassing the interception check.</td>
+        </tr>
+        <tr>
+          <td>D-7</td>
+          <td><code>afterAll</code> hook timeout — serial suite retried despite all 17 TCs passing</td>
+          <td>Playwright's default <code>afterAll</code> timeout is 30 seconds. Cleaning up 5 records (navigate → search → delete → confirm per record) via <code>waitForPageLoad()</code> took ~35–40s total, exceeding the limit. With <code>retries: 2</code> in the root config, Playwright treats hook timeout as test failure → triggered full <code>describe.serial</code> block retry from TC-001 (2 extra full runs).</td>
+          <td>(1) Always run with the dedicated config (<code>retries: 0</code>, <code>timeout: 60_000</code>). (2) <code>test.setTimeout(0)</code> as the FIRST line inside <code>test.afterAll</code> body — removes the hook timeout at runtime for Playwright 1.60 (overrides the global config timeout; the <code>{ timeout }</code> second argument option is ignored when the global timeout is shorter). (3) Replaced <code>waitForPageLoad()</code> in cleanup with <code>page.waitForTimeout(1_500)</code> — eliminates 10s networkidle timeout per cleanup call.</td>
+        </tr>
+        <tr>
+          <td>D-8</td>
+          <td>Module not found: <code>@test-data/insurance-data</code></td>
+          <td><code>InsuranceLoginPage.ts</code> imported test data via the <code>@test-data/*</code> TypeScript path alias. The root <code>tsconfig.json</code> maps that alias to <code>./nopCommerce-Guest-Checkout-E2E/test-data/*</code> — the nopCommerce folder — not the insurance folder. Run fails immediately with <em>"Cannot find module"</em> before any test starts.</td>
+          <td>Changed the import in <code>InsuranceLoginPage.ts</code> from <code>@test-data/insurance-data</code> to the relative path <code>../test-data/insurance-data</code>. Project-specific page objects should always use relative imports to their own test-data folder, not shared aliases.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  Generated by QA Automation · DME Rocket Insurance Retest · Last updated 2026-05-29 · RUN_ID 466289 (Run 8) ·
+  <a href="20260529-1450/index.html" style="color:#3182ce;">View Playwright HTML Report (Run 8)</a>
+  &nbsp;·&nbsp;
+  <a href="../playwright-report/run-20260528-all-passed/index.html" style="color:#3182ce;">View Playwright HTML Report (Run 6)</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1987 @@
+{
+  "metadata": {
+    "generated_at": "2026-05-27T00:00:00.000Z",
+    "project": "nopCommerce Guest Order Placement",
+    "base_url": "https://demo.nopcommerce.com/",
+    "total_cases": 80,
+    "modules": 16,
+    "automation_candidates": 72,
+    "version": "1.0",
+    "prepared_by": "Agent 2 — Senior QA Test Architect"
+  },
+  "test_cases": [
+    {
+      "id": "TC-SITE-001",
+      "title": "Verify homepage loads with HTTP 200",
+      "module": "Site Access",
+      "requirement_ids": ["FR-001"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Network is available"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Page loads with HTTP 200 status"},
+        {"step": 2, "action": "Verify page title", "expected": "Title contains 'nopCommerce'"}
+      ],
+      "test_data": {},
+      "expected_result": "Homepage loads successfully with status 200",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SITE-002",
+      "title": "Verify main navigation menu is visible and functional",
+      "module": "Site Access",
+      "requirement_ids": ["FR-001"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Locate the main navigation menu", "expected": "Navigation menu is visible with category links"},
+        {"step": 3, "action": "Click on a top-level category link", "expected": "Category page loads successfully"}
+      ],
+      "test_data": {},
+      "expected_result": "Navigation menu is visible and all links are clickable",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["smoke", "regression", "navigation"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SITE-003",
+      "title": "Verify site loads over HTTPS with valid SSL certificate",
+      "module": "Site Access",
+      "requirement_ids": ["FR-002"],
+      "priority": "High",
+      "type": "Security",
+      "preconditions": ["Browser is open", "Network is available"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Site loads over HTTPS"},
+        {"step": 2, "action": "Check browser address bar for padlock icon", "expected": "Padlock icon is visible indicating secure connection"},
+        {"step": 3, "action": "View certificate details", "expected": "SSL certificate is valid and not expired"}
+      ],
+      "test_data": {},
+      "expected_result": "Site is accessible via HTTPS with a valid SSL certificate",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["security", "smoke"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SITE-004",
+      "title": "Verify homepage renders correctly on mobile viewport",
+      "module": "Site Access",
+      "requirement_ids": ["FR-003"],
+      "priority": "Medium",
+      "type": "UI",
+      "preconditions": ["Browser is open", "Device emulation or mobile device available"],
+      "steps": [
+        {"step": 1, "action": "Open browser with mobile viewport (375x812)", "expected": "Browser opens in mobile view"},
+        {"step": 2, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 3, "action": "Verify layout is responsive", "expected": "Content is properly arranged for mobile screen without horizontal scrollbar"},
+        {"step": 4, "action": "Verify hamburger menu appears", "expected": "Hamburger/mobile menu icon is visible"}
+      ],
+      "test_data": {"viewport": {"width": 375, "height": 812}},
+      "expected_result": "Homepage renders responsively on mobile viewport without layout issues",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["responsive", "ui", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-001",
+      "title": "Verify product search with valid keyword returns results",
+      "module": "Product Search",
+      "requirement_ids": ["FR-004"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Locate the search bar at the top of the page", "expected": "Search bar is visible"},
+        {"step": 3, "action": "Enter 'Apple MacBook Pro' in the search field", "expected": "Text is entered in the search field"},
+        {"step": 4, "action": "Click the Search button or press Enter", "expected": "Search results page loads with matching products"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Search results page displays products matching 'Apple MacBook Pro'",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "search"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-002",
+      "title": "Verify search with empty string shows validation message",
+      "module": "Product Search",
+      "requirement_ids": ["FR-004"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Leave search field empty", "expected": "Search field is empty"},
+        {"step": 3, "action": "Click the Search button", "expected": "Validation message or empty results message is shown"}
+      ],
+      "test_data": {"searchKeyword": ""},
+      "expected_result": "System displays an appropriate validation message for empty search",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "search"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-003",
+      "title": "Verify search with special characters handles gracefully",
+      "module": "Product Search",
+      "requirement_ids": ["FR-004"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Enter '@#$%^&*' in the search field", "expected": "Special characters are entered"},
+        {"step": 3, "action": "Click the Search button", "expected": "Page handles input gracefully without crash or error page"}
+      ],
+      "test_data": {"searchKeyword": "@#$%^&*"},
+      "expected_result": "System handles special characters without error, shows no results or sanitized search",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "boundary", "search"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-004",
+      "title": "Verify search with very long input string",
+      "module": "Product Search",
+      "requirement_ids": ["FR-004"],
+      "priority": "Low",
+      "type": "Boundary",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Enter a 500-character string in the search field", "expected": "Input is accepted or truncated gracefully"},
+        {"step": 3, "action": "Click the Search button", "expected": "Page handles long input without crash"}
+      ],
+      "test_data": {"searchKeyword": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+      "expected_result": "System handles 500-character input gracefully without errors",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P4",
+      "tags": ["boundary", "negative", "search"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-005",
+      "title": "Verify search is case-insensitive",
+      "module": "Product Search",
+      "requirement_ids": ["FR-005"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Enter 'apple macbook pro' (all lowercase) in search", "expected": "Text is entered"},
+        {"step": 3, "action": "Click Search and note result count", "expected": "Results page loads"},
+        {"step": 4, "action": "Search again with 'APPLE MACBOOK PRO' (all uppercase)", "expected": "Same results are returned as lowercase search"}
+      ],
+      "test_data": {"searchKeyword_lower": "apple macbook pro", "searchKeyword_upper": "APPLE MACBOOK PRO"},
+      "expected_result": "Search results are the same regardless of letter case",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "search", "case-sensitivity"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-006",
+      "title": "Verify search with partial keyword returns relevant results",
+      "module": "Product Search",
+      "requirement_ids": ["FR-005"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Enter 'MacBook' in the search field", "expected": "Text is entered"},
+        {"step": 3, "action": "Click Search button", "expected": "Results page displays products containing 'MacBook'"}
+      ],
+      "test_data": {"searchKeyword": "MacBook"},
+      "expected_result": "Search results contain products with 'MacBook' in their name or description",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["search", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-007",
+      "title": "Verify search with non-existent product shows no results message",
+      "module": "Product Search",
+      "requirement_ids": ["FR-006"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Enter 'xyznonexistentproduct12345' in the search field", "expected": "Text is entered"},
+        {"step": 3, "action": "Click the Search button", "expected": "Search results page loads with no products"},
+        {"step": 4, "action": "Verify no results message", "expected": "Message such as 'No products were found' is displayed"}
+      ],
+      "test_data": {"searchKeyword": "xyznonexistentproduct12345"},
+      "expected_result": "Page shows a 'No products found' or equivalent message",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "search", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SRCH-008",
+      "title": "Verify search suggestions / autocomplete appear while typing",
+      "module": "Product Search",
+      "requirement_ids": ["FR-007", "FR-008"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Click on the search bar", "expected": "Search bar receives focus"},
+        {"step": 3, "action": "Type 'Apple' slowly (one character at a time)", "expected": "Autocomplete suggestions appear as a dropdown"},
+        {"step": 4, "action": "Verify suggestions are relevant to typed text", "expected": "Suggestions contain products related to 'Apple'"}
+      ],
+      "test_data": {"searchKeyword": "Apple"},
+      "expected_result": "Autocomplete suggestions appear and are relevant to the typed keyword",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["ui", "search", "autocomplete"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-RSLT-001",
+      "title": "Verify search results page displays product name, image, and price",
+      "module": "Search Results",
+      "requirement_ids": ["FR-009"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Search performed with 'Apple MacBook Pro'"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Search for 'Apple MacBook Pro'", "expected": "Search results page loads"},
+        {"step": 3, "action": "Verify each product card has a product name", "expected": "Product name is visible on each card"},
+        {"step": 4, "action": "Verify each product card has a product image", "expected": "Product image is visible on each card"},
+        {"step": 5, "action": "Verify each product card has a price", "expected": "Product price is visible on each card"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Each product in search results displays name, image, and price",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "search", "results"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-RSLT-002",
+      "title": "Verify search results can be sorted by price (low to high)",
+      "module": "Search Results",
+      "requirement_ids": ["FR-009"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Search results page is loaded for 'MacBook'"],
+      "steps": [
+        {"step": 1, "action": "Navigate to search results for 'MacBook'", "expected": "Search results page is displayed"},
+        {"step": 2, "action": "Locate sort dropdown", "expected": "Sort dropdown is visible"},
+        {"step": 3, "action": "Select 'Price: Low to High' from sort dropdown", "expected": "Page reloads or re-sorts"},
+        {"step": 4, "action": "Verify product prices are in ascending order", "expected": "Products are sorted from lowest to highest price"}
+      ],
+      "test_data": {"searchKeyword": "MacBook", "sortOrder": "Price: Low to High"},
+      "expected_result": "Products are sorted by price in ascending order",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "search", "sort"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-RSLT-003",
+      "title": "Verify search results pagination works correctly",
+      "module": "Search Results",
+      "requirement_ids": ["FR-010"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Search that returns more than one page of results"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/ and search for a broad term", "expected": "Multiple pages of results exist"},
+        {"step": 2, "action": "Verify pagination controls are visible at the bottom", "expected": "Pagination links or next button is visible"},
+        {"step": 3, "action": "Click on page 2 or Next button", "expected": "Second page of results loads with different products"},
+        {"step": 4, "action": "Verify current page indicator shows page 2", "expected": "Page 2 is highlighted in pagination"}
+      ],
+      "test_data": {"searchKeyword": "book"},
+      "expected_result": "Pagination works and navigates between pages correctly",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "pagination", "search"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-RSLT-004",
+      "title": "Verify clicking a product in search results navigates to PDP",
+      "module": "Search Results",
+      "requirement_ids": ["FR-010"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Search results page is displayed"],
+      "steps": [
+        {"step": 1, "action": "Search for 'Apple MacBook Pro' and land on results page", "expected": "Results page shows matching products"},
+        {"step": 2, "action": "Click on the first product in the results list", "expected": "Product Detail Page (PDP) for that product loads"},
+        {"step": 3, "action": "Verify PDP URL matches the clicked product", "expected": "URL contains the product slug"},
+        {"step": 4, "action": "Verify product name on PDP matches what was clicked", "expected": "Correct product is displayed"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Clicking a product in search results opens the correct Product Detail Page",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "navigation"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-001",
+      "title": "Verify product detail page displays product name, price, and description",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-012"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded for Apple MacBook Pro"],
+      "steps": [
+        {"step": 1, "action": "Navigate to a product detail page for 'Apple MacBook Pro'", "expected": "PDP loads successfully"},
+        {"step": 2, "action": "Verify product name is displayed prominently", "expected": "Product name 'Apple MacBook Pro' is visible"},
+        {"step": 3, "action": "Verify product price is displayed", "expected": "Price is shown in correct currency format"},
+        {"step": 4, "action": "Verify product description is present", "expected": "Product description text is visible"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "PDP shows product name, price, and description clearly",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "pdp"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-002",
+      "title": "Verify product images are displayed on PDP",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-012"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Verify main product image is displayed", "expected": "Main image is visible and loaded (not broken)"},
+        {"step": 3, "action": "Verify thumbnail images are present if available", "expected": "Thumbnail gallery is displayed"},
+        {"step": 4, "action": "Click on a thumbnail image", "expected": "Main image updates to show the selected thumbnail"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Product images are displayed and image gallery is functional",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "pdp", "ui"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-003",
+      "title": "Verify quantity selector on PDP allows valid input",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-013"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Locate the quantity input field", "expected": "Quantity field is visible with default value of 1"},
+        {"step": 3, "action": "Change quantity to 2", "expected": "Quantity field accepts value 2"},
+        {"step": 4, "action": "Verify quantity is set to 2", "expected": "Input field shows 2"}
+      ],
+      "test_data": {"quantity": 2},
+      "expected_result": "Quantity selector accepts valid positive integer values",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "pdp", "quantity"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-004",
+      "title": "Verify quantity selector rejects zero or negative values",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-013"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Product detail page is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Clear the quantity field and enter 0", "expected": "Value 0 is entered"},
+        {"step": 3, "action": "Click Add to Cart", "expected": "Validation error shown or quantity resets to minimum"},
+        {"step": 4, "action": "Try entering -1 as quantity", "expected": "Validation error or field rejects negative input"}
+      ],
+      "test_data": {"quantity_zero": 0, "quantity_negative": -1},
+      "expected_result": "System rejects or corrects zero and negative quantity values",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "boundary", "pdp"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-005",
+      "title": "Verify 'Add to Cart' button is present and clickable on PDP",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-014"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded for Apple MacBook Pro"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Verify 'Add to Cart' button is present", "expected": "Button with text 'Add to cart' is visible"},
+        {"step": 3, "action": "Click the 'Add to Cart' button", "expected": "Product is added to cart and confirmation notification appears"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro", "quantity": 1},
+      "expected_result": "Add to Cart button is functional and adds product to cart",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "pdp", "cart"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-006",
+      "title": "Verify product breadcrumb navigation on PDP",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-015"],
+      "priority": "Low",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Locate breadcrumb navigation at the top of page", "expected": "Breadcrumb trail is visible"},
+        {"step": 3, "action": "Verify breadcrumb shows correct hierarchy (e.g., Home > Computers > Notebooks)", "expected": "Correct category hierarchy is shown"},
+        {"step": 4, "action": "Click on a breadcrumb link", "expected": "Navigates to the correct parent category page"}
+      ],
+      "test_data": {},
+      "expected_result": "Breadcrumb navigation shows correct hierarchy and links are functional",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P4",
+      "tags": ["ui", "navigation", "pdp"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PDP-007",
+      "title": "Verify product reviews section is visible on PDP",
+      "module": "Product Detail",
+      "requirement_ids": ["FR-016"],
+      "priority": "Low",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Scroll to reviews section", "expected": "Reviews section is present on the page"},
+        {"step": 3, "action": "Verify review count or 'be the first to review' link is shown", "expected": "Reviews section renders correctly"}
+      ],
+      "test_data": {},
+      "expected_result": "Product reviews section is visible on the PDP",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": false,
+      "automation_priority": "P4",
+      "tags": ["ui", "pdp", "reviews"],
+      "remarks": "Manual verification may be needed for review content accuracy"
+    },
+    {
+      "id": "TC-CART-001",
+      "title": "Verify product is added to cart successfully from PDP",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-017"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Product detail page is loaded for Apple MacBook Pro"],
+      "steps": [
+        {"step": 1, "action": "Navigate to PDP for Apple MacBook Pro", "expected": "PDP loads"},
+        {"step": 2, "action": "Set quantity to 1", "expected": "Quantity is 1"},
+        {"step": 3, "action": "Click 'Add to Cart' button", "expected": "Success notification appears"},
+        {"step": 4, "action": "Verify cart icon count updates to 1", "expected": "Cart counter shows 1 item"},
+        {"step": 5, "action": "Navigate to shopping cart page", "expected": "Apple MacBook Pro appears in the cart"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro", "quantity": 1},
+      "expected_result": "Product is successfully added to cart and visible in cart page",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "cart"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-002",
+      "title": "Verify cart displays correct product name, quantity, and price",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-017"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Apple MacBook Pro has been added to cart"],
+      "steps": [
+        {"step": 1, "action": "Add Apple MacBook Pro to cart and navigate to cart page", "expected": "Cart page loads"},
+        {"step": 2, "action": "Verify product name is 'Apple MacBook Pro'", "expected": "Product name matches"},
+        {"step": 3, "action": "Verify quantity shown is 1", "expected": "Quantity shows 1"},
+        {"step": 4, "action": "Verify unit price is correct", "expected": "Price matches the PDP price"},
+        {"step": 5, "action": "Verify subtotal = unit price × quantity", "expected": "Subtotal calculation is correct"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro", "quantity": 1},
+      "expected_result": "Cart shows correct product details with accurate price calculations",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "cart", "price-validation"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-003",
+      "title": "Verify cart quantity can be updated",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-018"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Apple MacBook Pro is in the cart with quantity 1"],
+      "steps": [
+        {"step": 1, "action": "Navigate to shopping cart", "expected": "Cart page loads with 1 item"},
+        {"step": 2, "action": "Change quantity from 1 to 2 in the quantity field", "expected": "Quantity field accepts value 2"},
+        {"step": 3, "action": "Click Update Shopping Cart button", "expected": "Cart refreshes"},
+        {"step": 4, "action": "Verify subtotal is updated to reflect new quantity", "expected": "Subtotal = 2 × unit price"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro", "initialQuantity": 1, "updatedQuantity": 2},
+      "expected_result": "Cart quantity update reflects correct new subtotal",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "cart"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-004",
+      "title": "Verify item can be removed from cart",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-019"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Apple MacBook Pro is in the cart"],
+      "steps": [
+        {"step": 1, "action": "Navigate to shopping cart with at least one item", "expected": "Cart shows items"},
+        {"step": 2, "action": "Click the Remove (X) button next to the product", "expected": "Item is removed from the cart"},
+        {"step": 3, "action": "Verify cart is empty", "expected": "Cart shows empty cart message"},
+        {"step": 4, "action": "Verify cart counter in header shows 0", "expected": "Header cart count is 0"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Item is removed from cart and cart shows as empty",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "cart"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-005",
+      "title": "Verify cart order total includes subtotal and shipping estimate",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-020"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Apple MacBook Pro is in cart"],
+      "steps": [
+        {"step": 1, "action": "Navigate to cart with Apple MacBook Pro added", "expected": "Cart page loads"},
+        {"step": 2, "action": "Verify Sub-Total is shown", "expected": "Sub-Total is visible"},
+        {"step": 3, "action": "Verify Shipping section is shown", "expected": "Shipping cost or estimate is visible"},
+        {"step": 4, "action": "Verify Total is shown as sum of subtotal and applicable taxes/shipping", "expected": "Total calculation is correct"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro", "quantity": 1},
+      "expected_result": "Cart shows correct total with subtotal and shipping breakdown",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "cart", "pricing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-006",
+      "title": "Verify 'Continue Shopping' button navigates back correctly",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-021"],
+      "priority": "Low",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Shopping cart page is open"],
+      "steps": [
+        {"step": 1, "action": "Add a product and navigate to cart", "expected": "Cart page is displayed"},
+        {"step": 2, "action": "Click 'Continue Shopping' button", "expected": "User is navigated back to the previous page or homepage"}
+      ],
+      "test_data": {},
+      "expected_result": "Clicking 'Continue Shopping' navigates away from cart without losing cart items",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P4",
+      "tags": ["ui", "navigation", "cart"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-007",
+      "title": "Verify 'Checkout' button on cart page navigates to checkout",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-021"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Cart has at least one item"],
+      "steps": [
+        {"step": 1, "action": "Add Apple MacBook Pro to cart and navigate to cart page", "expected": "Cart page loads with item"},
+        {"step": 2, "action": "Click the 'Checkout' button", "expected": "User is directed to checkout page (guest/login choice or billing step)"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Clicking Checkout redirects to the checkout flow",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "cart", "checkout"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CART-008",
+      "title": "Verify cart persists items after browser page refresh",
+      "module": "Shopping Cart",
+      "requirement_ids": ["FR-022"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Apple MacBook Pro has been added to cart"],
+      "steps": [
+        {"step": 1, "action": "Add Apple MacBook Pro to cart", "expected": "Item is in cart"},
+        {"step": 2, "action": "Refresh the browser page (F5)", "expected": "Page reloads"},
+        {"step": 3, "action": "Navigate to cart page", "expected": "Apple MacBook Pro is still in the cart"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Cart items persist after page refresh",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "cart", "persistence"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-GCHK-001",
+      "title": "Verify guest checkout option is available on checkout page",
+      "module": "Guest Checkout",
+      "requirement_ids": ["FR-023"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Cart has Apple MacBook Pro", "User is not logged in"],
+      "steps": [
+        {"step": 1, "action": "Add product to cart and proceed to checkout", "expected": "Checkout page or login/guest choice page loads"},
+        {"step": 2, "action": "Verify 'Checkout as Guest' option is visible", "expected": "Guest checkout option/button is displayed"},
+        {"step": 3, "action": "Click 'Checkout as Guest'", "expected": "Billing address form is presented"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro"},
+      "expected_result": "Guest checkout option is available and leads to billing address step",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "checkout", "guest"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-GCHK-002",
+      "title": "Verify registered user login option is available at checkout",
+      "module": "Guest Checkout",
+      "requirement_ids": ["FR-023"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Cart has a product", "User is not logged in"],
+      "steps": [
+        {"step": 1, "action": "Add product to cart and proceed to checkout", "expected": "Checkout page loads"},
+        {"step": 2, "action": "Verify 'Returning Customer' or 'Login' option is visible", "expected": "Login/returning customer section is displayed"},
+        {"step": 3, "action": "Verify email and password fields are present in login section", "expected": "Login form fields are visible"}
+      ],
+      "test_data": {},
+      "expected_result": "Login option for returning customers is displayed alongside guest checkout",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "checkout"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-GCHK-003",
+      "title": "Verify checkout as guest does not require account creation",
+      "module": "Guest Checkout",
+      "requirement_ids": ["FR-024"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Cart has Apple MacBook Pro"],
+      "steps": [
+        {"step": 1, "action": "Add Apple MacBook Pro to cart and proceed to checkout", "expected": "Checkout flow begins"},
+        {"step": 2, "action": "Select 'Checkout as Guest'", "expected": "Billing form appears"},
+        {"step": 3, "action": "Complete all checkout steps without creating an account", "expected": "Order is placed without registration"},
+        {"step": 4, "action": "Verify order confirmation page appears", "expected": "Order confirmation shown without requiring account creation"}
+      ],
+      "test_data": {
+        "searchKeyword": "Apple MacBook Pro",
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Complete order is placed as guest without mandatory account registration",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "checkout", "guest", "e2e"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-001",
+      "title": "Verify billing address form is displayed at checkout step 1",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-025"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Guest checkout selected"],
+      "steps": [
+        {"step": 1, "action": "Proceed to checkout as guest", "expected": "Billing address form is displayed"},
+        {"step": 2, "action": "Verify all required fields are present: First Name, Last Name, Email, Country, State, City, Address, Zip, Phone", "expected": "All required form fields are visible"}
+      ],
+      "test_data": {},
+      "expected_result": "Billing address form shows all required fields",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-002",
+      "title": "Verify billing form submission with all valid data proceeds to next step",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-025"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Fill in First Name: 'Demo'", "expected": "Field accepts value"},
+        {"step": 2, "action": "Fill in Last Name: 'Test'", "expected": "Field accepts value"},
+        {"step": 3, "action": "Fill in Email: 'demo@test.com'", "expected": "Field accepts value"},
+        {"step": 4, "action": "Select Country: 'United States'", "expected": "Country selected"},
+        {"step": 5, "action": "Select State: 'California'", "expected": "State selected"},
+        {"step": 6, "action": "Fill in City: 'Los Angeles'", "expected": "Field accepts value"},
+        {"step": 7, "action": "Fill in Address: '2458 Sunset Blvd'", "expected": "Field accepts value"},
+        {"step": 8, "action": "Fill in Zip: '90028'", "expected": "Field accepts value"},
+        {"step": 9, "action": "Fill in Phone: '9876543210'", "expected": "Field accepts value"},
+        {"step": 10, "action": "Click 'Continue' button", "expected": "Form submits and proceeds to Shipping Method step"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Valid billing data is accepted and checkout advances to shipping method",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-003",
+      "title": "Verify billing form shows error when First Name is empty",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-026"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Leave First Name field empty", "expected": "Field remains empty"},
+        {"step": 2, "action": "Fill in all other required fields with valid data", "expected": "Other fields are filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error appears for First Name field"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Validation error displayed for missing First Name",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-004",
+      "title": "Verify billing form shows error when Last Name is empty",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-026"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Fill in all required fields except Last Name", "expected": "Fields are filled except Last Name"},
+        {"step": 2, "action": "Click 'Continue'", "expected": "Validation error appears for Last Name field"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Validation error displayed for missing Last Name",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-005",
+      "title": "Verify billing form shows error for invalid email format",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-027"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter 'invalidemail' in the Email field", "expected": "Text is entered"},
+        {"step": 2, "action": "Fill in all other required fields with valid data", "expected": "Other fields are filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Email validation error is shown"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "invalidemail", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Email format validation error is displayed",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-006",
+      "title": "Verify billing form shows error when Email is empty",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-027"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Leave Email field empty and fill all other required fields", "expected": "Email field is empty"},
+        {"step": 2, "action": "Click 'Continue'", "expected": "Email required validation error is shown"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Validation error shown for empty Email field",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-007",
+      "title": "Verify state/province dropdown populates based on country selection",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-028"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Select 'United States' from the Country dropdown", "expected": "Country is selected"},
+        {"step": 2, "action": "Verify State/Province dropdown populates with US states", "expected": "State dropdown shows list of US states"},
+        {"step": 3, "action": "Select 'Canada' from Country dropdown", "expected": "Country changes to Canada"},
+        {"step": 4, "action": "Verify State/Province dropdown updates with Canadian provinces", "expected": "State dropdown shows Canadian provinces"}
+      ],
+      "test_data": {"countries": ["United States", "Canada"]},
+      "expected_result": "State/Province dropdown dynamically updates based on selected country",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "billing", "dynamic-dropdown"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-008",
+      "title": "Verify billing form shows error when City is empty",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-029"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Fill all required fields except City", "expected": "City field is empty"},
+        {"step": 2, "action": "Click 'Continue'", "expected": "Validation error shown for City field"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Validation error shown for empty City",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-009",
+      "title": "Verify billing form shows error when Address is empty",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-029"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Fill all required fields except Address Line 1", "expected": "Address field is empty"},
+        {"step": 2, "action": "Click 'Continue'", "expected": "Validation error shown for Address field"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Validation error shown for empty Address Line 1",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-010",
+      "title": "Verify billing form shows error when ZIP code is invalid format",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-030"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter 'ABCDE' (alphabetic) in the ZIP/Postal Code field", "expected": "Value is entered"},
+        {"step": 2, "action": "Fill all other required fields with valid data", "expected": "Other fields are filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for ZIP code"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "ABCDE", "phone": "9876543210"}
+      },
+      "expected_result": "Validation error is displayed for invalid ZIP code format",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "validation", "billing", "boundary"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-011",
+      "title": "Verify billing form shows error when Phone number is invalid",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-031"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter 'abc' in the Phone field", "expected": "Value is entered"},
+        {"step": 2, "action": "Fill all other required fields with valid data", "expected": "Other fields are filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for Phone field"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "abc"}
+      },
+      "expected_result": "Validation error shown for invalid phone number",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "validation", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-BILL-012",
+      "title": "Verify 'Ship to same address' checkbox pre-populates shipping with billing data",
+      "module": "Billing Address",
+      "requirement_ids": ["FR-031"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Billing address form is displayed and filled"],
+      "steps": [
+        {"step": 1, "action": "Fill billing form with valid data", "expected": "Billing form is completed"},
+        {"step": 2, "action": "Check the 'Ship to same address' checkbox if present", "expected": "Checkbox is checked"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Shipping step is skipped or shipping address pre-populated with billing data"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "shipToSameAddress": true
+      },
+      "expected_result": "Shipping address is pre-populated with billing address when 'ship to same address' is checked",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "billing", "shipping"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SHIP-001",
+      "title": "Verify shipping method options are displayed at checkout step 2",
+      "module": "Shipping Method",
+      "requirement_ids": ["FR-032"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Billing address step completed successfully"],
+      "steps": [
+        {"step": 1, "action": "Complete billing address and advance to Shipping Method step", "expected": "Shipping Method step is displayed"},
+        {"step": 2, "action": "Verify at least one shipping option is displayed", "expected": "One or more shipping methods are listed"},
+        {"step": 3, "action": "Verify each shipping option shows method name and cost", "expected": "Name and price are shown for each option"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "Shipping method step shows available shipping options with names and costs",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "shipping"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SHIP-002",
+      "title": "Verify user can select a shipping method and proceed",
+      "module": "Shipping Method",
+      "requirement_ids": ["FR-033"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Shipping method step is displayed"],
+      "steps": [
+        {"step": 1, "action": "View available shipping methods", "expected": "Shipping options are listed"},
+        {"step": 2, "action": "Select the first available shipping method radio button", "expected": "Shipping method is selected"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Checkout advances to Payment Method step"}
+      ],
+      "test_data": {},
+      "expected_result": "Selected shipping method is saved and checkout proceeds to payment",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "shipping"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SHIP-003",
+      "title": "Verify shipping cost updates order total in cart summary",
+      "module": "Shipping Method",
+      "requirement_ids": ["FR-034"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Shipping method step is displayed with multiple options"],
+      "steps": [
+        {"step": 1, "action": "View shipping method options", "expected": "Multiple shipping options visible"},
+        {"step": 2, "action": "Select first shipping option and note cost", "expected": "Order summary reflects first shipping cost"},
+        {"step": 3, "action": "Select second shipping option with different cost", "expected": "Order summary updates with new shipping cost"},
+        {"step": 4, "action": "Verify total updates accordingly", "expected": "Total = subtotal + new shipping cost"}
+      ],
+      "test_data": {},
+      "expected_result": "Selecting different shipping methods updates the order total correctly",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["regression", "shipping", "pricing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PAY-001",
+      "title": "Verify payment method options are displayed at checkout step 3",
+      "module": "Payment Method",
+      "requirement_ids": ["FR-035"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Shipping method step completed"],
+      "steps": [
+        {"step": 1, "action": "Complete shipping method step and advance to Payment Method", "expected": "Payment Method step is displayed"},
+        {"step": 2, "action": "Verify at least one payment method is available", "expected": "Payment options are listed"},
+        {"step": 3, "action": "Verify 'Credit Card' option is available", "expected": "Credit card payment option is present"}
+      ],
+      "test_data": {},
+      "expected_result": "Payment method step shows available payment options including credit card",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "payment"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PAY-002",
+      "title": "Verify user can select Credit Card payment method and proceed",
+      "module": "Payment Method",
+      "requirement_ids": ["FR-036"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Payment Method step is displayed"],
+      "steps": [
+        {"step": 1, "action": "Select 'Credit Card' payment method", "expected": "Credit card option is selected"},
+        {"step": 2, "action": "Click 'Continue'", "expected": "Checkout advances to Payment Information step"}
+      ],
+      "test_data": {"paymentMethod": "Credit Card"},
+      "expected_result": "Credit Card is selected and checkout proceeds to payment info step",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "payment"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PAY-003",
+      "title": "Verify COD (Cash on Delivery) payment option if available",
+      "module": "Payment Method",
+      "requirement_ids": ["FR-037"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Payment Method step is displayed"],
+      "steps": [
+        {"step": 1, "action": "View available payment methods", "expected": "Payment options are listed"},
+        {"step": 2, "action": "Check if 'Cash On Delivery' option is present", "expected": "COD option appears if configured"},
+        {"step": 3, "action": "If present, select COD and click Continue", "expected": "Checkout advances to next step without card info required"}
+      ],
+      "test_data": {"paymentMethod": "Cash On Delivery"},
+      "expected_result": "COD payment option works and does not require credit card information",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": false,
+      "automation_priority": "P3",
+      "tags": ["regression", "payment"],
+      "remarks": "Only applicable if COD is enabled in the demo store configuration"
+    },
+    {
+      "id": "TC-PINFO-001",
+      "title": "Verify payment information form is displayed for credit card",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-038"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Credit Card selected as payment method"],
+      "steps": [
+        {"step": 1, "action": "Select Credit Card and advance to Payment Information", "expected": "Payment Information form is displayed"},
+        {"step": 2, "action": "Verify Cardholder Name field is present", "expected": "Cardholder Name input is visible"},
+        {"step": 3, "action": "Verify Card Number field is present", "expected": "Card Number input is visible"},
+        {"step": 4, "action": "Verify Expiration Month/Year fields are present", "expected": "Expiration date inputs are visible"},
+        {"step": 5, "action": "Verify CVV/Card Code field is present", "expected": "CVV input is visible"}
+      ],
+      "test_data": {},
+      "expected_result": "All credit card form fields are displayed",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-002",
+      "title": "Verify valid credit card details are accepted",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-038"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter Cardholder Name: 'Demo'", "expected": "Field accepts value"},
+        {"step": 2, "action": "Enter Card Number: '4242424242424242'", "expected": "Field accepts 16-digit card number"},
+        {"step": 3, "action": "Select Expiration Month: '01'", "expected": "Month is selected"},
+        {"step": 4, "action": "Select Expiration Year: '2030'", "expected": "Year is selected"},
+        {"step": 5, "action": "Enter CVV: '123'", "expected": "CVV field accepts 3-digit code"},
+        {"step": 6, "action": "Click 'Continue'", "expected": "Form is accepted and checkout proceeds to Confirm Order step"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Valid credit card information is accepted and checkout advances",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-003",
+      "title": "Verify payment form shows error for empty Card Number",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-039"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Leave Card Number field empty", "expected": "Field is empty"},
+        {"step": 2, "action": "Fill in Cardholder Name, Expiration and CVV", "expected": "Other fields are filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for Card Number"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Validation error shown for empty card number field",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-004",
+      "title": "Verify payment form shows error for invalid Card Number",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-039"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter '1234567890' (short, invalid) in Card Number field", "expected": "Value entered"},
+        {"step": 2, "action": "Fill in other fields with valid data", "expected": "Other fields filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for Card Number"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "1234567890", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Validation error shown for invalid card number format",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-005",
+      "title": "Verify payment form shows error for expired card",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-040"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter a past year in the Expiration Year field (e.g., 2020)", "expected": "Year value entered"},
+        {"step": 2, "action": "Fill in other fields with valid data", "expected": "Other fields filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for expired card date"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2020", "cvv": "123"}
+      },
+      "expected_result": "Validation error shown for expired expiration date",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-006",
+      "title": "Verify payment form shows error for empty CVV",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-041"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Fill in valid Cardholder Name, Card Number, and Expiration", "expected": "Fields are filled"},
+        {"step": 2, "action": "Leave CVV field empty", "expected": "CVV field is empty"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for CVV field"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": ""}
+      },
+      "expected_result": "Validation error shown for empty CVV",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-007",
+      "title": "Verify payment form shows error for invalid CVV (too short)",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-041"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter '12' (2 digits) in the CVV field", "expected": "Value entered"},
+        {"step": 2, "action": "Fill other fields with valid data", "expected": "Fields filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for CVV"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "12"}
+      },
+      "expected_result": "Validation error for CVV shorter than 3 digits",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "boundary", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-008",
+      "title": "Verify payment form shows error for empty Cardholder Name",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-042"],
+      "priority": "Medium",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Leave Cardholder Name empty", "expected": "Field is empty"},
+        {"step": 2, "action": "Fill in valid card number, expiration, and CVV", "expected": "Other fields filled"},
+        {"step": 3, "action": "Click 'Continue'", "expected": "Validation error shown for Cardholder Name"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Validation error shown for empty Cardholder Name",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["negative", "validation", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-009",
+      "title": "Verify card number field accepts only numeric characters",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-042"],
+      "priority": "Medium",
+      "type": "Boundary",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Try entering letters in the Card Number field (e.g., 'ABCD1234EFGH5678')", "expected": "Non-numeric characters are rejected or stripped"},
+        {"step": 2, "action": "Verify the field only contains numeric characters after input", "expected": "Card number field only shows digits"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "ABCD1234EFGH5678", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Card number field rejects or strips non-numeric characters",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["boundary", "validation", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PINFO-010",
+      "title": "Verify CVV field is masked for security",
+      "module": "Payment Information",
+      "requirement_ids": ["FR-043"],
+      "priority": "High",
+      "type": "Security",
+      "preconditions": ["Browser is open", "Payment Information form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Click on the CVV input field and type '123'", "expected": "CVV field accepts input"},
+        {"step": 2, "action": "Verify the characters are masked (shown as dots or asterisks)", "expected": "CVV input is masked for security"}
+      ],
+      "test_data": {
+        "payment": {"cvv": "123"}
+      },
+      "expected_result": "CVV field masks input characters for security",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["security", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CONF-001",
+      "title": "Verify order confirmation/review page displays before final submit",
+      "module": "Order Confirmation",
+      "requirement_ids": ["FR-044"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "All checkout steps (billing, shipping, payment) completed"],
+      "steps": [
+        {"step": 1, "action": "Complete all checkout steps through payment information", "expected": "Confirm Order page is displayed"},
+        {"step": 2, "action": "Verify billing address summary is shown", "expected": "Billing address is visible in review"},
+        {"step": 3, "action": "Verify shipping method summary is shown", "expected": "Selected shipping method is visible"},
+        {"step": 4, "action": "Verify payment method summary is shown", "expected": "Payment method is visible (card masked)"},
+        {"step": 5, "action": "Verify product list with quantities and prices is shown", "expected": "Order items are visible with correct details"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Order confirmation page shows complete summary of billing, shipping, payment, and items",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "confirmation"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CONF-002",
+      "title": "Verify order total on confirmation page matches cart total",
+      "module": "Order Confirmation",
+      "requirement_ids": ["FR-044"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Confirm Order page is displayed"],
+      "steps": [
+        {"step": 1, "action": "Note the order total from the cart summary during checkout", "expected": "Total amount is noted"},
+        {"step": 2, "action": "On the Confirm Order page, verify the total amount matches", "expected": "Total on confirmation matches cart total"},
+        {"step": 3, "action": "Verify subtotal, shipping, and taxes breakdown are correct", "expected": "All price components are accurate"}
+      ],
+      "test_data": {
+        "searchKeyword": "Apple MacBook Pro",
+        "quantity": 1
+      },
+      "expected_result": "Order total on confirmation page is identical to cart total",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["regression", "confirmation", "price-validation"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CONF-003",
+      "title": "Verify 'Confirm Order' button submits the order",
+      "module": "Order Confirmation",
+      "requirement_ids": ["FR-045"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Confirm Order page is displayed with all details correct"],
+      "steps": [
+        {"step": 1, "action": "Review all order details on the Confirm Order page", "expected": "All details are correct"},
+        {"step": 2, "action": "Click 'Confirm Order' button", "expected": "Order is submitted and Thank You page loads"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Clicking Confirm Order places the order and redirects to Thank You page",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "confirmation", "e2e"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-CONF-004",
+      "title": "Verify terms and conditions checkbox is required before confirming order",
+      "module": "Order Confirmation",
+      "requirement_ids": ["FR-046"],
+      "priority": "High",
+      "type": "Negative",
+      "preconditions": ["Browser is open", "Confirm Order page is displayed"],
+      "steps": [
+        {"step": 1, "action": "On the Confirm Order page, locate Terms and Conditions checkbox", "expected": "Checkbox is visible and unchecked"},
+        {"step": 2, "action": "Do not check the Terms and Conditions checkbox", "expected": "Checkbox remains unchecked"},
+        {"step": 3, "action": "Click 'Confirm Order'", "expected": "Validation error is shown requiring T&C acceptance"},
+        {"step": 4, "action": "Check the Terms and Conditions checkbox and click Confirm Order", "expected": "Order is submitted successfully"}
+      ],
+      "test_data": {},
+      "expected_result": "Terms and conditions must be accepted before order can be confirmed",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["negative", "validation", "confirmation"],
+      "remarks": "Behavior depends on store configuration; verify if T&C checkbox is required"
+    },
+    {
+      "id": "TC-TYKU-001",
+      "title": "Verify Thank You page loads after successful order placement",
+      "module": "Thank You Page",
+      "requirement_ids": ["FR-047"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Order confirmed via Confirm Order button"],
+      "steps": [
+        {"step": 1, "action": "Complete full checkout and click Confirm Order", "expected": "Order is processed"},
+        {"step": 2, "action": "Verify Thank You page loads", "expected": "Page with 'Thank you' message is displayed"},
+        {"step": 3, "action": "Verify URL changes to order complete/thank-you URL", "expected": "URL reflects order completion"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Thank You page is displayed after order placement",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "thank-you", "e2e"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-TYKU-002",
+      "title": "Verify Thank You page displays order number",
+      "module": "Thank You Page",
+      "requirement_ids": ["FR-047"],
+      "priority": "Critical",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Thank You page is displayed after order placement"],
+      "steps": [
+        {"step": 1, "action": "View the Thank You page after order placement", "expected": "Thank You page is loaded"},
+        {"step": 2, "action": "Verify order number is displayed on the page", "expected": "Order number is shown (e.g., 'Order Number: 12345')"}
+      ],
+      "test_data": {},
+      "expected_result": "Order number is displayed on Thank You page",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["smoke", "regression", "thank-you"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-TYKU-003",
+      "title": "Verify confirmation email is sent to guest email address",
+      "module": "Thank You Page",
+      "requirement_ids": ["FR-048"],
+      "priority": "High",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Order placed successfully with valid email"],
+      "steps": [
+        {"step": 1, "action": "Complete order with email 'demo@test.com'", "expected": "Order is placed"},
+        {"step": 2, "action": "Check the Thank You page for confirmation email notification", "expected": "Page mentions that a confirmation email has been sent"},
+        {"step": 3, "action": "Check the email inbox for order confirmation email", "expected": "Confirmation email is received with order details"}
+      ],
+      "test_data": {"email": "demo@test.com"},
+      "expected_result": "Order confirmation email is sent to the guest's email address",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": false,
+      "automation_priority": "P2",
+      "tags": ["regression", "email", "thank-you"],
+      "remarks": "Email verification requires mailbox access; consider using Mailosaur or similar service for automation"
+    },
+    {
+      "id": "TC-TYKU-004",
+      "title": "Verify Thank You page provides link to view order details",
+      "module": "Thank You Page",
+      "requirement_ids": ["FR-049"],
+      "priority": "Medium",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Thank You page is displayed"],
+      "steps": [
+        {"step": 1, "action": "View the Thank You page", "expected": "Thank You page is loaded"},
+        {"step": 2, "action": "Look for a link or button to view the order", "expected": "A link to view order details is present"},
+        {"step": 3, "action": "Click on the order link", "expected": "Order detail page loads with the placed order information"}
+      ],
+      "test_data": {},
+      "expected_result": "Thank You page includes a functional link to view the placed order details",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["regression", "thank-you", "navigation"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-TYKU-005",
+      "title": "Verify Thank You page contains 'Continue Shopping' link",
+      "module": "Thank You Page",
+      "requirement_ids": ["FR-050"],
+      "priority": "Low",
+      "type": "Functional",
+      "preconditions": ["Browser is open", "Thank You page is displayed"],
+      "steps": [
+        {"step": 1, "action": "View the Thank You page after order placement", "expected": "Thank You page loads"},
+        {"step": 2, "action": "Locate 'Continue Shopping' button or link", "expected": "Continue shopping link is present"},
+        {"step": 3, "action": "Click 'Continue Shopping'", "expected": "User is redirected to homepage or product catalog"}
+      ],
+      "test_data": {},
+      "expected_result": "Thank You page has a functional 'Continue Shopping' link",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P4",
+      "tags": ["ui", "navigation", "thank-you"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-E2E-001",
+      "title": "End-to-end: Guest order placement with valid data (Happy Path)",
+      "module": "End-to-End",
+      "requirement_ids": ["FR-001", "FR-004", "FR-014", "FR-017", "FR-023", "FR-025", "FR-032", "FR-035", "FR-038", "FR-044", "FR-047"],
+      "priority": "Critical",
+      "type": "Regression",
+      "preconditions": ["Browser is open", "Network is available", "User is not logged in"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads successfully"},
+        {"step": 2, "action": "Search for 'Apple MacBook Pro'", "expected": "Search results display matching products"},
+        {"step": 3, "action": "Click on 'Apple MacBook Pro' product", "expected": "Product Detail Page loads"},
+        {"step": 4, "action": "Set quantity to 1 and click 'Add to Cart'", "expected": "Product added to cart with success notification"},
+        {"step": 5, "action": "Navigate to shopping cart and click Checkout", "expected": "Checkout page loads"},
+        {"step": 6, "action": "Select 'Checkout as Guest'", "expected": "Billing address form is displayed"},
+        {"step": 7, "action": "Fill billing form: Demo Test, demo@test.com, 2458 Sunset Blvd, Los Angeles, CA 90028, US, 9876543210", "expected": "Form is filled with valid data"},
+        {"step": 8, "action": "Click Continue on billing step", "expected": "Shipping Method step is displayed"},
+        {"step": 9, "action": "Select first available shipping method and click Continue", "expected": "Payment Method step is displayed"},
+        {"step": 10, "action": "Select Credit Card and click Continue", "expected": "Payment Information form is displayed"},
+        {"step": 11, "action": "Enter card details: Demo, 4242424242424242, 01/2030, 123 and click Continue", "expected": "Confirm Order page is displayed"},
+        {"step": 12, "action": "Review order summary and click 'Confirm Order'", "expected": "Order is placed and Thank You page loads"},
+        {"step": 13, "action": "Verify order number is displayed on Thank You page", "expected": "Order number is shown confirming successful placement"}
+      ],
+      "test_data": {
+        "searchKeyword": "Apple MacBook Pro",
+        "quantity": 1,
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Complete guest order is placed successfully and Thank You page with order number is shown",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["e2e", "smoke", "regression", "happy-path", "critical-path"],
+      "remarks": "This is the primary smoke test for the entire checkout flow"
+    },
+    {
+      "id": "TC-E2E-002",
+      "title": "End-to-end: Guest order with multiple items in cart",
+      "module": "End-to-End",
+      "requirement_ids": ["FR-017", "FR-018", "FR-023", "FR-044", "FR-047"],
+      "priority": "High",
+      "type": "Regression",
+      "preconditions": ["Browser is open", "User is not logged in"],
+      "steps": [
+        {"step": 1, "action": "Navigate to homepage and search for 'Apple MacBook Pro'", "expected": "Results shown"},
+        {"step": 2, "action": "Add 'Apple MacBook Pro' to cart (qty: 1)", "expected": "Item added"},
+        {"step": 3, "action": "Continue shopping and search for another product (e.g., 'HTC')", "expected": "Results shown"},
+        {"step": 4, "action": "Add second product to cart (qty: 1)", "expected": "Cart now has 2 items"},
+        {"step": 5, "action": "Proceed through full checkout as guest with valid data", "expected": "Checkout flow completes"},
+        {"step": 6, "action": "Confirm order and verify Thank You page", "expected": "Order placed with both items reflected in order total"}
+      ],
+      "test_data": {
+        "products": ["Apple MacBook Pro", "HTC One M8 Android L 5.0 Lollipop"],
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Order with multiple items is placed successfully",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["e2e", "regression", "multi-item"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-E2E-003",
+      "title": "End-to-end: Guest checkout with billing and shipping to different address",
+      "module": "End-to-End",
+      "requirement_ids": ["FR-023", "FR-025", "FR-031", "FR-032"],
+      "priority": "High",
+      "type": "Regression",
+      "preconditions": ["Browser is open", "Cart has at least one item", "User is not logged in"],
+      "steps": [
+        {"step": 1, "action": "Add Apple MacBook Pro to cart and proceed to checkout as guest", "expected": "Billing form displayed"},
+        {"step": 2, "action": "Fill billing address with Demo Test details", "expected": "Billing form filled"},
+        {"step": 3, "action": "Uncheck 'Ship to same address' if present", "expected": "Shipping address form appears"},
+        {"step": 4, "action": "Fill shipping address with different address (e.g., 100 Main St, New York, NY 10001)", "expected": "Shipping form filled"},
+        {"step": 5, "action": "Complete remaining checkout steps with valid payment", "expected": "Order placed"},
+        {"step": 6, "action": "Verify Thank You page displays correct order number", "expected": "Order number is shown"}
+      ],
+      "test_data": {
+        "searchKeyword": "Apple MacBook Pro",
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "shipping": {"firstName": "Ship", "lastName": "To", "country": "United States", "state": "New York", "city": "New York", "address1": "100 Main St", "zipCode": "10001", "phone": "2125551234"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Order is placed successfully with separate billing and shipping addresses",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["e2e", "regression", "shipping", "billing"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SEC-001",
+      "title": "Verify search field is protected against XSS injection",
+      "module": "Security",
+      "requirement_ids": ["FR-004"],
+      "priority": "Critical",
+      "type": "Security",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads"},
+        {"step": 2, "action": "Enter XSS payload '<script>alert(\"XSS\")</script>' in the search field", "expected": "Value is entered"},
+        {"step": 3, "action": "Click Search button", "expected": "Page handles input without executing the script"},
+        {"step": 4, "action": "Verify no alert dialog appears and page remains functional", "expected": "No script execution occurs; payload is treated as text"}
+      ],
+      "test_data": {"searchKeyword": "<script>alert(\"XSS\")</script>"},
+      "expected_result": "XSS payload is not executed; input is sanitized or escaped properly",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["security", "xss", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SEC-002",
+      "title": "Verify billing form fields are protected against SQL injection",
+      "module": "Security",
+      "requirement_ids": ["FR-025"],
+      "priority": "Critical",
+      "type": "Security",
+      "preconditions": ["Browser is open", "Billing address form is displayed"],
+      "steps": [
+        {"step": 1, "action": "Enter SQL injection payload \"' OR '1'='1\" in the First Name field", "expected": "Value is entered"},
+        {"step": 2, "action": "Fill remaining fields with valid data", "expected": "Other fields filled"},
+        {"step": 3, "action": "Click Continue", "expected": "System handles input without SQL error or data breach"},
+        {"step": 4, "action": "Verify no database error is returned and application remains stable", "expected": "Application is stable; no SQL error messages exposed"}
+      ],
+      "test_data": {
+        "billing": {"firstName": "' OR '1'='1", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"}
+      },
+      "expected_result": "SQL injection payload is sanitized; no database errors or unauthorized access occurs",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["security", "sqli", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-SEC-003",
+      "title": "Verify payment page is served over HTTPS and card data is not exposed in URL",
+      "module": "Security",
+      "requirement_ids": ["FR-035", "FR-038"],
+      "priority": "Critical",
+      "type": "Security",
+      "preconditions": ["Browser is open", "User is on payment information page"],
+      "steps": [
+        {"step": 1, "action": "Navigate to the payment information step of checkout", "expected": "Payment information page loads"},
+        {"step": 2, "action": "Verify the page URL starts with 'https://'", "expected": "URL uses HTTPS protocol"},
+        {"step": 3, "action": "Enter card number and submit form", "expected": "Form is submitted"},
+        {"step": 4, "action": "Verify the browser address bar does not contain card number or CVV", "expected": "Card data is NOT visible in the URL"},
+        {"step": 5, "action": "Verify browser network requests do not send card data in plain text GET parameters", "expected": "Card data is sent via POST over HTTPS only"}
+      ],
+      "test_data": {
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Payment page is HTTPS and no sensitive card data is exposed in URLs or HTTP logs",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["security", "https", "payment-info"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PERF-001",
+      "title": "Verify homepage loads within 3 seconds",
+      "module": "Performance",
+      "requirement_ids": ["FR-001"],
+      "priority": "High",
+      "type": "Performance",
+      "preconditions": ["Browser is open", "Network connection is stable"],
+      "steps": [
+        {"step": 1, "action": "Start performance measurement timer", "expected": "Timer started"},
+        {"step": 2, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Page begins loading"},
+        {"step": 3, "action": "Record time until page is fully loaded (DOMContentLoaded and Load events)", "expected": "Page load time is measured"},
+        {"step": 4, "action": "Verify load time is under 3000 milliseconds", "expected": "Page loads in under 3 seconds"}
+      ],
+      "test_data": {"maxLoadTimeMs": 3000, "url": "https://demo.nopcommerce.com/"},
+      "expected_result": "Homepage loads within 3 seconds under normal network conditions",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["performance", "regression"],
+      "remarks": "Use Playwright's built-in timing APIs or browser devtools for measurement"
+    },
+    {
+      "id": "TC-PERF-002",
+      "title": "Verify search results page loads within 3 seconds",
+      "module": "Performance",
+      "requirement_ids": ["FR-004"],
+      "priority": "High",
+      "type": "Performance",
+      "preconditions": ["Browser is open", "Homepage is loaded"],
+      "steps": [
+        {"step": 1, "action": "Navigate to homepage", "expected": "Homepage loaded"},
+        {"step": 2, "action": "Enter search keyword and submit", "expected": "Search is submitted"},
+        {"step": 3, "action": "Measure time from search submission to search results page fully loaded", "expected": "Load time measured"},
+        {"step": 4, "action": "Verify load time is under 3000 milliseconds", "expected": "Search results load in under 3 seconds"}
+      ],
+      "test_data": {"searchKeyword": "Apple MacBook Pro", "maxLoadTimeMs": 3000},
+      "expected_result": "Search results page loads within 3 seconds",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["performance", "search", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-PERF-003",
+      "title": "Verify checkout pages load within 3 seconds each",
+      "module": "Performance",
+      "requirement_ids": ["FR-023"],
+      "priority": "Medium",
+      "type": "Performance",
+      "preconditions": ["Browser is open", "Cart has Apple MacBook Pro"],
+      "steps": [
+        {"step": 1, "action": "Navigate to cart and record time to checkout page load", "expected": "Checkout page load time measured"},
+        {"step": 2, "action": "Proceed through billing and record billing step load time", "expected": "Billing step load time measured"},
+        {"step": 3, "action": "Proceed through shipping and record shipping step load time", "expected": "Shipping step load time measured"},
+        {"step": 4, "action": "Proceed to payment and record payment step load time", "expected": "Payment step load time measured"},
+        {"step": 5, "action": "Verify each step loads in under 3000 milliseconds", "expected": "All checkout steps load under 3 seconds"}
+      ],
+      "test_data": {"maxLoadTimeMs": 3000},
+      "expected_result": "Each checkout step page loads within 3 seconds",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P3",
+      "tags": ["performance", "checkout", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-XBRS-001",
+      "title": "Verify complete guest checkout flow works in Chromium browser",
+      "module": "Cross-Browser",
+      "requirement_ids": ["FR-001", "FR-004", "FR-023", "FR-044", "FR-047"],
+      "priority": "Critical",
+      "type": "Regression",
+      "preconditions": ["Chromium browser is installed and available", "Network is available"],
+      "steps": [
+        {"step": 1, "action": "Launch Playwright with Chromium browser", "expected": "Chromium opens"},
+        {"step": 2, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads in Chromium"},
+        {"step": 3, "action": "Search for 'Apple MacBook Pro', add to cart, proceed to checkout as guest", "expected": "Cart and checkout flow works"},
+        {"step": 4, "action": "Fill billing, shipping, payment details and confirm order", "expected": "Order is placed"},
+        {"step": 5, "action": "Verify Thank You page with order number", "expected": "Order number displayed in Chromium"}
+      ],
+      "test_data": {
+        "browser": "chromium",
+        "searchKeyword": "Apple MacBook Pro",
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Full guest checkout completes successfully in Chromium",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P1",
+      "tags": ["cross-browser", "chromium", "e2e", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-XBRS-002",
+      "title": "Verify complete guest checkout flow works in Firefox browser",
+      "module": "Cross-Browser",
+      "requirement_ids": ["FR-001", "FR-004", "FR-023", "FR-044", "FR-047"],
+      "priority": "High",
+      "type": "Regression",
+      "preconditions": ["Firefox browser is installed and available via Playwright", "Network is available"],
+      "steps": [
+        {"step": 1, "action": "Launch Playwright with Firefox browser", "expected": "Firefox opens"},
+        {"step": 2, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads in Firefox"},
+        {"step": 3, "action": "Search for 'Apple MacBook Pro', add to cart, proceed to checkout as guest", "expected": "Cart and checkout flow works in Firefox"},
+        {"step": 4, "action": "Fill billing, shipping, payment details and confirm order", "expected": "Order is placed"},
+        {"step": 5, "action": "Verify Thank You page with order number", "expected": "Order number displayed in Firefox"}
+      ],
+      "test_data": {
+        "browser": "firefox",
+        "searchKeyword": "Apple MacBook Pro",
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Full guest checkout completes successfully in Firefox",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["cross-browser", "firefox", "e2e", "regression"],
+      "remarks": ""
+    },
+    {
+      "id": "TC-XBRS-003",
+      "title": "Verify complete guest checkout flow works in WebKit (Safari) browser",
+      "module": "Cross-Browser",
+      "requirement_ids": ["FR-001", "FR-004", "FR-023", "FR-044", "FR-047"],
+      "priority": "High",
+      "type": "Regression",
+      "preconditions": ["WebKit browser engine is available via Playwright", "Network is available"],
+      "steps": [
+        {"step": 1, "action": "Launch Playwright with WebKit browser engine", "expected": "WebKit opens"},
+        {"step": 2, "action": "Navigate to https://demo.nopcommerce.com/", "expected": "Homepage loads in WebKit"},
+        {"step": 3, "action": "Search for 'Apple MacBook Pro', add to cart, proceed to checkout as guest", "expected": "Cart and checkout flow works in WebKit"},
+        {"step": 4, "action": "Fill billing, shipping, payment details and confirm order", "expected": "Order is placed"},
+        {"step": 5, "action": "Verify Thank You page with order number", "expected": "Order number displayed in WebKit"}
+      ],
+      "test_data": {
+        "browser": "webkit",
+        "searchKeyword": "Apple MacBook Pro",
+        "billing": {"firstName": "Demo", "lastName": "Test", "email": "demo@test.com", "country": "United States", "state": "California", "city": "Los Angeles", "address1": "2458 Sunset Blvd", "zipCode": "90028", "phone": "9876543210"},
+        "payment": {"cardholderName": "Demo", "cardNumber": "4242424242424242", "expirationMonth": "01", "expirationYear": "2030", "cvv": "123"}
+      },
+      "expected_result": "Full guest checkout completes successfully in WebKit",
+      "actual_result": "",
+      "status": "Not Run",
+      "automation_candidate": true,
+      "automation_priority": "P2",
+      "tags": ["cross-browser", "webkit", "safari", "e2e", "regression"],
+      "remarks": "WebKit engine simulates Safari behavior; actual Safari testing recommended on macOS"
+    }
+  ]
+}

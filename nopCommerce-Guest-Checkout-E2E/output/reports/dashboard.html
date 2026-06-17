@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Execution Dashboard — AI-QA-POC</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+    .header {
+      background: #7f1d1d;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    .header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .header p { font-size: 0.9rem; opacity: 0.8; }
+    .status-badge {
+      display: inline-block;
+      background: #ef4444;
+      color: white;
+      padding: 0.35rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      text-align: center;
+      border-top: 4px solid var(--accent, #6366f1);
+    }
+    .card .value { font-size: 2.5rem; font-weight: 800; color: var(--accent, #6366f1); line-height: 1; }
+    .card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-top: 0.35rem; }
+    .card.total { --accent: #6366f1; }
+    .card.pass { --accent: #22c55e; }
+    .card.fail { --accent: #ef4444; }
+    .card.skip { --accent: #f59e0b; }
+    .card.rate { --accent: #3b82f6; }
+    .card.dur  { --accent: #8b5cf6; }
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+    }
+    .section h2 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; }
+    .chart-wrap { display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+    .chart-canvas { width: 200px !important; height: 200px !important; }
+    .chart-legend { display: flex; flex-direction: column; gap: 0.5rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead tr { background: #f8fafc; }
+    th { padding: 0.75rem 1rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: #f8fafc; }
+    .footer { text-align: center; font-size: 0.75rem; color: #94a3b8; padding: 2rem 0; border-top: 1px solid #e2e8f0; margin-top: 2rem; }
+    .env-info { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; font-size: 0.8rem; color: #64748b; }
+    .env-item { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+    .env-item strong { color: #334155; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Test Execution Dashboard</h1>
+  <p>AI-QA-POC Automated Test Suite</p>
+  <div class="status-badge">22 TEST(S) FAILED</div>
+</div>
+
+<div class="container">
+
+  <!-- Executive Summary Cards -->
+  <div class="cards">
+    <div class="card total">
+      <div class="value">30</div>
+      <div class="label">Total Tests</div>
+    </div>
+    <div class="card pass">
+      <div class="value">5</div>
+      <div class="label">Passed</div>
+    </div>
+    <div class="card fail">
+      <div class="value">22</div>
+      <div class="label">Failed</div>
+    </div>
+    <div class="card skip">
+      <div class="value">3</div>
+      <div class="label">Skipped</div>
+    </div>
+    <div class="card rate">
+      <div class="value">17%</div>
+      <div class="label">Pass Rate</div>
+    </div>
+    <div class="card dur">
+      <div class="value" style="font-size:1.5rem">5m 36s</div>
+      <div class="label">Duration</div>
+    </div>
+  </div>
+
+  <!-- Pie Chart -->
+  <div class="section">
+    <h2>Result Distribution</h2>
+    <div class="chart-wrap">
+      <canvas class="chart-canvas" id="pieChart"></canvas>
+      <div class="chart-legend">
+        
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#22c55e"></div>
+          <span>Passed: <strong>5</strong></span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#ef4444"></div>
+          <span>Failed: <strong>22</strong></span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#f59e0b"></div>
+          <span>Skipped: <strong>3</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module Breakdown -->
+  <div class="section">
+    <h2>Module Breakdown</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th>Total</th>
+          <th>Passed</th>
+          <th>Failed</th>
+          <th>Skipped</th>
+          <th style="min-width:150px">Pass Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr>
+        <td style="font-weight:600">SITE</td>
+        <td style="text-align:center">2</td>
+        <td style="text-align:center;color:#22c55e">2</td>
+        <td style="text-align:center;color:#6b7280">0</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#22c55e;width:100%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">100%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">SRCH</td>
+        <td style="text-align:center">2</td>
+        <td style="text-align:center;color:#22c55e">1</td>
+        <td style="text-align:center;color:#6b7280">0</td>
+        <td style="text-align:center;color:#f59e0b">1</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:50%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">50%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">RSLT</td>
+        <td style="text-align:center">2</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#6b7280">0</td>
+        <td style="text-align:center;color:#f59e0b">2</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">PDP</td>
+        <td style="text-align:center">2</td>
+        <td style="text-align:center;color:#22c55e">2</td>
+        <td style="text-align:center;color:#6b7280">0</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#22c55e;width:100%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">100%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">CART</td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">3</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">GCHK</td>
+        <td style="text-align:center">2</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">2</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">SHIP</td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">3</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">PAY</td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">3</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">PINFO</td>
+        <td style="text-align:center">2</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">2</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">CONF</td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">3</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">TYKU</td>
+        <td style="text-align:center">5</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">5</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600">GENERAL</td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#22c55e">0</td>
+        <td style="text-align:center;color:#ef4444">1</td>
+        <td style="text-align:center;color:#f59e0b">0</td>
+        <td>
+          <div style="background:#e5e7eb;border-radius:4px;height:12px;width:100%;min-width:80px">
+            <div style="background:#ef4444;width:2%;height:12px;border-radius:4px"></div>
+          </div>
+          <span style="font-size:0.75rem;color:#6b7280">0%</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Failed Tests -->
+  <div class="section">
+    <h2>Failed Tests (22)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>TC ID</th>
+          <th>Title</th>
+          <th>File</th>
+          <th>Duration</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-CART-001</td>
+        <td>TC-CART-001: Adding product to cart succeeds @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">14.9s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;.bar-notification&#039;)).toBeVisible() failed
+
+Locator: locator(&#039;.bar-notification&#039;)
+Expected: visible
+Timeout: 30000ms
+
+Cloudflare bot-protection blocks AJAX add-to-cart endpoint. </pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-CART-004</td>
+        <td>TC-CART-004: Cart page shows added product @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">21.8s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: Cart page (/cart) is empty because add-to-cart AJAX was blocked by Cloudflare. Expected product row &#039;.cart-item-row&#039; not found.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-CART-006</td>
+        <td>TC-CART-006: Cart subtotal reflects correct amount @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">23.6s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: Cart is empty (Cloudflare blocks add-to-cart). Subtotal locator not visible.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-GCHK-001</td>
+        <td>TC-GCHK-001: Checkout as guest option is available @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">24.6s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed
+
+Locator: locator(&#039;#termsofservice&#039;)
+Expected: visible
+Timeout: 5000ms
+
+Cart is empty because Cloudflare blocked add-to-cart. #termsofser</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-GCHK-002</td>
+        <td>TC-GCHK-002: Clicking checkout as guest reveals billing form @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">24.4s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-SHIP-001</td>
+        <td>TC-SHIP-001: Shipping method step is displayed after billing @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.3s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-SHIP-002</td>
+        <td>TC-SHIP-002: Default shipping method is pre-selected @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.7s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-SHIP-003</td>
+        <td>TC-SHIP-003: Continuing from shipping reveals payment methods @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">24.3s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-PAY-001</td>
+        <td>TC-PAY-001: Payment methods are listed @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">21.8s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-PAY-002</td>
+        <td>TC-PAY-002: Credit card option is selectable @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">26.8s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-PAY-003</td>
+        <td>TC-PAY-003: Continuing from payment method reveals payment info form @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">24.2s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-PINFO-001</td>
+        <td>TC-PINFO-001: Payment info form accepts valid card details @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">23.6s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-PINFO-002</td>
+        <td>TC-PINFO-002: Continuing from payment info reveals confirm order section @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.5s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-CONF-001</td>
+        <td>TC-CONF-001: Order confirmation page shows product summary @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">22.4s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-CONF-002</td>
+        <td>TC-CONF-002: Confirm order button is present @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.1s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-CONF-003</td>
+        <td>TC-CONF-003: Clicking confirm places the order @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">24.3s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-TYKU-001</td>
+        <td>TC-TYKU-001: Thank you page title is displayed @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.1s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-TYKU-002</td>
+        <td>TC-TYKU-002: Order number is displayed on thank you page @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">22.8s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-TYKU-003</td>
+        <td>TC-TYKU-003: Thank you page URL contains expected path @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.7s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-TYKU-004</td>
+        <td>TC-TYKU-004: Order detail link is present on thank you page @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">20.9s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-TYKU-005</td>
+        <td>TC-TYKU-005: Continue shopping link is visible on thank you page @tag:regression</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">25.8s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: expect(locator(&#039;#termsofservice&#039;)).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart.</pre>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;color:#dc2626">TC-E2E-001: Complete</td>
+        <td>TC-E2E-001: Complete guest checkout flow @tag:e2e @tag:smoke</td>
+        <td style="font-size:0.75rem;color:#6b7280">tests\e2e\guest-checkout.spec.ts</td>
+        <td style="font-size:0.75rem">19.2s</td>
+        <td style="font-size:0.75rem;color:#7f1d1d;max-width:300px;word-break:break-word">
+          <pre style="margin:0;white-space:pre-wrap;font-size:0.7rem">Error: Product detail page should load
+
+expect(locator(&#039;.product-name h1&#039;)).toBeVisible() failed
+
+Locator: locator(&#039;.product-name h1&#039;)
+Expected: visible
+Timeout: 5000ms
+
+After Cloudflare challenge tri</pre>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Environment Info -->
+  <div class="section">
+    <h2>Environment</h2>
+    <div class="env-info">
+      <div class="env-item">
+        <span>Environment</span>
+        <strong>https://demo.nopcommerce.com</strong>
+      </div>
+      <div class="env-item">
+        <span>Branch</span>
+        <strong>local</strong>
+      </div>
+      <div class="env-item">
+        <span>Run Date</span>
+        <strong>May 27, 2026, 11:44:52 PM GMT+5:30</strong>
+      </div>
+      <div class="env-item">
+        <span>Bug Reports</span>
+        <strong>4</strong>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>Generated by AI-QA-POC Test Automation Framework &bull; May 27, 2026, 11:56:16 PM GMT+5:30</p>
+</div>
+
+<script>
+  (function() {
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    const data = {
+      labels: ["Passed","Failed","Skipped"],
+      datasets: [{
+        data: [5,22,3],
+        backgroundColor: ["#22c55e","#ef4444","#f59e0b"],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+        hoverOffset: 6,
+      }]
+    };
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: data,
+      options: {
+        responsive: false,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                const pct = total > 0 ? Math.round((ctx.raw / total) * 100) : 0;
+                return ctx.label + ': ' + ctx.raw + ' (' + pct + '%)';
+              }
+            }
+          }
+        },
+        cutout: '65%',
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

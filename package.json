@@ -1,0 +1,36 @@
+{
+  "name": "ai-qa-poc",
+  "version": "1.0.0",
+  "description": "AI-Powered Quality Assurance — Proof of Concept",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:debug": "npx playwright test --debug",
+    "report": "npx playwright show-report",
+    "allure:generate": "npx allure generate allure-results -o allure-report --clean",
+    "allure:open": "npx allure open allure-report",
+    "allure:serve": "npx allure serve allure-results",
+    "stlc:run": "npx tsx tools/run-stlc-pipeline.ts",
+    "stlc:parse": "npx tsx tools/parse-requirements.ts",
+    "stlc:plan": "npx tsx tools/generate-test-plan.ts",
+    "stlc:cases": "npx tsx tools/generate-test-cases.ts",
+    "stlc:coverage": "npx tsx tools/generate-coverage-matrix.ts",
+    "stlc:report": "npx tsx tools/generate-html-reports.ts"
+  },
+  "keywords": ["qa", "automation", "playwright", "stlc", "ai-qa"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^22.0.0",
+    "allure-commandline": "^2.33.0",
+    "allure-playwright": "^3.2.0",
+    "dotenv": "^16.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "winston": "^3.17.0"
+  }
+}

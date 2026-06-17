@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*":     ["./nopCommerce-Guest-Checkout-E2E/page-objects/*"],
+      "@fixtures/*":  ["./nopCommerce-Guest-Checkout-E2E/fixtures/*"],
+      "@test-data/*": ["./nopCommerce-Guest-Checkout-E2E/test-data/*"],
+      "@base/*":      ["./src/base/*"],
+      "@utils/*":     ["./src/utils/*"],
+      "@helpers/*":   ["./src/helpers/*"],
+      "@config/*":    ["./src/config/*"],
+      "@models/*":    ["./src/models/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@api/*":       ["./src/api/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "playwright.config.ts",
+    "nopCommerce-Guest-Checkout-E2E/**/*.ts",
+    "BUG-Retest-Insurance-Name-Truncation/**/*.ts",
+    "BUG-Retest-STAR-2173-RA/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".tmp",
+    "result",
+    "playwright-report",
+    "allure-report"
+  ]
+}

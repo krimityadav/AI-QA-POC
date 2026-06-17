@@ -1,0 +1,2 @@
+[2026-05-28T06:50:37.657Z] [ProductDetailPage] navigate -> https://demo.nopcommerce.com/apple-macbook-pro
+[2026-05-28T06:50:43.755Z] [ProductDetailPage] waitForPageLoad: networkidle timed-out, continuing

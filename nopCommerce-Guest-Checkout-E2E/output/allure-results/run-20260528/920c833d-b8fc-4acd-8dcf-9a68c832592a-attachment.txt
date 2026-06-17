@@ -1,0 +1,5 @@
+[2026-05-28T06:49:24.538Z] [HomePage] navigate → /
+[2026-05-28T06:49:24.645Z] [HomePage] navigate -> https://demo.nopcommerce.com/
+[2026-05-28T06:49:26.955Z] [HomePage] searchFor: "Apple MacBook Pro"
+[2026-05-28T06:49:26.956Z] [HomePage] fillField: "Apple MacBook Pro"
+[2026-05-28T06:49:27.132Z] [HomePage] clickElement: locator('.search-box-button')

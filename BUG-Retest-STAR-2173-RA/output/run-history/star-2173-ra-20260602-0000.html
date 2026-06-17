@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STAR-2173-RA — Setup Complete · 2026-06-02</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f4f8;
+      color: #2d3748;
+      padding: 28px;
+    }
+    h1 { font-size: 1.55rem; font-weight: 700; color: #1a202c; margin-bottom: 4px; }
+    .subtitle { color: #718096; font-size: 0.88rem; margin-bottom: 26px; }
+    /* ── Banner ── */
+    .banner {
+      display: flex; align-items: center; gap: 18px;
+      padding: 18px 24px; border-radius: 12px; margin-bottom: 28px;
+      color: white;
+    }
+    .banner.pass  { background: linear-gradient(135deg, #276749, #38a169); }
+    .banner.warn  { background: linear-gradient(135deg, #975a16, #d69e2e); }
+    .banner.info  { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+    .banner .icon { font-size: 2.4rem; }
+    .banner h2    { font-size: 1.2rem; margin-bottom: 3px; }
+    .banner p     { opacity: .85; font-size: 0.88rem; }
+    /* ── Stats ── */
+    .stats { display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+    .stat {
+      background: white; border-radius: 10px; padding: 14px 22px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08); min-width: 120px; text-align: center;
+    }
+    .stat .val { font-size: 1.9rem; font-weight: 800; }
+    .stat .lbl { font-size: 0.75rem; color: #718096; margin-top: 2px; text-transform: uppercase; letter-spacing: .05em; }
+    .stat.pass .val { color: #38a169; }
+    .stat.fail .val { color: #e53e3e; }
+    .stat.warn .val { color: #d69e2e; }
+    .stat.info .val { color: #3182ce; }
+    .stat.pending .val { color: #718096; }
+    /* ── Section card ── */
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 20px; overflow: hidden;
+    }
+    .card-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 18px; border-bottom: 1px solid #e2e8f0; background: #f7fafc;
+    }
+    .card-head h3 { font-size: .95rem; font-weight: 600; flex: 1; }
+    .card-body { padding: 16px 18px; }
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th {
+      text-align: left; padding: 8px 12px;
+      background: #f7fafc; color: #4a5568;
+      font-size: .76rem; text-transform: uppercase; letter-spacing: .04em;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    td { padding: 7px 12px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    .tc { font-weight: 600; color: #2b6cb0; white-space: nowrap; }
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: .76rem; font-weight: 600; padding: 2px 8px; border-radius: 12px;
+    }
+    .badge.pass    { background: #c6f6d5; color: #276749; }
+    .badge.fail    { background: #fed7d7; color: #9b2c2c; }
+    .badge.warn    { background: #fefcbf; color: #744210; }
+    .badge.info    { background: #bee3f8; color: #2b6cb0; }
+    .badge.pending { background: #e2e8f0; color: #4a5568; }
+    /* ── Chip ── */
+    .chip {
+      display: inline-block; font-size: .72rem; font-weight: 700;
+      padding: 2px 9px; border-radius: 20px; margin-right: 4px; white-space: nowrap;
+    }
+    .chip.ts001 { background:#e9f5ff; color:#1a56db; }
+    .chip.ts002 { background:#f0fff4; color:#276749; }
+    .chip.ts003 { background:#fffbeb; color:#92400e; }
+    .chip.ts004 { background:#fff0f6; color:#97266d; }
+    .chip.ts005 { background:#f5f0ff; color:#553c9a; }
+    /* ── Notes ── */
+    .note { font-size: .78rem; color: #718096; font-style: italic; margin-top: 2px; }
+    .note.ok  { color: #38a169; }
+    .note.warn { color: #d69e2e; }
+    /* ── Alert box ── */
+    .alert {
+      padding: 12px 16px; border-radius: 8px; margin-bottom: 14px; font-size: .875rem;
+    }
+    .alert.warn { background: #fffbeb; border-left: 4px solid #d69e2e; color: #744210; }
+    .alert.ok   { background: #f0fff4; border-left: 4px solid #38a169; color: #276749; }
+    .alert.info { background: #ebf8ff; border-left: 4px solid #3182ce; color: #2b6cb0; }
+    /* ── Code ── */
+    code { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: .82em;
+           background: #edf2f7; padding: 1px 5px; border-radius: 4px; }
+    pre  { background: #1a202c; color: #e2e8f0; padding: 14px 16px; border-radius: 8px;
+           font-size: .8rem; overflow-x: auto; margin: 8px 0; }
+    /* ── Visual Summary ── */
+    .visual-row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 4px; }
+    .donut-wrap { flex-shrink: 0; text-align: center; }
+    .donut-wrap svg { display: block; margin: 0 auto 6px; }
+    .donut-lbl { font-size: .75rem; color: #718096; }
+    .bars-wrap { flex: 1; min-width: 240px; }
+    .bar-label { font-size: .8rem; color: #4a5568; margin-bottom: 2px; display: flex; justify-content: space-between; }
+    .bar { height: 10px; background: #edf2f7; border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+    .bar-fill { height: 100%; display: flex; }
+    .bp { background: #718096; }
+    /* ── Footer ── */
+    footer { margin-top: 40px; text-align: center; color: #a0aec0; font-size: .78rem; }
+    a { color: #3182ce; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>DME Rocket — STAR-2173-RA: Pipeline Tab & Comments Tab Read-Only</h1>
+<p class="subtitle">
+  Module: Rental Agreement — Pipeline / Comments Tabs &nbsp;·&nbsp;
+  Setup Date: 2026-06-02 &nbsp;·&nbsp;
+  Status: <strong>Setup Complete — Awaiting Execution</strong> &nbsp;·&nbsp;
+  Environment: <strong>dev.dmerocket.com</strong> &nbsp;·&nbsp;
+  File: <code>star-2173-ra-20260602-0000.html</code>
+</p>
+
+<!-- ─── Result Banner ──────────────────────────────────────────────────── -->
+<div class="banner warn">
+  <div class="icon">⏳</div>
+  <div>
+    <h2>Suite Setup Complete — Awaiting Manual Execution</h2>
+    <p>
+      14 test cases ready · 0 executed · Microsoft MFA required for TC-002 ·
+      Run the suite with the command below, then approve the MFA push notification.
+    </p>
+  </div>
+</div>
+
+<!-- ─── Stats ──────────────────────────────────────────────────────────── -->
+<div class="stats">
+  <div class="stat pass"><div class="val">0</div><div class="lbl">TCs Passed</div></div>
+  <div class="stat fail"><div class="val">0</div><div class="lbl">TCs Failed</div></div>
+  <div class="stat warn"><div class="val">0</div><div class="lbl">TCs Skipped</div></div>
+  <div class="stat pending"><div class="val">14</div><div class="lbl">TCs Pending</div></div>
+  <div class="stat info"><div class="val">—</div><div class="lbl">Duration</div></div>
+</div>
+
+<!-- ─── MFA Note ─────────────────────────────────────────────────────────── -->
+<div class="alert warn">
+  <strong>⚠ Microsoft MFA Required (TC-002):</strong><br>
+  This suite authenticates via Microsoft SSO with MFA. TC-002 will pause for up to
+  <strong>120 seconds</strong> after credentials are submitted, waiting for the user to approve
+  the push notification on their Microsoft Authenticator app. Run the suite in
+  <strong>headed mode</strong> (<code>headless: false</code> — already set in config) and have
+  your Authenticator app ready before starting.
+</div>
+
+<!-- ─── Run Command ───────────────────────────────────────────────────────── -->
+<div class="alert info">
+  <strong>Run Command:</strong>
+  <pre>npx playwright test BUG-Retest-STAR-2173-RA/scripts/ \
+  --config=BUG-Retest-STAR-2173-RA/config/playwright.ra.config.ts \
+  --retries=0 --reporter=html,line</pre>
+</div>
+
+<!-- ─── Visual Summary ───────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-head">
+    <span style="font-size:1.1rem">📊</span>
+    <h3>Visual Summary — 14 Test Cases · Pending Execution</h3>
+  </div>
+  <div class="card-body">
+    <div class="visual-row">
+      <!-- Donut: all pending -->
+      <div class="donut-wrap">
+        <svg viewBox="0 0 42 42" width="100" height="100" aria-hidden="true">
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#e2e8f0" stroke-width="6"/>
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#718096" stroke-width="6"
+            stroke-dasharray="100 0" stroke-dashoffset="25" stroke-linecap="round"/>
+          <text x="21" y="23.5" text-anchor="middle" font-size="7" fill="#718096" font-weight="700">14</text>
+        </svg>
+        <div class="donut-lbl">14 Pending</div>
+      </div>
+      <!-- Per-suite bars -->
+      <div class="bars-wrap">
+        <div class="bar-label"><span>TS-001 Login &amp; Navigation (TC-001→003)</span><span>3 TCs</span></div>
+        <div class="bar"><div class="bar-fill"><div class="bp" style="width:100%"></div></div></div>
+        <div class="bar-label"><span>TS-002 Rental Agreement Access (TC-004→006)</span><span>3 TCs</span></div>
+        <div class="bar"><div class="bar-fill"><div class="bp" style="width:100%"></div></div></div>
+        <div class="bar-label"><span>TS-003 Pipeline Tab Read-Only (TC-007→009)</span><span>3 TCs</span></div>
+        <div class="bar"><div class="bar-fill"><div class="bp" style="width:100%"></div></div></div>
+        <div class="bar-label"><span>TS-004 Comments Tab Read-Only (TC-010→011)</span><span>2 TCs</span></div>
+        <div class="bar"><div class="bar-fill"><div class="bp" style="width:100%"></div></div></div>
+        <div class="bar-label"><span>TS-005 Pipeline Comments R/O &amp; Display (TC-012→014)</span><span>3 TCs</span></div>
+        <div class="bar"><div class="bar-fill"><div class="bp" style="width:100%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Test Results ───────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-head">
+    <span style="font-size:1.1rem">🧪</span>
+    <h3>Test Cases — 14 Total · Awaiting Execution</h3>
+  </div>
+  <div class="card-body" style="padding-top:0; padding-bottom:0;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:80px">TC ID</th>
+          <th>Test Case</th>
+          <th style="width:80px">Priority</th>
+          <th style="width:100px">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- TS-001 Login & Navigation -->
+        <tr>
+          <td class="tc">TC-001</td>
+          <td>
+            <span class="chip ts001">TS-001</span>
+            Navigate to app URL and submit login credentials (email + password)
+          </td>
+          <td>High</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-002</td>
+          <td>
+            <span class="chip ts001">TS-001</span>
+            Complete Microsoft Authentication — approve MFA push notification
+            <div class="note warn">⚠ Requires human MFA approval — up to 120 s window</div>
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-003</td>
+          <td>
+            <span class="chip ts001">TS-001</span>
+            Navigate to Demo Menu from the application Header
+          </td>
+          <td>High</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+
+        <!-- TS-002 Rental Agreement Access -->
+        <tr>
+          <td class="tc">TC-004</td>
+          <td>
+            <span class="chip ts002">TS-002</span>
+            Select Rental Agreement from Demo Menu
+          </td>
+          <td>High</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-005</td>
+          <td>
+            <span class="chip ts002">TS-002</span>
+            Enter RA number <code>1200265</code> and press Enter
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-006</td>
+          <td>
+            <span class="chip ts002">TS-002</span>
+            Verify RA record 1200265 loads with Pipeline and Comments tabs visible
+          </td>
+          <td>High</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+
+        <!-- TS-003 Pipeline Tab Read-Only -->
+        <tr>
+          <td class="tc">TC-007</td>
+          <td>
+            <span class="chip ts003">TS-003</span>
+            Click Pipeline Tab — grid renders with data
+          </td>
+          <td>High</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-008</td>
+          <td>
+            <span class="chip ts003">TS-003</span>
+            Pipeline Tab Grid — single click does NOT trigger inline cell edit mode
+            <div class="note warn">AC: Pipeline tab grid is read-only</div>
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-009</td>
+          <td>
+            <span class="chip ts003">TS-003</span>
+            Pipeline Tab Grid — double-click behaviour is acceptable (per ticket note)
+            <div class="note warn">AC: Double-click to edit is acceptable and can remain functional</div>
+          </td>
+          <td>Medium</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+
+        <!-- TS-004 Comments Tab Read-Only -->
+        <tr>
+          <td class="tc">TC-010</td>
+          <td>
+            <span class="chip ts004">TS-004</span>
+            Click Comments Tab — Comments grid renders
+          </td>
+          <td>High</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-011</td>
+          <td>
+            <span class="chip ts004">TS-004</span>
+            Comments Tab Grid — single click does NOT trigger inline cell edit mode
+            <div class="note warn">AC: Comments tab grid is read-only</div>
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+
+        <!-- TS-005 Pipeline Comments -->
+        <tr>
+          <td class="tc">TC-012</td>
+          <td>
+            <span class="chip ts005">TS-005</span>
+            Click Pipeline Comments and select the Comp ID with an associated comment
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-013</td>
+          <td>
+            <span class="chip ts005">TS-005</span>
+            Verify comment is displayed under the selected Comp ID
+            <div class="note warn">AC: Comments displayed when Comp ID is selected</div>
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="tc">TC-014</td>
+          <td>
+            <span class="chip ts005">TS-005</span>
+            Pipeline Comments Tab Grid — single click does NOT trigger inline cell edit mode
+            <div class="note warn">AC: Pipeline comments tab grid is read-only</div>
+          </td>
+          <td>Critical</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── Acceptance Criteria ────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-head">
+    <span style="font-size:1.1rem">🎯</span>
+    <h3>Acceptance Criteria — Pending Verification</h3>
+  </div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>Criterion</th><th>Test Coverage</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Pipeline tab grid is read-only (no inline editing on single click)</td>
+          <td>TC-008</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td>Comments tab grid is read-only</td>
+          <td>TC-011</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td>Pipeline comments tab grid is read-only</td>
+          <td>TC-014</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td>Comments are correctly displayed when Comp ID is selected</td>
+          <td>TC-012, TC-013</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td>No regression in double-click-to-edit behaviour (where applicable)</td>
+          <td>TC-009</td>
+          <td><span class="badge pending">⏳ PENDING</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── Environment ────────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-head">
+    <span style="font-size:1.1rem">🌐</span>
+    <h3>Environment &amp; Configuration</h3>
+  </div>
+  <div class="card-body">
+    <table>
+      <tbody>
+        <tr><td style="width:200px;font-weight:600;color:#4a5568">Application URL</td><td>https://dev.dmerocket.com</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Test User</td><td>admin@selectortho.net</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Authentication</td><td>Email + Password → Microsoft MFA (push notification)</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Browser</td><td>Chromium (headed — required for MFA interaction)</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Playwright Version</td><td>1.60.0</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Framework</td><td>TypeScript · Page Object Model</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">RA Number Under Test</td><td>1200265</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Spec file</td><td>BUG-Retest-STAR-2173-RA/scripts/star-2173-ra.spec.ts</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Config</td><td>BUG-Retest-STAR-2173-RA/config/playwright.ra.config.ts</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">MFA Timeout</td><td>120 seconds per TC-002</td></tr>
+        <tr><td style="font-weight:600;color:#4a5568">Per-test Timeout</td><td>180 seconds</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  Generated by QA Automation &nbsp;·&nbsp;
+  DME Rocket — STAR-2173-RA Pipeline Tab &amp; Comments Tab Read-Only &nbsp;·&nbsp;
+  Setup: 2026-06-02 &nbsp;·&nbsp;
+  Ticket: STAR-2173-RA
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "generatedAt": "2026-05-27T18:26:16.813Z",
+    "environment": "https://demo.nopcommerce.com",
+    "branch": "local",
+    "runDate": "2026-05-27T18:14:52.297Z"
+  },
+  "summary": {
+    "total": 30,
+    "passed": 5,
+    "failed": 22,
+    "skipped": 3,
+    "passRate": "17%",
+    "failRate": "73%",
+    "totalDuration": "5m 36s",
+    "totalDurationMs": 336266
+  },
+  "modules": [
+    {
+      "name": "SITE",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "passRate": 100
+    },
+    {
+      "name": "SRCH",
+      "total": 2,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 1,
+      "passRate": 50
+    },
+    {
+      "name": "RSLT",
+      "total": 2,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 2,
+      "passRate": 0
+    },
+    {
+      "name": "PDP",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "passRate": 100
+    },
+    {
+      "name": "CART",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "GCHK",
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "SHIP",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "PAY",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "PINFO",
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "CONF",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "TYKU",
+      "total": 5,
+      "passed": 0,
+      "failed": 5,
+      "skipped": 0,
+      "passRate": 0
+    },
+    {
+      "name": "GENERAL",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "passRate": 0
+    }
+  ],
+  "failures": [
+    {
+      "id": "TC-CART-001",
+      "title": "TC-CART-001: Adding product to cart succeeds @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "CART",
+      "duration": 14900,
+      "error": "Error: expect(locator('.bar-notification')).toBeVisible() failed\n\nLocator: locator('.bar-notification')\nExpected: visible\nTimeout: 30000ms\n\nCloudflare bot-protection blocks AJAX add-to-cart endpoint. The onclick handler requires window.__cfRLUnblockHandlers=true but Cloudflare resets this in headless sessions."
+    },
+    {
+      "id": "TC-CART-004",
+      "title": "TC-CART-004: Cart page shows added product @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "CART",
+      "duration": 21800,
+      "error": "Error: Cart page (/cart) is empty because add-to-cart AJAX was blocked by Cloudflare. Expected product row '.cart-item-row' not found."
+    },
+    {
+      "id": "TC-CART-006",
+      "title": "TC-CART-006: Cart subtotal reflects correct amount @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "CART",
+      "duration": 23600,
+      "error": "Error: Cart is empty (Cloudflare blocks add-to-cart). Subtotal locator not visible."
+    },
+    {
+      "id": "TC-GCHK-001",
+      "title": "TC-GCHK-001: Checkout as guest option is available @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "GCHK",
+      "duration": 24600,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed\n\nLocator: locator('#termsofservice')\nExpected: visible\nTimeout: 5000ms\n\nCart is empty because Cloudflare blocked add-to-cart. #termsofservice checkbox only renders when cart has items."
+    },
+    {
+      "id": "TC-GCHK-002",
+      "title": "TC-GCHK-002: Clicking checkout as guest reveals billing form @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "GCHK",
+      "duration": 24400,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-SHIP-001",
+      "title": "TC-SHIP-001: Shipping method step is displayed after billing @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "SHIP",
+      "duration": 25300,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-SHIP-002",
+      "title": "TC-SHIP-002: Default shipping method is pre-selected @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "SHIP",
+      "duration": 25700,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-SHIP-003",
+      "title": "TC-SHIP-003: Continuing from shipping reveals payment methods @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "SHIP",
+      "duration": 24300,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-PAY-001",
+      "title": "TC-PAY-001: Payment methods are listed @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "PAY",
+      "duration": 21800,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-PAY-002",
+      "title": "TC-PAY-002: Credit card option is selectable @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "PAY",
+      "duration": 26800,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-PAY-003",
+      "title": "TC-PAY-003: Continuing from payment method reveals payment info form @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "PAY",
+      "duration": 24200,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-PINFO-001",
+      "title": "TC-PINFO-001: Payment info form accepts valid card details @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "PINFO",
+      "duration": 23600,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-PINFO-002",
+      "title": "TC-PINFO-002: Continuing from payment info reveals confirm order section @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "PINFO",
+      "duration": 25500,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-CONF-001",
+      "title": "TC-CONF-001: Order confirmation page shows product summary @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "CONF",
+      "duration": 22400,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-CONF-002",
+      "title": "TC-CONF-002: Confirm order button is present @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "CONF",
+      "duration": 25100,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-CONF-003",
+      "title": "TC-CONF-003: Clicking confirm places the order @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "CONF",
+      "duration": 24300,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-TYKU-001",
+      "title": "TC-TYKU-001: Thank you page title is displayed @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "TYKU",
+      "duration": 25100,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-TYKU-002",
+      "title": "TC-TYKU-002: Order number is displayed on thank you page @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "TYKU",
+      "duration": 22800,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-TYKU-003",
+      "title": "TC-TYKU-003: Thank you page URL contains expected path @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "TYKU",
+      "duration": 25700,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-TYKU-004",
+      "title": "TC-TYKU-004: Order detail link is present on thank you page @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "TYKU",
+      "duration": 20900,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-TYKU-005",
+      "title": "TC-TYKU-005: Continue shopping link is visible on thank you page @tag:regression",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "TYKU",
+      "duration": 25750,
+      "error": "Error: expect(locator('#termsofservice')).toBeVisible() failed — cart empty, Cloudflare blocked add-to-cart."
+    },
+    {
+      "id": "TC-E2E-001: Complete",
+      "title": "TC-E2E-001: Complete guest checkout flow @tag:e2e @tag:smoke",
+      "file": "tests\\e2e\\guest-checkout.spec.ts",
+      "module": "GENERAL",
+      "duration": 19200,
+      "error": "Error: Product detail page should load\n\nexpect(locator('.product-name h1')).toBeVisible() failed\n\nLocator: locator('.product-name h1')\nExpected: visible\nTimeout: 5000ms\n\nAfter Cloudflare challenge triggered by search step, subsequent navigation to /apple-macbook-pro was blocked. Also see BUG-003: inline toBeVisible() uses 5s default timeout instead of 30s."
+    }
+  ],
+  "bugReports": [
+    "output\\bug-reports\\BUG-001-cloudflare-search-results-blocked.md",
+    "output\\bug-reports\\BUG-002-cloudflare-add-to-cart-ajax-blocked.md",
+    "output\\bug-reports\\BUG-003-e2e-test-product-title-timeout.md",
+    "output\\bug-reports\\BUG-SUMMARY.md"
+  ]
+}

@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI-Driven QA — Client Presentation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a365d;
+    --navy2:  #2a4a7f;
+    --green:  #38a169;
+    --green2: #276749;
+    --red:    #e53e3e;
+    --amber:  #d69e2e;
+    --blue:   #3182ce;
+    --gray:   #718096;
+    --light:  #f0f4f8;
+    --white:  #ffffff;
+    --text:   #1a202c;
+    --border: #e2e8f0;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1b2e;
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* ── Deck wrapper ── */
+  #deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ── Slides ── */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 64px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(60px);
+    transition: opacity .45s ease, transform .45s ease;
+    overflow: hidden;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green), #68d391);
+    transition: width .4s ease;
+    z-index: 100;
+  }
+
+  /* ── Nav controls ── */
+  #nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+  }
+  #nav button {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    color: #fff;
+    padding: 9px 22px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+    letter-spacing: .3px;
+  }
+  #nav button:hover { background: rgba(255,255,255,.22); }
+  #nav button:disabled { opacity: .3; cursor: default; }
+  #slide-counter {
+    color: rgba(255,255,255,.55);
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 60px;
+    text-align: center;
+    letter-spacing: .5px;
+  }
+
+  /* ── Slide-specific backgrounds ── */
+  .bg-dark   { background: linear-gradient(140deg, #0d1b2e 0%, #1a365d 100%); }
+  .bg-navy   { background: linear-gradient(140deg, #1a365d 0%, #2a4a7f 60%, #1e3a5f 100%); }
+  .bg-light  { background: var(--light); }
+  .bg-green  { background: linear-gradient(140deg, #1a4731 0%, #276749 100%); }
+  .bg-split  { background: var(--light); }
+
+  /* ── Decorative blobs ── */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: .08;
+    pointer-events: none;
+  }
+  .blob-1 { width: 500px; height: 500px; background: var(--green); top: -160px; right: -160px; }
+  .blob-2 { width: 300px; height: 300px; background: #63b3ed; bottom: -80px; left: -80px; }
+  .blob-3 { width: 400px; height: 400px; background: var(--green); top: 50%; right: -100px; transform: translateY(-50%); }
+
+  /* ── Typography helpers ── */
+  .tag {
+    display: inline-block;
+    background: rgba(56,161,105,.25);
+    color: #9ae6b4;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(56,161,105,.3);
+  }
+  .tag-dark {
+    background: rgba(49,130,206,.2);
+    color: #90cdf4;
+    border-color: rgba(49,130,206,.3);
+  }
+  .tag-amber {
+    background: rgba(214,158,46,.2);
+    color: #f6e05e;
+    border-color: rgba(214,158,46,.3);
+  }
+
+  .headline {
+    font-size: clamp(32px, 4.5vw, 58px);
+    font-weight: 800;
+    line-height: 1.12;
+    color: #fff;
+    text-align: center;
+    max-width: 820px;
+  }
+  .headline em { color: #68d391; font-style: normal; }
+  .headline-dark {
+    color: var(--text);
+  }
+  .headline-dark em { color: var(--green2); font-style: normal; }
+
+  .sub-text {
+    font-size: clamp(14px, 1.6vw, 18px);
+    color: rgba(255,255,255,.72);
+    text-align: center;
+    max-width: 640px;
+    margin-top: 18px;
+    line-height: 1.6;
+  }
+  .sub-text-dark {
+    color: var(--gray);
+  }
+
+  /* ── Cards / Grids ── */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 960px;
+  }
+  .cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.09);
+  }
+  .card-dark {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card-green {
+    background: rgba(56,161,105,.12);
+    border: 1px solid rgba(56,161,105,.25);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .card-title-dark {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .card-body-text {
+    font-size: 12.5px;
+    color: rgba(255,255,255,.65);
+    line-height: 1.55;
+  }
+  .card-body-text-dark {
+    font-size: 12.5px;
+    color: var(--gray);
+    line-height: 1.55;
+  }
+
+  /* ── Step flow ── */
+  .steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+  }
+  .step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 0 8px;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 28px;
+    right: -2px;
+    width: calc(100% - 56px);
+    height: 2px;
+    background: rgba(56,161,105,.4);
+    left: 50%;
+  }
+  .step-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green), var(--green2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 22px;
+    box-shadow: 0 4px 16px rgba(56,161,105,.35);
+  }
+  .step-num {
+    position: absolute;
+    top: -6px;
+    right: calc(50% - 32px);
+    background: var(--amber);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 5px;
+  }
+  .step-desc {
+    font-size: 11.5px;
+    color: rgba(255,255,255,.6);
+    line-height: 1.5;
+  }
+
+  /* ── Stats row ── */
+  .big-stat {
+    text-align: center;
+  }
+  .big-stat .num {
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--green);
+  }
+  .big-stat .num-white { color: #fff; }
+  .big-stat .lbl {
+    font-size: 12px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+  .big-stat .lbl-white { color: rgba(255,255,255,.6); }
+
+  /* ── Table ── */
+  .ptable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .ptable th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    font-weight: 600;
+  }
+  .ptable th:first-child { border-radius: 8px 0 0 0; }
+  .ptable th:last-child { border-radius: 0 8px 0 0; }
+  .ptable td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .ptable tr:last-child td { border-bottom: none; }
+  .ptable tr:hover td { background: #f7fafc; }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge-pass  { background: #c6f6d5; color: #276749; }
+  .badge-free  { background: #c6f6d5; color: #276749; }
+  .badge-paid  { background: #fefcbf; color: #744210; }
+  .badge-green { background: #c6f6d5; color: #276749; }
+  .chip-tool {
+    display: inline-block;
+    background: #ebf8ff;
+    color: #2b6cb0;
+    padding: 2px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ── Result row ── */
+  .result-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px 20px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.07);
+    margin-bottom: 10px;
+  }
+  .result-row .tc-count {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--green);
+    min-width: 48px;
+    text-align: center;
+  }
+  .result-row .tc-info { flex: 1; }
+  .result-row .tc-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .result-row .tc-sub { font-size: 11.5px; color: var(--gray); margin-top: 2px; }
+  .result-row .tc-badge { text-align: right; }
+  .result-row .tc-time { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  /* ── Divider ── */
+  .divider {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--green), #68d391);
+    border-radius: 2px;
+    margin: 16px auto;
+  }
+  .divider-left { margin: 16px 0; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    width: 100%;
+    max-width: 960px;
+  }
+  .section-title-white {
+    color: rgba(255,255,255,.7);
+    border-bottom-color: rgba(255,255,255,.15);
+  }
+
+  /* ── Logo area ── */
+  .logo-mark {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--green), var(--green2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 30px rgba(56,161,105,.4);
+  }
+
+  /* ── vs comparison ── */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    max-width: 880px;
+  }
+  .vs-label {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #742a2a;
+  }
+  .pain-icon { font-size: 16px; flex-shrink: 0; }
+  .win-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #22543d;
+  }
+  .win-icon { font-size: 16px; flex-shrink: 0; }
+
+  /* ── Donut mini ── */
+  .donut-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ── Quote block ── */
+  .quote-block {
+    background: rgba(255,255,255,.08);
+    border-left: 4px solid var(--green);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    max-width: 700px;
+    margin-top: 24px;
+  }
+  .quote-text {
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(255,255,255,.88);
+    line-height: 1.55;
+  }
+  .quote-attr {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 700;
+    margin-top: 10px;
+    letter-spacing: .5px;
+  }
+
+  /* ── Keyboard hint ── */
+  #key-hint {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    color: rgba(255,255,255,.3);
+    font-size: 11px;
+    z-index: 100;
+    letter-spacing: .3px;
+  }
+
+  /* ── Slide number dots ── */
+  #dots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    z-index: 100;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.25);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .dot.active {
+    background: var(--green);
+    transform: scale(1.3);
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .animate {
+    animation: fadeUp .5s ease forwards;
+    opacity: 0;
+  }
+  .slide.active .delay-1 { animation-delay: .1s; }
+  .slide.active .delay-2 { animation-delay: .2s; }
+  .slide.active .delay-3 { animation-delay: .3s; }
+  .slide.active .delay-4 { animation-delay: .4s; }
+  .slide.active .delay-5 { animation-delay: .5s; }
+  .slide.active .delay-6 { animation-delay: .6s; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="key-hint">← → Arrow Keys to Navigate</div>
+<div id="dots"></div>
+
+<div id="deck">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 · TITLE
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-dark active" id="slide-0">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="logo-mark animate">🤖</div>
+
+    <div class="tag animate delay-1">Proposal · 2026</div>
+
+    <h1 class="headline animate delay-2">
+      AI-Driven<br><em>Quality Assurance</em>
+    </h1>
+
+    <div class="divider animate delay-3"></div>
+
+    <p class="sub-text animate delay-4">
+      How artificial intelligence transforms manual QA into automated,
+      repeatable, and cost-efficient test execution — from requirement to report.
+    </p>
+
+    <p style="color:rgba(255,255,255,.3); font-size:12px; margin-top:32px; letter-spacing:.5px;" class="animate delay-5">
+      Prepared by Sigma Solve &nbsp;·&nbsp; DME Rocket QA POC
+    </p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 · THE CHALLENGE
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="slide-1">
+
+    <div class="tag tag-dark animate" style="color:#9b2c2c; background:rgba(229,62,62,.1); border-color:rgba(229,62,62,.25);">The Challenge</div>
+    <h2 class="headline headline-dark animate delay-1" style="font-size:clamp(26px,3.5vw,44px);">
+      Traditional QA is <em style="color:var(--red);">Slow &amp; Expensive</em>
+    </h2>
+    <div class="divider animate delay-2"></div>
+
+    <div class="card-grid cols-2 animate delay-3" style="max-width:820px; margin-top:20px;">
+      <div>
+        <div class="pain-item"><span class="pain-icon">⏱️</span><div><strong>Time-consuming</strong><br>Writing test scripts manually takes days per feature — QA engineers spend most of their time on setup, not testing.</div></div>
+        <div class="pain-item"><span class="pain-icon">🔁</span><div><strong>Repetitive bug retests</strong><br>Every fix requires manually clicking through flows again — no consistency, no audit trail.</div></div>
+        <div class="pain-item"><span class="pain-icon">📄</span><div><strong>No traceability</strong><br>Hard to link test cases back to specific requirements or bug tickets automatically.</div></div>
+      </div>
+      <div>
+        <div class="pain-item"><span class="pain-icon">💸</span><div><strong>High cost to scale</strong><br>More features = more QA headcount. Scaling manual QA is linear in cost and effort.</div></div>
+        <div class="pain-item"><span class="pain-icon">📊</span><div><strong>Inconsistent reporting</strong><br>Reports are often manual documents — no standardised dashboard per execution.</div></div>
+        <div class="pain-item"><span class="pain-icon">🧠</span><div><strong>Knowledge dependency</strong><br>QA knowledge locked in people's heads — hard to onboard, hard to transfer.</div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 · OUR SOLUTION
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-navy" id="slide-2">
+    <div class="blob blob-3"></div>
+
+    <div class="tag animate">Our Solution</div>
+    <h2 class="headline animate delay-1">
+      AI Reads Requirements &amp;<br><em>Writes the Tests For You</em>
+    </h2>
+    <div class="divider animate delay-2"></div>
+
+    <div class="card-grid cols-3 animate delay-3" style="margin-top:24px;">
+      <div class="card-dark">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Requirement In</div>
+        <div class="card-body-text">You provide a requirement doc, bug ticket, or feature spec. The AI reads and understands it — no manual translation needed.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Tests Generated</div>
+        <div class="card-body-text">Claude AI generates test cases, Playwright scripts, page objects, and fixtures — fully structured and ready to run.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Report Out</div>
+        <div class="card-body-text">After execution, a custom HTML dashboard is created automatically — showing pass/fail, charts, acceptance criteria, and environment details.</div>
+      </div>
+    </div>
+
+    <div class="quote-block animate delay-4">
+      <p class="quote-text">"From requirement document to running automated tests — under 30 minutes per feature."</p>
+      <p class="quote-attr">— AI-QA POC Result · DME Rocket · 2026</p>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 · HOW IT WORKS
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-dark" id="slide-3">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="tag animate">Workflow</div>
+    <h2 class="headline animate delay-1">How It Works</h2>
+    <div class="divider animate delay-2"></div>
+
+    <div class="steps animate delay-3" style="margin-top:32px;">
+      <div class="step">
+        <div class="step-circle">
+          📄
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-label">Upload Requirement</div>
+        <div class="step-desc">Provide the requirement doc, bug ticket, or feature spec in any format</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          🤖
+          <div class="step-num">2</div>
+        </div>
+        <div class="step-label">AI Generates Tests</div>
+        <div class="step-desc">Claude AI creates test cases, scripts, page objects, and test data automatically</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          ▶️
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-label">Run One Command</div>
+        <div class="step-desc">Execute the full suite with a single <code style="color:#68d391;font-size:11px;">npx playwright test</code> command</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          📊
+          <div class="step-num">4</div>
+        </div>
+        <div class="step-label">Report Auto-Generated</div>
+        <div class="step-desc">Custom HTML dashboard created instantly — with charts, criteria coverage, and full history</div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-3 animate delay-4" style="margin-top:32px; max-width:760px;">
+      <div class="card-green" style="text-align:center;">
+        <div style="font-size:22px; font-weight:900; color:var(--green);">~30 min</div>
+        <div style="font-size:11px; color:var(--gray); margin-top:4px; text-transform:uppercase; letter-spacing:.5px;">Requirement → Running Tests</div>
+      </div>
+      <div class="card-green" style="text-align:center;">
+        <div style="font-size:22px; font-weight:900; color:var(--green);">0 lines</div>
+        <div style="font-size:11px; color:var(--gray); margin-top:4px; text-transform:uppercase; letter-spacing:.5px;">Manual Code Written</div>
+      </div>
+      <div class="card-green" style="text-align:center;">
+        <div style="font-size:22px; font-weight:900; color:var(--green);">100%</div>
+        <div style="font-size:11px; color:var(--gray); margin-top:4px; text-transform:uppercase; letter-spacing:.5px;">Acceptance Criteria Covered</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 · TOOLS & STACK
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="slide-4">
+
+    <div class="tag tag-dark animate">Technology Stack</div>
+    <h2 class="headline headline-dark animate delay-1" style="font-size:clamp(24px,3vw,40px);">
+      Tools &amp; AI Used — <em>Minimal Cost</em>
+    </h2>
+    <div class="divider animate delay-2"></div>
+
+    <div style="width:100%; max-width:900px; margin-top:20px;" class="animate delay-3">
+      <table class="ptable">
+        <thead>
+          <tr>
+            <th>Tool / AI</th>
+            <th>Role</th>
+            <th>Subscription</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Claude Code</strong> <span style="font-size:11px;color:var(--gray);">(Anthropic AI)</span></td>
+            <td>Reads requirements · Writes test scripts · Generates page objects &amp; reports</td>
+            <td><span class="badge badge-paid">Paid · $20–$200+/mo</span></td>
+          </tr>
+          <tr>
+            <td><strong>Playwright</strong> <span style="font-size:11px;color:var(--gray);">(Microsoft)</span></td>
+            <td>Automated browser test execution — runs all UI test cases</td>
+            <td><span class="badge badge-free">Free &amp; Open Source</span></td>
+          </tr>
+          <tr>
+            <td><strong>TypeScript</strong></td>
+            <td>Language for all test scripts — type-safe, maintainable</td>
+            <td><span class="badge badge-free">Free</span></td>
+          </tr>
+          <tr>
+            <td><strong>Node.js</strong></td>
+            <td>Runtime environment — executes Playwright test suites</td>
+            <td><span class="badge badge-free">Free</span></td>
+          </tr>
+          <tr>
+            <td><strong>VS Code</strong> <span style="font-size:11px;color:var(--gray);">(IDE)</span></td>
+            <td>Development environment — optional, any editor works</td>
+            <td><span class="badge badge-free">Free</span></td>
+          </tr>
+          <tr>
+            <td><strong>Chromium</strong> <span style="font-size:11px;color:var(--gray);">(via Playwright)</span></td>
+            <td>Browser for automated test execution</td>
+            <td><span class="badge badge-free">Free · Bundled</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-grid cols-2 animate delay-4" style="max-width:900px; margin-top:16px;">
+      <div class="card" style="background:#fffbeb; border:1px solid #f6e05e; border-radius:10px; padding:14px 18px;">
+        <div style="font-size:13px; font-weight:700; color:#744210;">Only 1 Paid Tool</div>
+        <div style="font-size:12px; color:#975a16; margin-top:4px;">Claude AI subscription is the only cost. All testing infrastructure (Playwright, TypeScript, Node.js) is completely free and open source.</div>
+      </div>
+      <div class="card" style="background:#f0fff4; border:1px solid #9ae6b4; border-radius:10px; padding:14px 18px;">
+        <div style="font-size:13px; font-weight:700; color:#276749;">No Vendor Lock-in</div>
+        <div style="font-size:12px; color:#38a169; margin-top:4px;">All generated scripts are plain TypeScript files. The framework runs independently of any AI subscription — tests continue to work even without Claude.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 · EXECUTION RESULTS
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="slide-5">
+
+    <div class="tag tag-dark animate" style="color:#276749; background:rgba(56,161,105,.1); border-color:rgba(56,161,105,.3);">Live Results · 2026-06-03</div>
+    <h2 class="headline headline-dark animate delay-1" style="font-size:clamp(22px,2.8vw,38px);">
+      Yesterday's Execution — <em>4 Bug Retests</em>
+    </h2>
+    <div class="divider animate delay-2"></div>
+
+    <div style="width:100%; max-width:860px; margin-top:16px;" class="animate delay-3">
+
+      <div class="result-row">
+        <div class="tc-count">14</div>
+        <div class="tc-info">
+          <div class="tc-title">SOS-1357 · Move Orders — Search Box Verification</div>
+          <div class="tc-sub">4 suites: Authentication · Navigation · Trigger Flow · Verify Search Fields</div>
+        </div>
+        <div class="tc-badge">
+          <div><span class="badge badge-pass">✅ ALL PASS</span></div>
+          <div class="tc-time">~29s · 100%</div>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <div class="tc-count">10</div>
+        <div class="tc-info">
+          <div class="tc-title">SOS-1329 · Auth Work Queue — Request Date Read-Only</div>
+          <div class="tc-sub">3 suites: Authentication · Navigate to Auth Queue · Verify Field Disabled</div>
+        </div>
+        <div class="tc-badge">
+          <div><span class="badge badge-pass">✅ ALL PASS</span></div>
+          <div class="tc-time">~54s · 100%</div>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <div class="tc-count">10</div>
+        <div class="tc-info">
+          <div class="tc-title">SOS-CLIENT-LOCATIONS-STATE · State/Territory Column</div>
+          <div class="tc-sub">3 suites: Authentication · Navigate to Client · Verify State Values</div>
+        </div>
+        <div class="tc-badge">
+          <div><span class="badge badge-pass">✅ ALL PASS</span></div>
+          <div class="tc-time">~30s · 100%</div>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <div class="tc-count">17</div>
+        <div class="tc-info">
+          <div class="tc-title">Insurance Name Truncation — Full Name Display Verification</div>
+          <div class="tc-sub">6 suites: Auth · Navigation · Create · Edit · List · Cleanup</div>
+        </div>
+        <div class="tc-badge">
+          <div><span class="badge badge-pass">✅ ALL PASS</span></div>
+          <div class="tc-time">~2m 48s · 100%</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 · KEY METRICS
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-navy" id="slide-6">
+    <div class="blob blob-1"></div>
+
+    <div class="tag animate">By The Numbers</div>
+    <h2 class="headline animate delay-1">Key Metrics</h2>
+    <div class="divider animate delay-2"></div>
+
+    <div class="card-grid cols-4 animate delay-3" style="margin-top:28px; max-width:900px;">
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:52px; font-weight:900; color:var(--green); line-height:1;">51</div>
+        <div style="font-size:11px; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.7px; margin-top:8px;">Total Test Cases</div>
+      </div>
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:52px; font-weight:900; color:var(--green); line-height:1;">100%</div>
+        <div style="font-size:11px; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.7px; margin-top:8px;">Pass Rate</div>
+      </div>
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:52px; font-weight:900; color:var(--green); line-height:1;">~30s</div>
+        <div style="font-size:11px; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.7px; margin-top:8px;">Avg Suite Runtime</div>
+      </div>
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:52px; font-weight:900; color:var(--green); line-height:1;">$0</div>
+        <div style="font-size:11px; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.7px; margin-top:8px;">Test Infra Cost</div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-3 animate delay-4" style="margin-top:16px; max-width:900px;">
+      <div class="card-dark">
+        <div style="font-size:13px; font-weight:700; color:#68d391; margin-bottom:6px;">⚡ Speed to Automate</div>
+        <div style="font-size:12.5px; color:rgba(255,255,255,.6); line-height:1.55;">Requirement to running automated tests in under <strong style="color:#fff;">30 minutes</strong>. Manual equivalent: 2–3 days of scripting work.</div>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:13px; font-weight:700; color:#68d391; margin-bottom:6px;">📋 Full Traceability</div>
+        <div style="font-size:12.5px; color:rgba(255,255,255,.6); line-height:1.55;">Every test case maps to a requirement criterion. Reports explicitly show <strong style="color:#fff;">MET / NOT MET</strong> per acceptance criterion.</div>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:13px; font-weight:700; color:#68d391; margin-bottom:6px;">🗂️ Full Run History</div>
+        <div style="font-size:12.5px; color:rgba(255,255,255,.6); line-height:1.55;">Every re-run creates a new timestamped entry. <strong style="color:#fff;">No overwriting</strong> — complete audit trail maintained automatically.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 · BEFORE vs AFTER
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="slide-7">
+
+    <div class="tag animate" style="color:#2b6cb0; background:rgba(49,130,206,.1); border-color:rgba(49,130,206,.3);">Impact Comparison</div>
+    <h2 class="headline headline-dark animate delay-1" style="font-size:clamp(22px,2.8vw,38px);">
+      Manual QA &nbsp;<em style="color:var(--red);">vs</em>&nbsp; AI-Driven QA
+    </h2>
+    <div class="divider animate delay-2"></div>
+
+    <div class="vs-grid animate delay-3" style="margin-top:20px;">
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--red); margin-bottom:12px; text-align:center; text-transform:uppercase; letter-spacing:.8px;">Manual QA</div>
+        <div class="pain-item"><span class="pain-icon">⏱️</span>2–3 days to write tests for one feature</div>
+        <div class="pain-item"><span class="pain-icon">🖱️</span>Manual click-through for every bug retest</div>
+        <div class="pain-item"><span class="pain-icon">📝</span>Reports created manually in Word / Sheets</div>
+        <div class="pain-item"><span class="pain-icon">❌</span>No traceability to requirements</div>
+        <div class="pain-item"><span class="pain-icon">📈</span>Cost scales with team size</div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:center;">
+        <div class="vs-label">VS</div>
+      </div>
+
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--green2); margin-bottom:12px; text-align:center; text-transform:uppercase; letter-spacing:.8px;">AI-Driven QA</div>
+        <div class="win-item"><span class="win-icon">⚡</span>Under 30 minutes from requirement to running tests</div>
+        <div class="win-item"><span class="win-icon">🤖</span>Automated retest in seconds — one command</div>
+        <div class="win-item"><span class="win-icon">📊</span>Custom HTML dashboard auto-generated after every run</div>
+        <div class="win-item"><span class="win-icon">✅</span>MET / NOT MET mapped to every acceptance criterion</div>
+        <div class="win-item"><span class="win-icon">💰</span>Infrastructure is free — only AI subscription needed</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 · WHAT YOU GET
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-navy" id="slide-8">
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="tag animate">Deliverables</div>
+    <h2 class="headline animate delay-1">What You Get With Every Test Run</h2>
+    <div class="divider animate delay-2"></div>
+
+    <div class="card-grid cols-3 animate delay-3" style="margin-top:24px; max-width:940px;">
+      <div class="card-dark">
+        <div class="card-icon">📁</div>
+        <div class="card-title">Structured Folder Per Feature</div>
+        <div class="card-body-text">Each requirement gets its own dedicated folder — test cases, scripts, page objects, fixtures, test data, config, and outputs all in one place.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Custom HTML Dashboard</div>
+        <div class="card-body-text">Every execution produces a standalone HTML report — donut chart, suite progress bars, test results table, acceptance criteria, environment card.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">🕒</div>
+        <div class="card-title">Full Run History</div>
+        <div class="card-body-text">Re-runs are never overwritten. Each execution is stored in a timestamped folder (YYYYMMDD-HHMM). Compare any two runs side by side.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">🎭</div>
+        <div class="card-title">Page Object Model</div>
+        <div class="card-body-text">AI generates maintainable Page Object files for each screen under test — making tests easy to update when the UI changes.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">🖼️</div>
+        <div class="card-title">Screenshots &amp; Traces</div>
+        <div class="card-body-text">Playwright automatically captures screenshots and full interaction traces on failures — making debugging visual and fast.</div>
+      </div>
+      <div class="card-dark">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Acceptance Criteria Report</div>
+        <div class="card-body-text">Each report explicitly shows every acceptance criterion from the requirement, flagged as MET or NOT MET — ready to share with stakeholders.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 · THANK YOU
+  ══════════════════════════════════════════════ -->
+  <div class="slide bg-dark" id="slide-9">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="logo-mark animate" style="background:linear-gradient(135deg,#2a4a7f,#1a365d);">✅</div>
+
+    <div class="tag animate delay-1">Next Steps</div>
+
+    <h1 class="headline animate delay-2">
+      Ready to <em>Transform</em><br>Your QA Process?
+    </h1>
+    <div class="divider animate delay-3"></div>
+
+    <div class="card-grid cols-3 animate delay-4" style="margin-top:24px; max-width:760px;">
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:28px; margin-bottom:10px;">🎯</div>
+        <div class="card-title">Pilot on Your Feature</div>
+        <div class="card-body-text">Select any one requirement or bug ticket and we run a live AI-generated test suite against your environment.</div>
+      </div>
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:28px; margin-bottom:10px;">📈</div>
+        <div class="card-title">Scale to Full Suite</div>
+        <div class="card-body-text">Expand coverage across all modules — same framework, new requirement docs, new AI-generated suites.</div>
+      </div>
+      <div class="card-dark" style="text-align:center;">
+        <div style="font-size:28px; margin-bottom:10px;">🔗</div>
+        <div class="card-title">CI/CD Integration</div>
+        <div class="card-body-text">Plug Playwright into your pipeline — tests run automatically on every deployment or pull request merge.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px; text-align:center;" class="animate delay-5">
+      <p style="color:rgba(255,255,255,.5); font-size:13px; margin-bottom:8px;">Contact</p>
+      <p style="color:#fff; font-size:16px; font-weight:600;">kyadav@sigmasolve.us</p>
+      <p style="color:rgba(255,255,255,.4); font-size:12px; margin-top:6px;">Sigma Solve · AI-QA POC · 2026</p>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+
+<!-- ── Nav bar ── -->
+<div id="nav">
+  <button id="btn-prev" disabled>← Prev</button>
+  <span id="slide-counter">1 / 10</span>
+  <button id="btn-next">Next →</button>
+</div>
+
+
+<script>
+  const slides  = Array.from(document.querySelectorAll('.slide'));
+  const total   = slides.length;
+  let   current = 0;
+
+  const bar     = document.getElementById('progress-bar');
+  const counter = document.getElementById('slide-counter');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const dotsEl  = document.getElementById('dots');
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function updateUI() {
+    bar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  function goTo(next) {
+    if (next === current) return;
+    const prev = current;
+    slides[prev].classList.remove('active');
+    slides[prev].classList.add('exit-left');
+    setTimeout(() => slides[prev].classList.remove('exit-left'), 400);
+
+    current = next;
+    slides[current].classList.add('active');
+    updateUI();
+  }
+
+  btnNext.addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
+  btnPrev.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      if (current < total - 1) goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      if (current > 0) goTo(current - 1);
+    }
+  });
+
+  updateUI();
+</script>
+</body>
+</html>
